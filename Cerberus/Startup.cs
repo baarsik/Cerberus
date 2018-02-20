@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cerberus.Controllers.Services;
 using DataContext;
 using DataContext.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -93,6 +94,8 @@ namespace Cerberus
                 options.LowercaseUrls = true;
             });
             services.AddMvc();
+
+            services.AddScoped<AuthService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

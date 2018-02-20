@@ -12,13 +12,6 @@ namespace Cerberus.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationContext _db;
-
-        public HomeController(ApplicationContext context)
-        {
-            _db = context;
-        }
-
         public IActionResult Index()
         {
             return View();
