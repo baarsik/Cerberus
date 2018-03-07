@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cerberus.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly AuthService _authService;
 
@@ -27,7 +27,7 @@ namespace Cerberus.Controllers
 
             return result.Status == LoginStatus.SUCCESS
                 ? RedirectToLocal(returnUrl)
-                : View(model);;
+                : View(model);
         }
 
         public IActionResult Register()
@@ -41,14 +41,7 @@ namespace Cerberus.Controllers
             var result = await _authService.JwtRegisterAsync(model.Email, model.Login, model.Password);
             return result.Status == RegisterStatus.SUCCESS
                 ? (IActionResult)RedirectToAction("Index", "Home")
-                : View(model); ;
-        }
-
-        private IActionResult RedirectToLocal(string returnUrl)
-        {
-            return Url.IsLocalUrl(returnUrl)
-                ? (IActionResult)Redirect(returnUrl)
-                : RedirectToAction(nameof(HomeController.Index), "Home");
+                : View(model);
         }
     }
 }

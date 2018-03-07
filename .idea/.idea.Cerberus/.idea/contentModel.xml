@@ -39,6 +39,7 @@
         <e p="Cerberus.csproj" t="IncludeRecursive" />
         <e p="Controllers" t="Include">
           <e p="AccountController.cs" t="Include" />
+          <e p="BaseController.cs" t="Include" />
           <e p="HomeController.cs" t="Include" />
           <e p="Services" t="Include">
             <e p="AuthService.cs" t="Include" />
@@ -74,8 +75,6 @@
             <e p="Register.cshtml" t="Include" />
           </e>
           <e p="Home" t="Include">
-            <e p="About.cshtml" t="Include" />
-            <e p="Contact.cshtml" t="Include" />
             <e p="Index.cshtml" t="Include" />
           </e>
           <e p="Shared" t="Include">

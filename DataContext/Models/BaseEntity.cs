@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DataContext.Models
 {
-    public class BaseEntity
+    public abstract class BaseEntity
     {
         [Key]
         public Guid Id { get; set; }

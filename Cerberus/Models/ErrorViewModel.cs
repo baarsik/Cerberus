@@ -1,5 +1,3 @@
-using System;
-
 namespace Cerberus.Models
 {
     public class ErrorViewModel

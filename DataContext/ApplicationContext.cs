@@ -1,11 +1,10 @@
-﻿using System;
-using DataContext.Models;
+﻿using DataContext.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataContext
 {
-    public class ApplicationContext : IdentityDbContext<User>
+    public sealed class ApplicationContext : IdentityDbContext<User>
     {
         public DbSet<News> News { get; set; }
         public DbSet<NewsComment> NewsComments { get; set; }
@@ -19,7 +18,7 @@ namespace DataContext
         {
             builder.Entity<Forum>()
                    .HasIndex(c => c.DisplayOrderId)
-                   .IsUnique(true);
+                   .IsUnique();
 
             builder.Entity<AttachmentDownloads>()
                    .HasOne(c => c.Attachment)
