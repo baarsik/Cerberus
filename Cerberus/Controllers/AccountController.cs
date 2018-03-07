@@ -23,7 +23,7 @@ namespace Cerberus.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model, string returnUrl)
         {
-            var result = await _authService.JwtLoginAsync(model.Login, model.Password, model.RememberMe);
+            var result = await _authService.JwtLoginAsync(model.Email, model.Password, model.RememberMe);
 
             return result.Status == LoginStatus.Success
                 ? RedirectToLocal(returnUrl)

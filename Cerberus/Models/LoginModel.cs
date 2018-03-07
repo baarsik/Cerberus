@@ -4,11 +4,11 @@ namespace Cerberus.Models
 {
     public class LoginModel
     {
-        [Required]
+        [Required(ErrorMessage = "Email is required")]
         [MaxLength(64)]
-        public string Login { get; set; }
+        public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Password is required")]
         [MaxLength(64)]
         public string Password { get; set; }
 
