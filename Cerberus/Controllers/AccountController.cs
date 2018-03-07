@@ -25,7 +25,7 @@ namespace Cerberus.Controllers
         {
             var result = await _authService.JwtLoginAsync(model.Login, model.Password, model.RememberMe);
 
-            return result.Status == LoginStatus.SUCCESS
+            return result.Status == LoginStatus.Success
                 ? RedirectToLocal(returnUrl)
                 : View(model);
         }
@@ -39,7 +39,7 @@ namespace Cerberus.Controllers
         public async Task<IActionResult> Register(RegisterModel model)
         {
             var result = await _authService.JwtRegisterAsync(model.Email, model.Login, model.Password);
-            return result.Status == RegisterStatus.SUCCESS
+            return result.Status == RegisterStatus.Success
                 ? (IActionResult)RedirectToAction("Index", "Home")
                 : View(model);
         }

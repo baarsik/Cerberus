@@ -10,7 +10,7 @@ namespace Cerberus.Models.Services
 
         public JwtRegisterResult(string token)
         {
-            Status = RegisterStatus.SUCCESS;
+            Status = RegisterStatus.Success;
             Token = token;
         }
 
@@ -20,8 +20,8 @@ namespace Cerberus.Models.Services
 
     public enum RegisterStatus
     {
-        USER_ALREADY_EXISTS,
-        FAILURE,
-        SUCCESS
+        UserAlreadyExists,
+        Failure,
+        Success
     }
 }

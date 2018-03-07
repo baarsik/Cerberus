@@ -46,14 +46,14 @@ namespace Cerberus.Controllers.Services
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(r => r.UserName == login);
             if (user == null)
-                return new JwtLoginResult(LoginStatus.INVALID_CREDENTIALS);
+                return new JwtLoginResult(LoginStatus.InvalidCredentials);
 
             if (user.LockoutEnd?.DateTime >= DateTime.Now)
-                return new JwtLoginResult(LoginStatus.ACCOUNT_LOCKED);
+                return new JwtLoginResult(LoginStatus.AccountLocked);
 
             var result = await _signInManager.PasswordSignInAsync(login, password, isPersistent, false);
             if (!result.Succeeded)
-                return new JwtLoginResult(LoginStatus.INVALID_CREDENTIALS);
+                return new JwtLoginResult(LoginStatus.InvalidCredentials);
             
             var token = GenerateJwtToken(login, user);
             return new JwtLoginResult(token);
@@ -69,11 +69,11 @@ namespace Cerberus.Controllers.Services
             };
 
             if (await UserExistsAsync(email, login))
-                return new JwtRegisterResult(RegisterStatus.USER_ALREADY_EXISTS);
+                return new JwtRegisterResult(RegisterStatus.UserAlreadyExists);
 
             var result = await _userManager.CreateAsync(user, password);
             if (!result.Succeeded)
-                return new JwtRegisterResult(RegisterStatus.FAILURE);
+                return new JwtRegisterResult(RegisterStatus.Failure);
 
             await _signInManager.SignInAsync(user, false);
             var token = GenerateJwtToken(email, user);

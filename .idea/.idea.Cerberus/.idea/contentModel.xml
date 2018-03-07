@@ -1,32 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.5/contentFiles/any/netcoreapp2.0/app.config.transform" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.5/contentFiles/any/netcoreapp2.0/docs/MySqlCommand.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.5/contentFiles/any/netcoreapp2.0/docs/MySqlCommandBuilder.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.5/contentFiles/any/netcoreapp2.0/docs/MySqlConnection.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.5/contentFiles/any/netcoreapp2.0/docs/MySqlConnectionStringBuilder.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.5/contentFiles/any/netcoreapp2.0/docs/MySqlDataAdapter.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.5/contentFiles/any/netcoreapp2.0/docs/MySqlDataReader.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.5/contentFiles/any/netcoreapp2.0/docs/MySqlException.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.5/contentFiles/any/netcoreapp2.0/docs/MySqlHelper.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.5/contentFiles/any/netcoreapp2.0/docs/MySqlParameter.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.5/contentFiles/any/netcoreapp2.0/docs/MySqlParameterCollection.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.5/contentFiles/any/netcoreapp2.0/docs/MySqlTransaction.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.5/contentFiles/any/netcoreapp2.0/web.config.transform" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/8.0.8-dmr/contentFiles/any/netstandard1.6/app.config.transform" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/8.0.8-dmr/contentFiles/any/netstandard1.6/docs/MySqlCommand.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/8.0.8-dmr/contentFiles/any/netstandard1.6/docs/MySqlCommandBuilder.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/8.0.8-dmr/contentFiles/any/netstandard1.6/docs/MySqlConnection.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/8.0.8-dmr/contentFiles/any/netstandard1.6/docs/MySqlConnectionStringBuilder.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/8.0.8-dmr/contentFiles/any/netstandard1.6/docs/MySqlDataAdapter.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/8.0.8-dmr/contentFiles/any/netstandard1.6/docs/MySqlDataReader.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/8.0.8-dmr/contentFiles/any/netstandard1.6/docs/MySqlException.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/8.0.8-dmr/contentFiles/any/netstandard1.6/docs/MySqlHelper.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/8.0.8-dmr/contentFiles/any/netstandard1.6/docs/MySqlParameter.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/8.0.8-dmr/contentFiles/any/netstandard1.6/docs/MySqlParameterCollection.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/8.0.8-dmr/contentFiles/any/netstandard1.6/docs/MySqlTransaction.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/8.0.8-dmr/contentFiles/any/netstandard1.6/web.config.transform" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/app.config.transform" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlCommand.xml" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlCommandBuilder.xml" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlConnection.xml" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlConnectionStringBuilder.xml" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlDataAdapter.xml" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlDataReader.xml" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlException.xml" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlHelper.xml" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlParameter.xml" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlParameterCollection.xml" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlTransaction.xml" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/web.config.transform" t="Include" />
     <e p="$USER_HOME$/Library/Caches/Rider2017.3/resharper-host/local/Transient/ReSharperHost/v11/SolutionCaches/_Cerberus.2038705725.00" t="ExcludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeFlat">
       <e p="Cerberus" t="IncludeRecursive">
@@ -161,6 +148,11 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="DataContext.csproj" t="IncludeRecursive" />
         <e p="docs" t="Include" />
+        <e p="Migrations" t="Include">
+          <e p="20180307212944_Initial.cs" t="Include" />
+          <e p="20180307212944_Initial.Designer.cs" t="Include" />
+          <e p="ApplicationContextModelSnapshot.cs" t="Include" />
+        </e>
         <e p="Models" t="Include">
           <e p="Attachment.cs" t="Include" />
           <e p="AttachmentDownloads.cs" t="Include" />

@@ -10,7 +10,7 @@ namespace Cerberus.Models.Services
 
         public JwtLoginResult(string token)
         {
-            Status = LoginStatus.SUCCESS;
+            Status = LoginStatus.Success;
             Token = token;
         }
 
@@ -20,8 +20,8 @@ namespace Cerberus.Models.Services
 
     public enum LoginStatus
     {
-        INVALID_CREDENTIALS,
-        ACCOUNT_LOCKED,
-        SUCCESS
+        InvalidCredentials,
+        AccountLocked,
+        Success
     }
 }
