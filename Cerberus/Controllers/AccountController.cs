@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Cerberus.Controllers.Services;
 using Cerberus.Models;
 using Cerberus.Models.Services;
@@ -23,11 +24,26 @@ namespace Cerberus.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model, string returnUrl)
         {
+            if (!ModelState.IsValid)
+                return View(model);
+            
             var result = await _authService.JwtLoginAsync(model.Email, model.Password, model.RememberMe);
 
-            return result.Status == LoginStatus.Success
-                ? RedirectToLocal(returnUrl)
-                : View(model);
+            switch (result.Status)
+            {
+                case LoginStatus.Success:
+                    return RedirectToLocal(returnUrl);
+                case LoginStatus.InvalidCredentials:
+                    ModelState.AddModelError("", "Invalid E-Mail or password");
+                    break;
+                case LoginStatus.AccountLocked:
+                    ModelState.AddModelError("", "Your account is banned");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return View(model);
         }
 
         public IActionResult Register()

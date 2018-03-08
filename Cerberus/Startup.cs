@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Threading.Tasks;
 using Cerberus.Controllers.Services;
 using DataContext;
 using DataContext.Models;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -32,7 +34,10 @@ namespace Cerberus
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationContext>();
+            services.AddDbContext<ApplicationContext>(options =>
+            {
+                options.UseMySql(Configuration.GetConnectionString("AppDatabase"));
+            });
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationContext>()
                 .AddDefaultTokenProviders();
@@ -114,10 +119,12 @@ namespace Cerberus
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationContext context)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationContext context, IServiceProvider serviceProvider)
         {
-            var localizationOption = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            var localizationOption = serviceProvider.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(localizationOption.Value);
+            
+            CreateRolesAsync(serviceProvider).Wait();
             
             if (env.IsDevelopment())
             {
@@ -140,7 +147,37 @@ namespace Cerberus
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
-            context.Database.EnsureCreated();
+        }
+        
+        private async Task CreateRolesAsync(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            string[] roleNames = { "admin", "user" };
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await roleManager.RoleExistsAsync(roleName);
+                if (roleExist)
+                    continue;
+
+                await roleManager.CreateAsync(new IdentityRole(roleName));
+            }
+            
+            var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+            if (!await userManager.Users.AnyAsync())
+            {
+                var defaultUser = new User
+                {
+                    UserName = Configuration["DefaultUser:Email"],
+                    DisplayName = Configuration["DefaultUser:DisplayName"],
+                    Email = Configuration["DefaultUser:Email"]
+                };
+                var createPowerUser = await userManager.CreateAsync(defaultUser, Configuration["DefaultUser:Password"]);
+                if (createPowerUser.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(defaultUser, "admin");
+                    await userManager.AddToRoleAsync(defaultUser, "user");
+                }
+            }
         }
     }
 }

@@ -6,7 +6,7 @@
 <div class="view-header">
     <div class="header-icon">
         @* ToDo: add icon, center form *@
-        <i class="pe page-header-icon pe-7s-unlock"></i>
+        <i class="far fa-lock-alt"></i>
     </div>
     <div class="header-title">
         <h3>Login</h3>
@@ -19,6 +19,7 @@
 <div class="panel panel-filled">
     <div class="panel-body">
         <form asp-action="Login" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
             <div class="form-group">
                 <label class="control-label" asp-for="Email">E-Mail</label>
                 <input type="text" asp-for="Email" placeholder="E-Mail" class="form-control">
@@ -29,9 +30,11 @@
                 <input type="password" asp-for="Password" placeholder="Password" class="form-control">
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <div class="form-group checkbox">
-                <input type="checkbox" asp-for="RememberMe" class="styled">
-                <label class="control-label" asp-for="RememberMe">Remember Me</label>
+            <div class="form-group">
+                <label class="control-label" asp-for="RememberMe">
+                    <input type="checkbox" asp-for="RememberMe">
+                    Remember Me
+                </label>
             </div>
             <div>
                 <button type="submit" class="btn btn-accent">Login</button>

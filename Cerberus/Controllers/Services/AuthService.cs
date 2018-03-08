@@ -30,11 +30,17 @@ namespace Cerberus.Controllers.Services
             _configuration = configuration;
         }
 
-        public async Task<bool> UserExistsAsync(string email, string login)
+        /// <summary>
+        /// Checks whether E-Mail or Display Name are already in use
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="displayName"></param>
+        /// <returns></returns>
+        public async Task<bool> UserExistsAsync(string email, string displayName)
         {
             return await _userManager.Users.AnyAsync(c =>
                 string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) != 0 ||
-                string.Compare(c.DisplayName, login, StringComparison.InvariantCultureIgnoreCase) != 0);
+                string.Compare(c.DisplayName, displayName, StringComparison.InvariantCultureIgnoreCase) != 0);
         }
 
         public async Task<JwtLoginResult> JwtLoginAsync(string login, string password)
@@ -59,22 +65,24 @@ namespace Cerberus.Controllers.Services
             return new JwtLoginResult(token);
         }
 
-        public async Task<JwtRegisterResult> JwtRegisterAsync(string email, string login, string password)
+        public async Task<JwtRegisterResult> JwtRegisterAsync(string email, string displayName, string password)
         {
             var user = new User
             {
-                DisplayName = login,
+                DisplayName = displayName,
                 UserName = email,
                 Email = email
             };
 
-            if (await UserExistsAsync(email, login))
+            if (await UserExistsAsync(email, displayName))
                 return new JwtRegisterResult(RegisterStatus.UserAlreadyExists);
 
             var result = await _userManager.CreateAsync(user, password);
             if (!result.Succeeded)
                 return new JwtRegisterResult(RegisterStatus.Failure);
 
+            
+            
             await _signInManager.SignInAsync(user, false);
             var token = GenerateJwtToken(email, user);
             return new JwtRegisterResult(token);

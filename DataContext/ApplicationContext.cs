@@ -6,6 +6,10 @@ namespace DataContext
 {
     public sealed class ApplicationContext : IdentityDbContext<User>
     {
+        public ApplicationContext(DbContextOptions options) 
+            : base(options)
+        { }
+        
         public DbSet<News> News { get; set; }
         public DbSet<NewsComment> NewsComments { get; set; }
         public DbSet<Forum> Forums { get; set; }
@@ -27,8 +31,5 @@ namespace DataContext
             
             base.OnModelCreating(builder);
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseMySql("Server=localhost;Uid=root;Pwd=29706430aA;Port=3306;database=cerberus;");
     }
 }

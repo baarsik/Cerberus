@@ -41,6 +41,7 @@
             <e p="JwtLoginResult.cs" t="Include" />
             <e p="JwtRegisterResult.cs" t="Include" />
           </e>
+          <e p="TagHelpers" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
@@ -118,6 +119,27 @@
                 </e>
               </e>
               <e p="LICENSE" t="Include" />
+            </e>
+            <e p="font-awesome-pro" t="Include">
+              <e p="css" t="Include">
+                <e p="fa-svg-with-js.css" t="Include" />
+              </e>
+              <e p="js" t="Include">
+                <e p="fa-brands.js" t="Include" />
+                <e p="fa-brands.min.js" t="Include" />
+                <e p="fa-light.js" t="Include" />
+                <e p="fa-light.min.js" t="Include" />
+                <e p="fa-regular.js" t="Include" />
+                <e p="fa-regular.min.js" t="Include" />
+                <e p="fa-solid.js" t="Include" />
+                <e p="fa-solid.min.js" t="Include" />
+                <e p="fa-v4-shims.js" t="Include" />
+                <e p="fa-v4-shims.min.js" t="Include" />
+                <e p="fontawesome-all.js" t="Include" />
+                <e p="fontawesome-all.min.js" t="Include" />
+                <e p="fontawesome.js" t="Include" />
+                <e p="fontawesome.min.js" t="Include" />
+              </e>
             </e>
             <e p="jquery" t="Include">
               <e p=".bower.json" t="Include" />
