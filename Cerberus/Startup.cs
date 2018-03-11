@@ -19,6 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using PaulMiami.AspNetCore.Mvc.Recaptcha;
 
 namespace Cerberus
 {
@@ -50,7 +51,7 @@ namespace Cerberus
                 options.Password.RequireUppercase = true;
                 options.Password.RequireLowercase = true;
                 options.Password.RequiredUniqueChars = 6;
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
                 options.User.RequireUniqueEmail = true;
@@ -109,6 +110,12 @@ namespace Cerberus
             services.AddMvc()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization();
+            
+            services.AddRecaptcha(new RecaptchaOptions
+            {
+                SiteKey = Configuration["ReCaptcha:SiteKey"],
+                SecretKey = Configuration["ReCaptcha:SecretKey"]
+            });
 
             services.AddScoped<AuthService>();
         }

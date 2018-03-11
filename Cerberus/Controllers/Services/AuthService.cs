@@ -31,16 +31,13 @@ namespace Cerberus.Controllers.Services
         }
 
         /// <summary>
-        /// Checks whether E-Mail or Display Name are already in use
+        /// Checks whether Display Name is already in use
         /// </summary>
-        /// <param name="email"></param>
         /// <param name="displayName"></param>
         /// <returns></returns>
-        public async Task<bool> UserExistsAsync(string email, string displayName)
+        public async Task<bool> IsDisplayNameInUseAsync(string displayName)
         {
-            return await _userManager.Users.AnyAsync(c =>
-                string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0 ||
-                string.Compare(c.DisplayName, displayName, StringComparison.InvariantCultureIgnoreCase) == 0);
+            return await _userManager.Users.AnyAsync(c => string.Compare(c.DisplayName, displayName, StringComparison.InvariantCultureIgnoreCase) == 0);
         }
         
         /// <summary>
@@ -48,7 +45,7 @@ namespace Cerberus.Controllers.Services
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        public async Task<bool> UserExistsAsync(string email)
+        public async Task<bool> IsEmailInUseAsync(string email)
         {
             return await _userManager.Users.AnyAsync(c => string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0);
         }
@@ -77,7 +74,7 @@ namespace Cerberus.Controllers.Services
             if (user.LockoutEnd?.DateTime >= DateTime.Now)
                 return new JwtLoginResult(LoginStatus.AccountLocked);
 
-            var result = await _signInManager.PasswordSignInAsync(email, password, isPersistent, false);
+            var result = await _signInManager.PasswordSignInAsync(email, password, isPersistent, true);
             return new JwtLoginResult(result.Succeeded
                 ? LoginStatus.Success
                 : LoginStatus.InvalidCredentials);
@@ -92,8 +89,11 @@ namespace Cerberus.Controllers.Services
                 Email = email
             };
 
-            if (await UserExistsAsync(email, displayName))
-                return new JwtRegisterResult(RegisterStatus.UserAlreadyExists);
+            if (await IsDisplayNameInUseAsync(displayName))
+                return new JwtRegisterResult(RegisterStatus.DisplayNameInUse);
+            
+            if (await IsEmailInUseAsync(email))
+                return new JwtRegisterResult(RegisterStatus.EmailInUse);
 
             var result = await _userManager.CreateAsync(user, password);
             if (!result.Succeeded)

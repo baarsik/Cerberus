@@ -13,7 +13,8 @@ namespace Cerberus.Models.Services
 
     public enum RegisterStatus
     {
-        UserAlreadyExists,
+        EmailInUse,
+        DisplayNameInUse,
         Failure,
         Success
     }
