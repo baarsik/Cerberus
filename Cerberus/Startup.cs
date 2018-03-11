@@ -38,7 +38,7 @@ namespace Cerberus
             {
                 options.UseMySql(Configuration.GetConnectionString("AppDatabase"));
             });
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationContext>()
                 .AddDefaultTokenProviders();
 
@@ -58,12 +58,7 @@ namespace Cerberus
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
             services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
+                .AddAuthentication()
                 .AddJwtBearer(cfg =>
                 {
 #if DEBUG
@@ -162,10 +157,10 @@ namespace Cerberus
                 await roleManager.CreateAsync(new IdentityRole(roleName));
             }
             
-            var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             if (!await userManager.Users.AnyAsync())
             {
-                var defaultUser = new User
+                var defaultUser = new ApplicationUser
                 {
                     UserName = Configuration["DefaultUser:Email"],
                     DisplayName = Configuration["DefaultUser:DisplayName"],

@@ -24,7 +24,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\Services\" />
-    <Folder Include="Models\Extensions" />
     <Folder Include="Models\Services\" />
     <Folder Include="Views\Account\" />
   </ItemGroup>

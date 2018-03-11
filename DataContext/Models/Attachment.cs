@@ -16,7 +16,7 @@ namespace DataContext.Models
         public string Uri { get; set; }
 
         [Required]
-        public virtual User Uploader { get; set; }
+        public virtual ApplicationUser Uploader { get; set; }
 
         public virtual ForumThread ForumThread { get; set; }
 

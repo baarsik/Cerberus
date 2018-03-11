@@ -17,12 +17,12 @@ namespace Cerberus.Controllers.Services
 {
     public class AuthService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
 
-        public AuthService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -39,35 +39,53 @@ namespace Cerberus.Controllers.Services
         public async Task<bool> UserExistsAsync(string email, string displayName)
         {
             return await _userManager.Users.AnyAsync(c =>
-                string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) != 0 ||
-                string.Compare(c.DisplayName, displayName, StringComparison.InvariantCultureIgnoreCase) != 0);
+                string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0 ||
+                string.Compare(c.DisplayName, displayName, StringComparison.InvariantCultureIgnoreCase) == 0);
+        }
+        
+        /// <summary>
+        /// Checks whether E-Mail is already in use
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public async Task<bool> UserExistsAsync(string email)
+        {
+            return await _userManager.Users.AnyAsync(c => string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0);
         }
 
-        public async Task<JwtLoginResult> JwtLoginAsync(string login, string password)
+        /// <summary>
+        /// Returns ApplicationUser record based on email and password
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns>ApplicationUser on success, null on failure</returns>
+        public async Task<ApplicationUser> GetUserByCredentials(string email, string password)
         {
-            return await JwtLoginAsync(login, password, false);
+            var user = await _userManager.Users.FirstOrDefaultAsync(c => string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0);
+            
+            return user != null && await _userManager.CheckPasswordAsync(user, password)
+                ? user
+                : null;
         }
 
-        public async Task<JwtLoginResult> JwtLoginAsync(string login, string password, bool isPersistent)
+        public async Task<JwtLoginResult> JwtLoginAsync(string email, string password, bool isPersistent = false)
         {
-            var user = await _userManager.Users.FirstOrDefaultAsync(r => r.UserName == login);
+            var user = await _userManager.Users.FirstOrDefaultAsync(c => string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0);
             if (user == null)
                 return new JwtLoginResult(LoginStatus.InvalidCredentials);
 
             if (user.LockoutEnd?.DateTime >= DateTime.Now)
                 return new JwtLoginResult(LoginStatus.AccountLocked);
 
-            var result = await _signInManager.PasswordSignInAsync(login, password, isPersistent, false);
-            if (!result.Succeeded)
-                return new JwtLoginResult(LoginStatus.InvalidCredentials);
-            
-            var token = GenerateJwtToken(login, user);
-            return new JwtLoginResult(token);
+            var result = await _signInManager.PasswordSignInAsync(email, password, isPersistent, false);
+            return new JwtLoginResult(result.Succeeded
+                ? LoginStatus.Success
+                : LoginStatus.InvalidCredentials);
         }
 
         public async Task<JwtRegisterResult> JwtRegisterAsync(string email, string displayName, string password)
         {
-            var user = new User
+            var user = new ApplicationUser
             {
                 DisplayName = displayName,
                 UserName = email,
@@ -81,32 +99,34 @@ namespace Cerberus.Controllers.Services
             if (!result.Succeeded)
                 return new JwtRegisterResult(RegisterStatus.Failure);
 
-            
-            
             await _signInManager.SignInAsync(user, false);
-            var token = GenerateJwtToken(email, user);
-            return new JwtRegisterResult(token);
+            return new JwtRegisterResult(RegisterStatus.Success);
         }
 
-        private string GenerateJwtToken(string login, User user)
+        public async Task SignOutAsync()
+        {
+            await _signInManager.SignOutAsync();
+        }
+
+        public string GenerateJwtToken(string email, ApplicationUser user)
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, login),
+                new Claim(JwtRegisteredClaimNames.Sub, email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtExpireDays"]));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.Now.AddHours(Convert.ToDouble(_configuration["JwtExpireHours"]));
 
             var token = new JwtSecurityToken(
-                _configuration["JwtIssuer"],
-                _configuration["JwtIssuer"],
-                claims,
+                issuer: _configuration["JwtIssuer"],
+                audience: _configuration["JwtIssuer"],
+                claims: claims,
                 expires: expires,
-                signingCredentials: creds
+                signingCredentials: credentials
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);

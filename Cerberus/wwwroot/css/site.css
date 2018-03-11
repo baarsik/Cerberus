@@ -1408,6 +1408,9 @@ img.image-xl {
     display: flex;
     flex-direction: row;
 }
+.flex-row.justify-between {
+    justify-content: space-between;
+}
 .flex-row.align-center {
     align-items: center;
 }

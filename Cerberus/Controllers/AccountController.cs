@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Cerberus.Controllers.Services;
 using Cerberus.Models;
 using Cerberus.Models.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cerberus.Controllers
@@ -58,6 +59,13 @@ namespace Cerberus.Controllers
             return result.Status == RegisterStatus.Success
                 ? (IActionResult)RedirectToAction("Index", "Home")
                 : View(model);
+        }
+        
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await _authService.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

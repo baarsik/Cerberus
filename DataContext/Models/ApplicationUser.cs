@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DataContext.Models
 {
-    public class User : IdentityUser
+    public class ApplicationUser : IdentityUser
     {
         [Required]
         [MaxLength(32)]

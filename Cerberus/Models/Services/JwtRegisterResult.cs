@@ -8,14 +8,7 @@ namespace Cerberus.Models.Services
             Status = status;
         }
 
-        public JwtRegisterResult(string token)
-        {
-            Status = RegisterStatus.Success;
-            Token = token;
-        }
-
-        public RegisterStatus Status { get; set; }
-        public string Token { get; set; }
+        public RegisterStatus Status { get; }
     }
 
     public enum RegisterStatus

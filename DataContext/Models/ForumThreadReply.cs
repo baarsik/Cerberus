@@ -20,6 +20,6 @@ namespace DataContext.Models
         public virtual ForumThread Thread { get; set; }
 
         [Required]
-        public virtual User Author { get; set; }
+        public virtual ApplicationUser Author { get; set; }
     }
 }

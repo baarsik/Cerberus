@@ -17,7 +17,7 @@ namespace DataContext.Models
         public virtual bool IsDeleted { get; set; } = false;
 
         [Required]
-        public virtual User Author { get; set; }
+        public virtual ApplicationUser Author { get; set; }
 
         [Required]
         public virtual News News { get; set; }

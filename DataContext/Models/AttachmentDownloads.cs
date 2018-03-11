@@ -8,6 +8,6 @@ namespace DataContext.Models
         public virtual Attachment Attachment { get; set; }
 
         [Required]
-        public virtual User User { get; set; }
+        public virtual ApplicationUser User { get; set; }
     }
 }
