@@ -1,12 +1,16 @@
 ﻿@model LoginModel
 @{
     ViewBag.Title = "Login";
+    ViewBag.Settings = new LayoutSettings
+    {
+        IsContainerCentered = true,
+        IsFooterVisible = false
+    };
 }
 
 <div class="view-header">
     <div class="header-icon">
-        @* ToDo: add icon, center form *@
-        <i class="far fa-lock-alt"></i>
+        <i class="fal fa-lock-alt" data-fa-transform="shrink-4"></i>
     </div>
     <div class="header-title">
         <h3>Login</h3>

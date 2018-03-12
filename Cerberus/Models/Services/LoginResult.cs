@@ -1,9 +1,9 @@
 ﻿using System;
 namespace Cerberus.Models.Services
 {
-    public class JwtLoginResult
+    public class LoginResult
     {
-        public JwtLoginResult(LoginStatus status)
+        public LoginResult(LoginStatus status)
         {
             Status = status;
         }

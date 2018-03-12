@@ -2,6 +2,77 @@
 
 @{
     ViewBag.Title = "Register";
+    ViewBag.Settings = new LayoutSettings
+    {
+        IsContainerCentered = true,
+        IsFooterVisible = false
+    };
 }
 
-<h2>title</h2>
+<div class="view-header">
+    <div class="header-icon">
+        <i class="fal fa-user" data-fa-transform="shrink-4"></i>
+    </div>
+    <div class="header-title">
+        <h3>Register</h3>
+        <small>
+            Please enter your data to register.
+        </small>
+    </div>
+</div>
+
+<div class="panel panel-filled">
+    <div class="panel-body">
+        <p>
+
+        </p>
+        <form asp-action="Register" method="post">
+            <div class="form-group">
+                <label>Display Name</label>
+                <input type="" asp-for="DisplayName" class="form-control" placeholder="Display Name">
+                <span class="help-block small">
+                    <div>Unique name that will be visible to everyone</div>
+                    <span asp-validation-for="DisplayName" class="text-danger"></span>
+                </span>
+                
+            </div>
+            <div class="form-group">
+                <label>E-Mail</label>
+                <input type="text" asp-for="Email" class="form-control" placeholder="E-Mail">
+                <span class="help-block small">
+                    <div>Your E-Mail will be used as your login</div>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </span>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" asp-for="Password" class="form-control" placeholder="Password">
+                <span class="help-block small">
+                    <div>For your account safety, use strong passwords</div>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </span>
+            </div>
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" asp-for="ConfirmPassword" class="form-control" placeholder="Password">
+                <span class="help-block small">
+                    <div>Repeat your pasword</div>
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </span>
+            </div>
+            <div class="form-group">
+                <recaptcha/>
+                <span id="recaptchaErrorMessage" class="text-danger"></span>
+            </div>
+            <div>
+                <button class="btn btn-accent">Register</button>
+                <a class="btn btn-default" asp-action="Login">I already have an account</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+    <recaptcha-script validation-message-element-id="recaptchaErrorMessage" />
+}

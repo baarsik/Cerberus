@@ -61,7 +61,7 @@ namespace Cerberus.Controllers
             if (!ModelState.IsValid)
                 return View(model);
             
-            var result = await _authService.JwtRegisterAsync(model.Email, model.Login, model.Password);
+            var result = await _authService.RegisterAsync(model.Email, model.DisplayName, model.Password);
             
             switch (result.Status)
             {

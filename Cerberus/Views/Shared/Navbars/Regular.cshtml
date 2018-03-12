@@ -1,0 +1,31 @@
+﻿<nav class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Cerberus</a>
+        </div>
+        <div id="navbar" class="flex-row justify-between">
+            <ul class="nav navbar-nav cerberus-nav flex-row align-center">
+                <li>
+                    <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav cerberus-nav flex-row align-center">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li>
+                        <a asp-area="" asp-controller="Account" asp-action="Logout">Sign Out</a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a asp-area="" asp-controller="Account" asp-action="Login">Sign In</a>
+                    </li>
+                    <li>
+                        <a asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>

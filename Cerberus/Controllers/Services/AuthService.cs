@@ -19,14 +19,12 @@ namespace Cerberus.Controllers.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
 
         public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _roleManager = roleManager;
             _configuration = configuration;
         }
 
@@ -65,22 +63,22 @@ namespace Cerberus.Controllers.Services
                 : null;
         }
 
-        public async Task<JwtLoginResult> JwtLoginAsync(string email, string password, bool isPersistent = false)
+        public async Task<LoginResult> JwtLoginAsync(string email, string password, bool isPersistent = false)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(c => string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0);
             if (user == null)
-                return new JwtLoginResult(LoginStatus.InvalidCredentials);
+                return new LoginResult(LoginStatus.InvalidCredentials);
 
             if (user.LockoutEnd?.DateTime >= DateTime.Now)
-                return new JwtLoginResult(LoginStatus.AccountLocked);
+                return new LoginResult(LoginStatus.AccountLocked);
 
             var result = await _signInManager.PasswordSignInAsync(email, password, isPersistent, true);
-            return new JwtLoginResult(result.Succeeded
+            return new LoginResult(result.Succeeded
                 ? LoginStatus.Success
                 : LoginStatus.InvalidCredentials);
         }
 
-        public async Task<JwtRegisterResult> JwtRegisterAsync(string email, string displayName, string password)
+        public async Task<RegisterResult> RegisterAsync(string email, string displayName, string password)
         {
             var user = new ApplicationUser
             {
@@ -90,17 +88,18 @@ namespace Cerberus.Controllers.Services
             };
 
             if (await IsDisplayNameInUseAsync(displayName))
-                return new JwtRegisterResult(RegisterStatus.DisplayNameInUse);
+                return new RegisterResult(RegisterStatus.DisplayNameInUse);
             
             if (await IsEmailInUseAsync(email))
-                return new JwtRegisterResult(RegisterStatus.EmailInUse);
+                return new RegisterResult(RegisterStatus.EmailInUse);
 
             var result = await _userManager.CreateAsync(user, password);
             if (!result.Succeeded)
-                return new JwtRegisterResult(RegisterStatus.Failure);
+                return new RegisterResult(RegisterStatus.Failure);
 
+            await _userManager.AddToRoleAsync(user, "user");
             await _signInManager.SignInAsync(user, false);
-            return new JwtRegisterResult(RegisterStatus.Success);
+            return new RegisterResult(RegisterStatus.Success);
         }
 
         public async Task SignOutAsync()
