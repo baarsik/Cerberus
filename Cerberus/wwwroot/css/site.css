@@ -1274,8 +1274,9 @@ img.image-xl {
     background-color: #f6a821;
     height: 60px;
     padding: 20px 25px;
-    font-weight: 400;
-    letter-spacing: 10px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-align: center;
     color: #FFFFFF
 }
 
@@ -1419,11 +1420,37 @@ img.image-xl {
     padding-top: 15px
 }
 
-    .cerberus-nav.nav li > a,
-    .cerberus-nav.nav .nav-category {
-        padding: 8px 15px 8px 25px;
-        margin: 0 0
-    }
+.cerberus-nav.nav li > a,
+.cerberus-nav.nav .nav-category {
+    padding: 8px 20px;
+    margin: 0;
+}
+
+.cerberus-nav.navbar-nav > .open > a,
+.cerberus-nav.navbar-nav > .open > a:hover,
+.cerberus-nav.navbar-nav > .open > a:focus,
+.cerberus-nav.navbar-nav > .open > a:active {
+    background-color: #2a2d35;
+    color: #c0c4c8;
+}
+
+.cerberus-nav.navbar-nav > .open > ul.dropdown-menu {
+    background-color: #2a2d35;
+    position: absolute;
+    top: 48px;
+    left: -50px;
+    width: 160px;
+    box-shadow: 6px 6px 6px rgba(0, 0, 0, .175);
+    border: 0;
+}
+.cerberus-nav.navbar-nav > .open > ul.dropdown-menu > li > a {
+    color: #848c94;
+}
+.cerberus-nav.navbar-nav > .open > ul.dropdown-menu > li > a:hover,
+.cerberus-nav.navbar-nav > .open > ul.dropdown-menu > li > a:focus,
+.cerberus-nav.navbar-nav > .open > ul.dropdown-menu > li > a:active {
+    color: #c0c4c8;
+}
 
     .cerberus-nav.nav .nav-info {
         margin-top: 50px;

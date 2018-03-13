@@ -1,7 +1,9 @@
 ﻿<nav class="navbar navbar-default navbar-static-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Cerberus</a>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">
+                CERBERUS
+            </a>
         </div>
         <div id="navbar" class="flex-row justify-between">
             <ul class="nav navbar-nav cerberus-nav flex-row align-center">
@@ -12,8 +14,25 @@
             <ul class="nav navbar-nav cerberus-nav flex-row align-center">
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <li>
-                        <a asp-area="" asp-controller="Account" asp-action="Logout">Sign Out</a>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fas fa-user"></i>
+                            @User.GetDisplayName()
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a asp-area="" asp-controller="Account" asp-action="Profile">
+                                    <i class="far fa-user-alt m-r-xs"></i>
+                                    Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-area="" asp-controller="Account" asp-action="Logout">
+                                    <i class="far fa-power-off m-r-xs"></i>
+                                    Sign Out
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 }
                 else
