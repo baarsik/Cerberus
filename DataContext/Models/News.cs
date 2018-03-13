@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DataContext.Models
@@ -7,23 +8,30 @@ namespace DataContext.Models
     {
         [Required]
         [MaxLength(64)]
-        public virtual string Title { get; set; }
+        public string Title { get; set; }
 
         [Required]
-        public virtual string Content { get; set; }
+        public string Content { get; set; }
 
         [Required]
         public string Uri { get; set; }
 
         [Required]
-        public virtual DateTime CreateDate { get; set; } = DateTime.Now;
+        public DateTime CreateDate { get; set; } = DateTime.Now;
 
-        public virtual DateTime? LastEditDate { get; set; }
+        public DateTime? LastEditDate { get; set; }
 
         [Required]
-        public virtual bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
 
         [Required]
         public virtual ApplicationUser Author { get; set; }
+
+        public virtual ICollection<NewsComment> Comments { get; set; }
+
+        public override string ToString()
+        {
+            return Title;
+        }
     }
 }

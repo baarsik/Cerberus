@@ -1,20 +1,28 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataContext.Models
 {
     public class Forum : BaseEntity
     {
+        [Required]
         [MaxLength(64)]
-        public string Name { get; set; }
+        public string Title { get; set; }
 
         [Required]
         public int DisplayOrderId { get; set; }
 
-        // Role required to be this forum (+subforums) moderator
-        [Required]
-        [MaxLength(16)]
-        public string ModeratorRole { get; set; }
-
         public virtual Forum Parent { get; set; }
+        
+        public virtual ICollection<Forum> Children { get; set; }
+        
+        public virtual ICollection<ForumThread> Threads { get; set; }
+        
+        public virtual ICollection<ForumModerator> Moderators { get; set; }
+
+        public override string ToString()
+        {
+            return Title;
+        }
     }
 }

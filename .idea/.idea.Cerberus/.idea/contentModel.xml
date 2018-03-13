@@ -40,6 +40,10 @@
           <e p="ErrorViewModel.cs" t="Include" />
           <e p="Extensions" t="Include">
             <e p="ClaimsPrincipalExtensions.cs" t="Include" />
+            <e p="StringExtensions.cs" t="Include" />
+          </e>
+          <e p="Helpers" t="Include">
+            <e p="StringHelpers.cs" t="Include" />
           </e>
           <e p="LayoutSettings.cs" t="Include" />
           <e p="LoginModel.cs" t="Include" />
@@ -184,8 +188,8 @@
         <e p="DataContext.csproj" t="IncludeRecursive" />
         <e p="docs" t="Include" />
         <e p="Migrations" t="Include">
-          <e p="20180307212944_Initial.cs" t="Include" />
-          <e p="20180307212944_Initial.Designer.cs" t="Include" />
+          <e p="20180313132438_Initial.cs" t="Include" />
+          <e p="20180313132438_Initial.Designer.cs" t="Include" />
           <e p="ApplicationContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="Models" t="Include">
@@ -194,6 +198,7 @@
           <e p="AttachmentDownloads.cs" t="Include" />
           <e p="BaseEntity.cs" t="Include" />
           <e p="Forum.cs" t="Include" />
+          <e p="ForumModerator.cs" t="Include" />
           <e p="ForumThread.cs" t="Include" />
           <e p="ForumThreadReply.cs" t="Include" />
           <e p="News.cs" t="Include" />

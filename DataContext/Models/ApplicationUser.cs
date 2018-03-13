@@ -10,17 +10,13 @@ namespace DataContext.Models
         [MaxLength(32)]
         public string DisplayName { get; set; }
 
-        [MaxLength(24)]
-        public virtual string FirstName { get; set; }
-
-        [MaxLength(32)]
-        public virtual string LastName { get; set; }
-
-        [MaxLength(32)]
-        public virtual string MiddleName { get; set; }
+        [Required]
+        [MinLength(64)]
+        [MaxLength(64)]
+        public string ApiKey { get; set; }
 
         [MaxLength(100)]
-        public virtual string LockoutReason { get; set; }
+        public string LockoutReason { get; set; }
 
         [Required]
         public DateTime RegisterDate { get; set; } = DateTime.Now;
@@ -29,6 +25,11 @@ namespace DataContext.Models
         public string Avatar { get; set; } = "noavatar";
 
         [MaxLength(8)]
-        public virtual string Culture { get; set; }
+        public string Culture { get; set; }
+
+        public override string ToString()
+        {
+            return DisplayName;
+        }
     }
 }

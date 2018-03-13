@@ -26,14 +26,17 @@
     }
     <div class="container @(settings.IsContainerCentered ? "container-center" : "") body-content">
         @RenderBody()
-        @if (settings.IsFooterVisible)
-        {
+    </div>
+
+    @if (settings.IsFooterVisible)
+    {
+        <div class="container">
             <hr/>
             <footer>
                 <p>&copy; 2017-2018, Cerberus</p>
             </footer>
-        }
-    </div>
+        </div>
+    }
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>

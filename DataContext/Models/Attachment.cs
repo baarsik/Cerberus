@@ -7,7 +7,7 @@ namespace DataContext.Models
     public class Attachment : BaseEntity
     {
         [Required]
-        public string Name { get; set; }
+        public string Title { get; set; }
 
         [Required]
         public DateTime CreateDate { get; set; } = DateTime.Now;

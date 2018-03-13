@@ -6,12 +6,15 @@ namespace DataContext.Models
     public class ForumThreadReply : BaseEntity
     {
         [Required]
-        public virtual DateTime CreateDate { get; set; } = DateTime.Now;
+        public string Content { get; set; }
+        
+        [Required]
+        public DateTime CreateDate { get; set; } = DateTime.Now;
 
-        public virtual DateTime? LastEditDate { get; set; }
+        public DateTime? LastEditDate { get; set; }
 
         [Required]
-        public virtual bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
 
         [Required]
         public virtual Forum Forum { get; set; }
@@ -21,5 +24,10 @@ namespace DataContext.Models
 
         [Required]
         public virtual ApplicationUser Author { get; set; }
+
+        public override string ToString()
+        {
+            return Content;
+        }
     }
 }

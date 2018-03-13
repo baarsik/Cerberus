@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Cerberus.Models;
+using Cerberus.Models.Extensions;
+using Cerberus.Models.Helpers;
 using Cerberus.Models.Services;
 using DataContext.Models;
 using Microsoft.AspNetCore.Identity;
@@ -31,8 +31,6 @@ namespace Cerberus.Controllers.Services
         /// <summary>
         /// Checks whether Display Name is already in use
         /// </summary>
-        /// <param name="displayName"></param>
-        /// <returns></returns>
         public async Task<bool> IsDisplayNameInUseAsync(string displayName)
         {
             return await _userManager.Users.AnyAsync(c => string.Compare(c.DisplayName, displayName, StringComparison.InvariantCultureIgnoreCase) == 0);
@@ -41,8 +39,6 @@ namespace Cerberus.Controllers.Services
         /// <summary>
         /// Checks whether E-Mail is already in use
         /// </summary>
-        /// <param name="email"></param>
-        /// <returns></returns>
         public async Task<bool> IsEmailInUseAsync(string email)
         {
             return await _userManager.Users.AnyAsync(c => string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0);
@@ -51,8 +47,6 @@ namespace Cerberus.Controllers.Services
         /// <summary>
         /// Returns ApplicationUser record based on email and password
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="password"></param>
         /// <returns>ApplicationUser on success, null on failure</returns>
         public async Task<ApplicationUser> GetUserByCredentials(string email, string password)
         {
@@ -62,8 +56,22 @@ namespace Cerberus.Controllers.Services
                 ? user
                 : null;
         }
-
-        public async Task<LoginResult> JwtLoginAsync(string email, string password, bool isPersistent = false)
+        
+        /// <summary>
+        /// Returns ApplicationUser record based on email and api key
+        /// </summary>
+        /// <returns>ApplicationUser on success, null on failure</returns>
+        public async Task<ApplicationUser> GetUserByApiCredentials(string email, string apiKey)
+        {
+            var user = await _userManager.Users
+                .FirstOrDefaultAsync(c =>
+                    string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0 
+                    && c.ApiKey == apiKey);
+            
+            return user;
+        }
+        
+        public async Task<LoginResult> LoginAsync(string email, string password, bool isPersistent = false)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(c => string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0);
             if (user == null)
@@ -77,14 +85,17 @@ namespace Cerberus.Controllers.Services
                 ? LoginStatus.Success
                 : LoginStatus.InvalidCredentials);
         }
-
+        
         public async Task<RegisterResult> RegisterAsync(string email, string displayName, string password)
         {
+            displayName = displayName.FixSpacing();
+            
             var user = new ApplicationUser
             {
                 DisplayName = displayName,
                 UserName = email,
-                Email = email
+                Email = email,
+                ApiKey = StringHelpers.GenerateRandomString(64)
             };
 
             if (await IsDisplayNameInUseAsync(displayName))
@@ -107,11 +118,15 @@ namespace Cerberus.Controllers.Services
             await _signInManager.SignOutAsync();
         }
 
-        public string GenerateJwtToken(string email, ApplicationUser user)
+        /// <summary>
+        /// Generate JSON Web Token based on user
+        /// </summary>
+        /// <returns>Token</returns>
+        public string GenerateJwt(ApplicationUser user)
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, email),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id)
             };

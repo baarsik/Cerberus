@@ -4,15 +4,16 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Threading.Tasks;
 using Cerberus.Controllers.Services;
+using Cerberus.Models.Helpers;
 using DataContext;
 using DataContext.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -149,6 +150,8 @@ namespace Cerberus
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+            
+            context.Database.Migrate();
         }
         
         private async Task CreateRolesAsync(IServiceProvider serviceProvider)
@@ -171,7 +174,8 @@ namespace Cerberus
                 {
                     UserName = Configuration["DefaultUser:Email"],
                     DisplayName = Configuration["DefaultUser:DisplayName"],
-                    Email = Configuration["DefaultUser:Email"]
+                    Email = Configuration["DefaultUser:Email"],
+                    ApiKey = StringHelpers.GenerateRandomString(64)
                 };
                 var createPowerUser = await userManager.CreateAsync(defaultUser, Configuration["DefaultUser:Password"]);
                 if (createPowerUser.Succeeded)
