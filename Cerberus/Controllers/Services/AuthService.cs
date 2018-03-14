@@ -48,7 +48,7 @@ namespace Cerberus.Controllers.Services
         /// Returns ApplicationUser record based on email and password
         /// </summary>
         /// <returns>ApplicationUser on success, null on failure</returns>
-        public async Task<ApplicationUser> GetUserByCredentials(string email, string password)
+        public async Task<ApplicationUser> GetUserByCredentialsAsync(string email, string password)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(c => string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0);
             
@@ -58,10 +58,20 @@ namespace Cerberus.Controllers.Services
         }
         
         /// <summary>
+        /// Returns ApplicationUser record based on display name
+        /// </summary>
+        /// <returns>ApplicationUser on success, null on failure</returns>
+        public async Task<ApplicationUser> GetUserByDisplayNameAsync(string displayName)
+        {
+            return await _userManager.Users
+                .FirstOrDefaultAsync(c => string.Compare(c.DisplayName, displayName, StringComparison.InvariantCultureIgnoreCase) == 0);
+        }
+        
+        /// <summary>
         /// Returns ApplicationUser record based on email and api key
         /// </summary>
         /// <returns>ApplicationUser on success, null on failure</returns>
-        public async Task<ApplicationUser> GetUserByApiCredentials(string email, string apiKey)
+        public async Task<ApplicationUser> GetUserByApiCredentialsAsync(string email, string apiKey)
         {
             var user = await _userManager.Users
                 .FirstOrDefaultAsync(c =>

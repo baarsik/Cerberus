@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Cerberus.Controllers.Services;
 using Cerberus.Models;
+using Cerberus.Models.Extensions;
 using Cerberus.Models.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -88,6 +89,21 @@ namespace Cerberus.Controllers
         {
             await _authService.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        [Route("profile/{name}")]
+        public async Task<IActionResult> Profile(string name)
+        {
+            var user = await _authService.GetUserByDisplayNameAsync(name);
+            if (user == null)
+                return new NotFoundResult();
+            
+            var model = new ProfileViewModel
+            {
+                IsOwnProfile = User.GetDisplayName() == user.DisplayName,
+                User = user
+            };
+            return View(model);
         }
     }
 }

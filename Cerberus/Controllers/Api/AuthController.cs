@@ -19,7 +19,7 @@ namespace Cerberus.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> Login(string email, string apiKey)
         {
-            var user = await _authService.GetUserByApiCredentials(email, apiKey);
+            var user = await _authService.GetUserByApiCredentialsAsync(email, apiKey);
             if (user == null)
                 return new UnauthorizedResult();
             

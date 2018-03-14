@@ -527,6 +527,19 @@
     background-color: #3d404c
 }
 
+.btn-unimportant {
+    color: #949ba2;
+}
+
+.btn-unimportant:hover,
+.btn-unimportant:active,
+.btn-unimportant:active:focus,
+.btn-unimportant:focus,
+.btn-unimportant.active {
+    color: #ffffff;
+    text-decoration: none
+}
+
 .btn-link:hover,
 .btn-link:active,
 .btn-link:active:focus,
@@ -1438,7 +1451,7 @@ img.image-xl {
     background-color: #2a2d35;
     position: absolute;
     top: 48px;
-    left: -50px;
+    left: -55px;
     width: 160px;
     box-shadow: 6px 6px 6px rgba(0, 0, 0, .175);
     border: 0;
@@ -1450,6 +1463,22 @@ img.image-xl {
 .cerberus-nav.navbar-nav > .open > ul.dropdown-menu > li > a:focus,
 .cerberus-nav.navbar-nav > .open > ul.dropdown-menu > li > a:active {
     color: #c0c4c8;
+}
+
+.cerberus-nav.navbar-nav > .open > ul.dropdown-menu > li.active > a,
+.cerberus-nav.navbar-nav > .open > ul.dropdown-menu > li.active > a:hover,
+.cerberus-nav.navbar-nav > .open > ul.dropdown-menu > li.active > a:focus {
+    color: #c0c4c8;    
+    background-color: #2a2d35;
+}
+
+.cerberus-nav.navbar-nav > .open > ul.dropdown-menu > li.text-accent > a {
+    color: #f6a821;
+}
+
+.cerberus-nav.navbar-nav > .open > ul.dropdown-menu > li.text-accent > a:hover,
+.cerberus-nav.navbar-nav > .open > ul.dropdown-menu > li.text-accent > a:focus {
+    color: #f8bb52;
 }
 
     .cerberus-nav.nav .nav-info {

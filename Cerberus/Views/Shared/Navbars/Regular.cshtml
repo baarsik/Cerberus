@@ -1,4 +1,10 @@
-﻿<nav class="navbar navbar-default navbar-static-top">
+﻿@{
+    var profileRouteData = new Dictionary<string, string>
+    {
+        {"name", User.GetDisplayName()}
+    };    
+}
+<nav class="navbar navbar-default navbar-static-top">
     <div class="container-fluid">
         <div class="navbar-header">
             <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">
@@ -20,8 +26,17 @@
                             @User.GetDisplayName()
                         </a>
                         <ul class="dropdown-menu">
+                            @if (User.IsAdmin())
+                            {
+                                <li class="text-accent">
+                                    <a asp-area="" asp-controller="Settings" asp-action="Index">
+                                        <i class="far fa-cog m-r-xs"></i>
+                                        Site Settings
+                                    </a>
+                                </li>
+                            }
                             <li>
-                                <a asp-area="" asp-controller="Account" asp-action="Profile">
+                                <a asp-area="" asp-controller="Account" asp-action="Profile" asp-all-route-data="profileRouteData">
                                     <i class="far fa-user-alt m-r-xs"></i>
                                     Profile
                                 </a>
