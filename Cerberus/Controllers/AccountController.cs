@@ -6,7 +6,6 @@ using Cerberus.Models.Extensions;
 using Cerberus.Models.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
 
 namespace Cerberus.Controllers
