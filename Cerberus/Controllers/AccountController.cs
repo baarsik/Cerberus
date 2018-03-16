@@ -6,6 +6,7 @@ using Cerberus.Models.Extensions;
 using Cerberus.Models.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
 
 namespace Cerberus.Controllers
@@ -91,19 +92,36 @@ namespace Cerberus.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [Route("profile/{name}")]
-        public async Task<IActionResult> Profile(string name)
+        [Authorize]
+        public async Task<IActionResult> ChangePassword()
         {
-            var user = await _authService.GetUserByDisplayNameAsync(name);
+            var user = await _authService.GetUserByClaimsPrincipalAsync(User);
             if (user == null)
-                return new NotFoundResult();
-            
-            var model = new ProfileViewModel
+                return new UnauthorizedResult();
+
+            var model = new ChangePasswordViewModel
             {
-                IsOwnProfile = User.GetDisplayName() == user.DisplayName,
                 User = user
             };
             return View(model);
+        }
+        
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _authService.GetUserByDisplayNameAsync(User.GetDisplayName(), model.OldPassword);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Wrong old password");
+                return View(model);
+            }
+
+            await _authService.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            return RedirectToAction("Profile", "Profile", new {name = User.GetDisplayName()});
         }
     }
 }

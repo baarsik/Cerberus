@@ -1422,10 +1422,16 @@ img.image-xl {
     display: flex;
     flex-direction: row;
 }
-.flex-row.justify-between {
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+.flex-row.justify-between,
+.flex-column.justify-between {
     justify-content: space-between;
 }
-.flex-row.align-center {
+.flex-row.align-center,
+.flex-column.align-center {
     align-items: center;
 }
 
@@ -3459,4 +3465,19 @@ div.dt-button-info {
     color: #ffffff !important;
     padding: 6px 12px !important
 
+}
+
+.avatar {
+    height: 96px;
+    width: 96px;
+    font-size: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+.profile-name {
+    font-size: 32px;
+    font-weight: bold;
 }

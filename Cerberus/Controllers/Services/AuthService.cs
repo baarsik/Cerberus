@@ -15,7 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Cerberus.Controllers.Services
 {
-    public class AuthService
+    public sealed class AuthService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -65,6 +65,29 @@ namespace Cerberus.Controllers.Services
         {
             return await _userManager.Users
                 .FirstOrDefaultAsync(c => string.Compare(c.DisplayName, displayName, StringComparison.InvariantCultureIgnoreCase) == 0);
+        }
+        
+        /// <summary>
+        /// Returns ApplicationUser record based on display name and password
+        /// </summary>
+        /// <returns>ApplicationUser on success, null on failure</returns>
+        public async Task<ApplicationUser> GetUserByDisplayNameAsync(string displayName, string password)
+        {
+            var user = await _userManager.Users
+                .FirstOrDefaultAsync(c => string.Compare(c.DisplayName, displayName, StringComparison.InvariantCultureIgnoreCase) == 0);
+            
+            return user != null && await _userManager.CheckPasswordAsync(user, password)
+                ? user
+                : null;
+        }
+
+        /// <summary>
+        /// Returns ApplicationUser record based on ClaimsIdentity
+        /// </summary>
+        /// <returns>ApplicationUser on success, null on failure</returns>
+        public async Task<ApplicationUser> GetUserByClaimsPrincipalAsync(ClaimsPrincipal user)
+        {
+            return await _userManager.GetUserAsync(user);
         }
         
         /// <summary>
@@ -155,6 +178,17 @@ namespace Cerberus.Controllers.Services
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        /// <summary>
+        /// Change user password
+        /// </summary>
+        /// <param name="user">User to change password</param>
+        /// <param name="oldPassword">Old password</param>
+        /// <param name="newPassword">New password</param>
+        public async Task ChangePasswordAsync(ApplicationUser user, string oldPassword, string newPassword)
+        {
+            await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
         }
     }
 }

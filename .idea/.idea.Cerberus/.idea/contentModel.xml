@@ -31,13 +31,16 @@
           </e>
           <e p="BaseController.cs" t="Include" />
           <e p="HomeController.cs" t="Include" />
+          <e p="ProfileController.cs" t="Include" />
           <e p="Services" t="Include">
             <e p="AuthService.cs" t="Include" />
+            <e p="ProfileService.cs" t="Include" />
           </e>
           <e p="Settings.cs" t="Include" />
         </e>
         <e p="docs" t="Include" />
         <e p="Models" t="Include">
+          <e p="ChangePasswordViewModel.cs" t="Include" />
           <e p="ErrorViewModel.cs" t="Include" />
           <e p="Extensions" t="Include">
             <e p="ClaimsPrincipalExtensions.cs" t="Include" />
@@ -75,12 +78,15 @@
           <e p="_ViewImports.cshtml" t="Include" />
           <e p="_ViewStart.cshtml" t="Include" />
           <e p="Account" t="Include">
+            <e p="ChangePassword.cshtml" t="Include" />
             <e p="Login.cshtml" t="Include" />
-            <e p="Profile.cshtml" t="Include" />
             <e p="Register.cshtml" t="Include" />
           </e>
           <e p="Home" t="Include">
             <e p="Index.cshtml" t="Include" />
+          </e>
+          <e p="Profile" t="Include">
+            <e p="Profile.cshtml" t="Include" />
           </e>
           <e p="Settings" t="Include">
             <e p="Index.cshtml" t="Include" />
@@ -101,6 +107,7 @@
           </e>
           <e p="favicon.ico" t="Include" />
           <e p="images" t="Include">
+            <e p="avatars" t="Include" />
             <e p="banner1.svg" t="Include" />
             <e p="banner2.svg" t="Include" />
             <e p="banner3.svg" t="Include" />
@@ -196,6 +203,8 @@
         <e p="Migrations" t="Include">
           <e p="20180313132438_Initial.cs" t="Include" />
           <e p="20180313132438_Initial.Designer.cs" t="Include" />
+          <e p="20180316144458_PrivateMessages.cs" t="Include" />
+          <e p="20180316144458_PrivateMessages.Designer.cs" t="Include" />
           <e p="ApplicationContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="Models" t="Include">
@@ -209,6 +218,7 @@
           <e p="ForumThreadReply.cs" t="Include" />
           <e p="News.cs" t="Include" />
           <e p="NewsComment.cs" t="Include" />
+          <e p="PrivateMessage.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">

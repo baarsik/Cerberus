@@ -22,6 +22,7 @@ namespace DataContext
         public DbSet<ForumModerator> ForumModerators { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<AttachmentDownloads> AttachmentDownloads { get; set; }
+        public DbSet<PrivateMessage> PrivateMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -53,6 +54,11 @@ namespace DataContext
             builder.Entity<News>()
                 .HasMany(c => c.Comments)
                 .WithOne(c => c.News)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<NewsComment>()
+                .HasMany(c => c.Children)
+                .WithOne(c => c.Parent)
                 .OnDelete(DeleteBehavior.Cascade);
             
             base.OnModelCreating(builder);

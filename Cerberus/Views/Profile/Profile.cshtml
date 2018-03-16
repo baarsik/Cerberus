@@ -1,0 +1,62 @@
+﻿@model ProfileViewModel
+
+@{
+    ViewBag.Title = Model.User.DisplayName;
+    var profileRouteData = new Dictionary<string, string>
+    {
+        {"name", Model.User.DisplayName}
+    };
+}
+
+<div class="flex-column">
+    <div class="flex-row">
+        <div class="avatar m-r">
+            @if (Model.User.Avatar == "noavatar")
+            {
+                <i class="fas fa-user"></i>
+            }
+            else
+            {
+                <img src="~/images/avatars/@Model.User.Avatar" alt="Avatar"/>
+            }
+        </div>
+        <div class="flex-column">
+            <div class="profile-name">
+                <div>@Model.User.DisplayName</div>
+            </div>
+            <div>
+                Registered on @Model.User.RegisterDate.ToLongDateString()
+            </div>
+            <div>
+                @if (Model.IsOwnProfile)
+                {
+                    <a class="btn btn-default btn-xs" asp-action="ChangePassword" asp-controller="Account">Change password</a>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row m-t">
+        <div class="col-lg-6">
+            <div class="panel panel-filled panel-c-warning">
+                <div class="panel-heading">
+                    News statistics
+                </div>
+                <div class="panel-body">
+                    <div>Total news: @Model.Statistics.TotalNews</div>
+                    <div>Total comments: @Model.Statistics.TotalNewsComments</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-filled panel-c-warning">
+                <div class="panel-heading">
+                    Forum statistics
+                </div>
+                <div class="panel-body">
+                    <div>Total threads: @Model.Statistics.TotalForumThreads</div>
+                    <div>Total posts: @Model.Statistics.TotalForumPosts</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

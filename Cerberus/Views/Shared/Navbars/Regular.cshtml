@@ -2,7 +2,7 @@
     var profileRouteData = new Dictionary<string, string>
     {
         {"name", User.GetDisplayName()}
-    };    
+    };
 }
 <nav class="navbar navbar-default navbar-static-top">
     <div class="container-fluid">
@@ -36,7 +36,7 @@
                                 </li>
                             }
                             <li>
-                                <a asp-area="" asp-controller="Account" asp-action="Profile" asp-all-route-data="profileRouteData">
+                                <a asp-area="" asp-controller="Profile" asp-action="Profile" asp-all-route-data="profileRouteData">
                                     <i class="far fa-user-alt m-r-xs"></i>
                                     Profile
                                 </a>

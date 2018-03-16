@@ -301,13 +301,51 @@ namespace DataContext.Migrations
 
                     b.Property<Guid>("NewsId");
 
+                    b.Property<Guid?>("ParentId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
 
                     b.HasIndex("NewsId");
 
+                    b.HasIndex("ParentId");
+
                     b.ToTable("NewsComments");
+                });
+
+            modelBuilder.Entity("DataContext.Models.PrivateMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Content")
+                        .IsRequired();
+
+                    b.Property<DateTime>("DateTime");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<bool>("IsRead");
+
+                    b.Property<bool>("IsSentByAdministration");
+
+                    b.Property<string>("ReceiverId")
+                        .IsRequired();
+
+                    b.Property<string>("SenderId");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(64);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("PrivateMessages");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -526,6 +564,23 @@ namespace DataContext.Migrations
                         .WithMany("Comments")
                         .HasForeignKey("NewsId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DataContext.Models.NewsComment", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DataContext.Models.PrivateMessage", b =>
+                {
+                    b.HasOne("DataContext.Models.ApplicationUser", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DataContext.Models.ApplicationUser", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

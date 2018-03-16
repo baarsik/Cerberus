@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DataContext.Models
@@ -21,6 +22,10 @@ namespace DataContext.Models
 
         [Required]
         public virtual News News { get; set; }
+        
+        public virtual NewsComment Parent { get; set; }
+
+        public virtual ICollection<NewsComment> Children { get; set; }
 
         public override string ToString()
         {
