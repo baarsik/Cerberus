@@ -15,5 +15,9 @@ namespace DataContext.Models
         public string Description { get; set; }
         
         public virtual ICollection<Attachment> Attachments { get; set; }
+        
+        public virtual ICollection<ProductLicense> Licenses { get; set; }
+        
+        public virtual ICollection<ProductSharedData> SharedData { get; set; }
     }
 }

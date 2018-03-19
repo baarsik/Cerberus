@@ -21,6 +21,7 @@ namespace DataContext
         public DbSet<PrivateMessage> PrivateMessages { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductSettings> ProductSettings { get; set; }
+        public DbSet<ProductLicense> ProductLicenses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -71,6 +72,16 @@ namespace DataContext
 
             builder.Entity<Product>()
                 .HasMany(c => c.Attachments)
+                .WithOne(c => c.Product)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Product>()
+                .HasMany(c => c.Licenses)
+                .WithOne(c => c.Product)
+                .OnDelete(DeleteBehavior.Restrict); // Should manually review licenses before product deletion
+            
+            builder.Entity<Product>()
+                .HasMany(c => c.SharedData)
                 .WithOne(c => c.Product)
                 .OnDelete(DeleteBehavior.Cascade);
             

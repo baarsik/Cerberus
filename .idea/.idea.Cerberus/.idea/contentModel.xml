@@ -208,6 +208,8 @@
           <e p="20180316144458_PrivateMessages.Designer.cs" t="Include" />
           <e p="20180319090233_UserApiIpBinding.cs" t="Include" />
           <e p="20180319090233_UserApiIpBinding.Designer.cs" t="Include" />
+          <e p="20180319115723_Products.cs" t="Include" />
+          <e p="20180319115723_Products.Designer.cs" t="Include" />
           <e p="ApplicationContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="Models" t="Include">
@@ -223,7 +225,9 @@
           <e p="NewsComment.cs" t="Include" />
           <e p="PrivateMessage.cs" t="Include" />
           <e p="Product.cs" t="Include" />
+          <e p="ProductLicense.cs" t="Include" />
           <e p="ProductSettings.cs" t="Include" />
+          <e p="ProductSharedData.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
