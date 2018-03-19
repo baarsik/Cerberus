@@ -4,10 +4,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Cerberus.Models;
 using Cerberus.Models.Extensions;
 using Cerberus.Models.Helpers;
 using Cerberus.Models.Services;
+using DataContext;
 using DataContext.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,12 +23,15 @@ namespace Cerberus.Controllers.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly ApplicationContext _db;
 
-        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration,
+            ApplicationContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _db = context;
         }
 
         /// <summary>
@@ -90,20 +96,6 @@ namespace Cerberus.Controllers.Services
             return await _userManager.GetUserAsync(user);
         }
         
-        /// <summary>
-        /// Returns ApplicationUser record based on email and api key
-        /// </summary>
-        /// <returns>ApplicationUser on success, null on failure</returns>
-        public async Task<ApplicationUser> GetUserByApiCredentialsAsync(string email, string apiKey)
-        {
-            var user = await _userManager.Users
-                .FirstOrDefaultAsync(c =>
-                    string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0 
-                    && c.ApiKey == apiKey);
-            
-            return user;
-        }
-        
         public async Task<LoginResult> LoginAsync(string email, string password, bool isPersistent = false)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(c => string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0);
@@ -153,23 +145,31 @@ namespace Cerberus.Controllers.Services
         }
 
         /// <summary>
-        /// Generate JSON Web Token based on user
+        /// Generate JSON Web Token based on user, update last token IP
         /// </summary>
         /// <returns>Token</returns>
-        public string GenerateJwt(ApplicationUser user)
+        public async Task<GenerateJwtResult> GenerateJwtAsync(string email, string apiKey, string ip)
         {
+            var user = await _userManager.Users
+                .FirstOrDefaultAsync(c =>
+                    string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0 
+                    && c.ApiKey == apiKey);
+            
+            if (user == null)
+                return new GenerateJwtResult(false);
+            
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
+                new Claim(ClaimTypes.SerialNumber, user.ApiKey)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expires = DateTime.Now.AddHours(Convert.ToDouble(_configuration["JwtExpireHours"]));
 
-            var token = new JwtSecurityToken(
+            var jwt = new JwtSecurityToken(
                 issuer: _configuration["JwtIssuer"],
                 audience: _configuration["JwtIssuer"],
                 claims: claims,
@@ -177,7 +177,38 @@ namespace Cerberus.Controllers.Services
                 signingCredentials: credentials
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            // Update token IP address binding
+            var userFromDb = await _db.Users.FirstAsync(c => c.Id == user.Id);
+            userFromDb.ApiBindedIp = ip;
+            _db.Entry(userFromDb).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+
+            var token = new JwtSecurityTokenHandler().WriteToken(jwt);
+            return new GenerateJwtResult(user, token);
+        }
+
+        /// <summary>
+        /// Validates whether user is eligible for API access
+        /// </summary>
+        /// <returns>Is valid user</returns>
+        public async Task<bool> IsApiBindedIpValidAsync(ClaimsPrincipal user, HttpContext httpContext)
+        {
+            var email = user.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            var apiKey = user.FindFirst(ClaimTypes.SerialNumber)?.Value;
+            var ip = httpContext.Connection.RemoteIpAddress.ToString();
+            return await IsApiBindedIpValidAsync(email, apiKey, ip);
+        }
+        
+        /// <summary>
+        /// Validates whether user is eligible for API access
+        /// </summary>
+        /// <param name="email">Current user E-Mail</param>
+        /// <param name="apiKey">Current user API key</param>
+        /// <param name="ip">Current user IP</param>
+        /// <returns>Is valid user</returns>
+        public async Task<bool> IsApiBindedIpValidAsync(string email, string apiKey, string ip)
+        {
+            return await _db.Users.AnyAsync(c => c.Email == email && c.ApiKey == apiKey && c.ApiBindedIp == ip);
         }
 
         /// <summary>

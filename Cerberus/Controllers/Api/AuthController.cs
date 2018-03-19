@@ -19,22 +19,26 @@ namespace Cerberus.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> Login(string email, string apiKey)
         {
-            var user = await _authService.GetUserByApiCredentialsAsync(email, apiKey);
-            if (user == null)
+            var ip = HttpContext.Connection.RemoteIpAddress.ToString();
+            var result = await _authService.GenerateJwtAsync(email, apiKey, ip);
+            
+            if (!result.Success)
                 return new UnauthorizedResult();
             
-            var token = _authService.GenerateJwt(user);
             return new OkObjectResult(new
             {
-                email = user.Email,
-                name = user.DisplayName,
-                token
+                email = result.User.Email,
+                name = result.User.DisplayName,
+                result.Token
             });
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public IActionResult Test()
+        public async Task<IActionResult> Test()
         {
+            if (!await _authService.IsApiBindedIpValidAsync(User, HttpContext))
+                return new UnauthorizedResult();
+            
             return new OkObjectResult("It works!");
         }
     }

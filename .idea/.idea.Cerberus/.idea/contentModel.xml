@@ -46,6 +46,7 @@
             <e p="ClaimsPrincipalExtensions.cs" t="Include" />
             <e p="StringExtensions.cs" t="Include" />
           </e>
+          <e p="GenerateJwtResult.cs" t="Include" />
           <e p="Helpers" t="Include">
             <e p="StringHelpers.cs" t="Include" />
           </e>
@@ -205,6 +206,8 @@
           <e p="20180313132438_Initial.Designer.cs" t="Include" />
           <e p="20180316144458_PrivateMessages.cs" t="Include" />
           <e p="20180316144458_PrivateMessages.Designer.cs" t="Include" />
+          <e p="20180319090233_UserApiIpBinding.cs" t="Include" />
+          <e p="20180319090233_UserApiIpBinding.Designer.cs" t="Include" />
           <e p="ApplicationContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="Models" t="Include">

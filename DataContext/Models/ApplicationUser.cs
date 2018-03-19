@@ -15,6 +15,9 @@ namespace DataContext.Models
         [MaxLength(64)]
         public string ApiKey { get; set; }
 
+        [MaxLength(15)]
+        public string ApiBindedIp { get; set; }
+
         [MaxLength(100)]
         public string LockoutReason { get; set; }
 
