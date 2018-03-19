@@ -28,6 +28,8 @@ namespace DataContext.Models
         public virtual ApplicationUser Author { get; set; }
 
         public virtual ICollection<NewsComment> Comments { get; set; }
+        
+        public virtual ICollection<Attachment> Attachments { get; set; }
 
         public override string ToString()
         {
