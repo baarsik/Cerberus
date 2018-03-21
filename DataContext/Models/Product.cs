@@ -12,6 +12,9 @@ namespace DataContext.Models
         [Required]
         public bool IsActive { get; set; } = true;
         
+        [Required]
+        public bool RequiresLicense { get; set; } = true;
+        
         public string Description { get; set; }
         
         public virtual ICollection<Attachment> Attachments { get; set; }

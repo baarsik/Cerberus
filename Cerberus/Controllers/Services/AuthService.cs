@@ -157,14 +157,8 @@ namespace Cerberus.Controllers.Services
             
             if (user == null)
                 return new GenerateJwtResult(false);
-            
-            var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.SerialNumber, user.ApiKey)
-            };
 
+            var tokenId = Guid.NewGuid();
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expires = DateTime.Now.AddHours(Convert.ToDouble(_configuration["JwtExpireHours"]));
@@ -172,17 +166,23 @@ namespace Cerberus.Controllers.Services
             var jwt = new JwtSecurityToken(
                 issuer: _configuration["JwtIssuer"],
                 audience: _configuration["JwtIssuer"],
-                claims: claims,
+                claims: new List<Claim>
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                    new Claim(JwtRegisteredClaimNames.Jti, tokenId.ToString()),
+                    new Claim(ClaimTypes.SerialNumber, user.ApiKey)
+                },
                 expires: expires,
                 signingCredentials: credentials
             );
-
-            // Update token IP address binding
+            
+            // Update user token binding
             var userFromDb = await _db.Users.FirstAsync(c => c.Id == user.Id);
             userFromDb.ApiBindedIp = ip;
+            userFromDb.LastApiTokenId = tokenId;
             _db.Entry(userFromDb).State = EntityState.Modified;
             await _db.SaveChangesAsync();
-
+            
             var token = new JwtSecurityTokenHandler().WriteToken(jwt);
             return new GenerateJwtResult(user, token);
         }
@@ -193,22 +193,26 @@ namespace Cerberus.Controllers.Services
         /// <returns>Is valid user</returns>
         public async Task<bool> IsApiBindedIpValidAsync(ClaimsPrincipal user, HttpContext httpContext)
         {
+            if (!Guid.TryParse(user.FindFirst(JwtRegisteredClaimNames.Jti)?.Value, out var tokenId))
+                return false;
+            
             var email = user.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
             var apiKey = user.FindFirst(ClaimTypes.SerialNumber)?.Value;
             var ip = httpContext.Connection.RemoteIpAddress.ToString();
-            return await IsApiBindedIpValidAsync(email, apiKey, ip);
+            return await IsApiBindedIpValidAsync(tokenId, email, apiKey, ip);
         }
-        
+
         /// <summary>
         /// Validates whether user is eligible for API access
         /// </summary>
+        /// <param name="tokenId">JWT id (claim JwtRegisteredClaimNames.Jti)</param>
         /// <param name="email">Current user E-Mail</param>
         /// <param name="apiKey">Current user API key</param>
         /// <param name="ip">Current user IP</param>
         /// <returns>Is valid user</returns>
-        public async Task<bool> IsApiBindedIpValidAsync(string email, string apiKey, string ip)
+        public async Task<bool> IsApiBindedIpValidAsync(Guid tokenId, string email, string apiKey, string ip)
         {
-            return await _db.Users.AnyAsync(c => c.Email == email && c.ApiKey == apiKey && c.ApiBindedIp == ip);
+            return await _db.Users.AnyAsync(c => c.Email == email && c.ApiKey == apiKey && c.ApiBindedIp == ip && c.LastApiTokenId == tokenId);
         }
 
         /// <summary>

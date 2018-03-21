@@ -28,9 +28,11 @@
           <e p="AccountController.cs" t="Include" />
           <e p="Api" t="Include">
             <e p="AuthController.cs" t="Include" />
+            <e p="SettingsController.cs" t="Include" />
           </e>
           <e p="BaseController.cs" t="Include" />
           <e p="HomeController.cs" t="Include" />
+          <e p="PageController.cs" t="Include" />
           <e p="ProfileController.cs" t="Include" />
           <e p="Services" t="Include">
             <e p="AuthService.cs" t="Include" />
@@ -53,7 +55,7 @@
           <e p="LayoutSettings.cs" t="Include" />
           <e p="LoginModel.cs" t="Include" />
           <e p="ProfileViewModel.cs" t="Include" />
-          <e p="RegisterModel.cs" t="Include" />
+          <e p="RegisterViewModel.cs" t="Include" />
           <e p="Services" t="Include">
             <e p="LoginResult.cs" t="Include" />
             <e p="RegisterResult.cs" t="Include" />
@@ -85,6 +87,9 @@
           </e>
           <e p="Home" t="Include">
             <e p="Index.cshtml" t="Include" />
+          </e>
+          <e p="Page" t="Include">
+            <e p="Rules.cshtml" t="Include" />
           </e>
           <e p="Profile" t="Include">
             <e p="Profile.cshtml" t="Include" />
@@ -210,6 +215,10 @@
           <e p="20180319090233_UserApiIpBinding.Designer.cs" t="Include" />
           <e p="20180319115723_Products.cs" t="Include" />
           <e p="20180319115723_Products.Designer.cs" t="Include" />
+          <e p="20180319135128_ProductImprovements.cs" t="Include" />
+          <e p="20180319135128_ProductImprovements.Designer.cs" t="Include" />
+          <e p="20180321075608_SafetyUpdate.cs" t="Include" />
+          <e p="20180321075608_SafetyUpdate.Designer.cs" t="Include" />
           <e p="ApplicationContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="Models" t="Include">

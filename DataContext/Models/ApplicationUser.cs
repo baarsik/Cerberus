@@ -18,6 +18,8 @@ namespace DataContext.Models
         [MaxLength(15)]
         public string ApiBindedIp { get; set; }
 
+        public Guid LastApiTokenId { get; set; }
+
         [MaxLength(100)]
         public string LockoutReason { get; set; }
 

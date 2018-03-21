@@ -3481,3 +3481,16 @@ div.dt-button-info {
     font-size: 32px;
     font-weight: bold;
 }
+
+
+ol {
+    counter-reset: item;
+    padding-left: 1.25em;
+}
+ol > li {
+    display: block;
+}
+ol > li:before {
+    content: counters(item, ".") ". ";
+    counter-increment: item;
+}

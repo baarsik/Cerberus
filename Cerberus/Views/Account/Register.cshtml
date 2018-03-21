@@ -1,4 +1,4 @@
-﻿@model RegisterModel
+﻿@model RegisterViewModel
 
 @{
     ViewBag.Title = "Register";
@@ -59,6 +59,15 @@
                     <div>Repeat your pasword</div>
                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </span>
+            </div>
+            <div class="form-group">
+                <label class="control-label" asp-for="AreRulesAccepted">
+                    <input type="checkbox" asp-for="AreRulesAccepted">
+                    I have read and accepted <a asp-controller="Page" asp-action="Rules" target="_blank">rules</a>
+                </label>
+                <div class="help-block small">
+                    <span asp-validation-for="AreRulesAccepted" class="text-danger"></span>
+                </div>
             </div>
             <div class="form-group">
                 <recaptcha/>

@@ -57,7 +57,7 @@ namespace Cerberus.Controllers
 
         [ValidateRecaptcha]
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
