@@ -28,15 +28,15 @@ namespace Cerberus.Models
         [MustBeTrue(ErrorMessage = "Please read and accept rules")]
         public bool AreRulesAccepted { get; set; }
     }
-}
+    
+    public class MustBeTrue : ValidationAttribute
+    {    
+        public override bool IsValid(object obj)
+        {
+            if (obj is bool value)
+                return value;
 
-public class MustBeTrue : ValidationAttribute
-{    
-    public override bool IsValid(object obj)
-    {
-        if (obj is bool value)
-            return value;
-
-        throw new InvalidOperationException("This attribute is only valid for Foo objects");
+            throw new InvalidOperationException("This attribute is only valid for Foo objects");
+        }
     }
 }

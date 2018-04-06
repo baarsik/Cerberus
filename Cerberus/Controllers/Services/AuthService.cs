@@ -225,5 +225,16 @@ namespace Cerberus.Controllers.Services
         {
             await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
         }
+
+        /// <summary>
+        /// Generates new API key
+        /// </summary>
+        /// <param name="user">User to change API key</param>
+        public async Task RegenerateApiKey(ApplicationUser user)
+        {
+            user.ApiKey = StringHelpers.GenerateRandomString(64);
+            _db.Entry(user).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+        }
     }
 }

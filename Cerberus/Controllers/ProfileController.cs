@@ -32,5 +32,16 @@ namespace Cerberus.Controllers
             };
             return View(model);
         }
+
+        [Route("[controller]/[action]")]
+        public async Task<IActionResult> RegenerateApiKey()
+        {
+            var user = await _authService.GetUserByClaimsPrincipalAsync(User);
+            if (user == null)
+                return new UnauthorizedResult();
+
+            await _authService.RegenerateApiKey(user);
+            return RedirectToAction("Profile", "Profile", new { name = user.DisplayName });
+        }
     }
 }

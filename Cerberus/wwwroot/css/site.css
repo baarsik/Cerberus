@@ -3494,3 +3494,28 @@ ol > li:before {
     content: counters(item, ".") ". ";
     counter-increment: item;
 }
+
+::selection {
+    background: #f7af3e;
+    color: #fff;
+}
+
+.spoiler {
+    background: #000000;
+    color: #000000;
+}
+.spoiler:hover {
+    color: #949ba2;
+}
+.spoiler::selection {
+    background: #000000;
+    color: #000000;
+}
+.spoiler:hover::selection {
+    background: #f7af3e;
+    color: #fff;
+}
+
+.classified {
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='75px' width='120px'><text x='5' y='30' fill='#f7af3e' style='opacity:0.25' transform='translate(30) rotate(45 50 50)' font-size='14'>Classified</text></svg>");
+}
