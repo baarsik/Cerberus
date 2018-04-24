@@ -14,7 +14,7 @@
     <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlParameterCollection.xml" t="Include" />
     <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlTransaction.xml" t="Include" />
     <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/web.config.transform" t="Include" />
-    <e p="$USER_HOME$/Library/Caches/Rider2017.3/resharper-host/local/Transient/ReSharperHost/v11/SolutionCaches/_Cerberus.2038705725.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2018.1/resharper-host/local/Transient/ReSharperHost/v12/SolutionCaches/_Cerberus.2038705725.00" t="ExcludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeFlat">
       <e p="Cerberus" t="IncludeRecursive">
         <e p=".bowerrc" t="Include" />
@@ -47,6 +47,7 @@
           <e p="Extensions" t="Include">
             <e p="ClaimsPrincipalExtensions.cs" t="Include" />
             <e p="StringExtensions.cs" t="Include" />
+            <e p="ViewContextExtensions.cs" t="Include" />
           </e>
           <e p="GenerateJwtResult.cs" t="Include" />
           <e p="Helpers" t="Include">
@@ -102,6 +103,7 @@
             <e p="_ValidationScriptsPartial.cshtml" t="Include" />
             <e p="Error.cshtml" t="Include" />
             <e p="Navbars" t="Include">
+              <e p="Admin.cshtml" t="Include" />
               <e p="Regular.cshtml" t="Include" />
             </e>
           </e>

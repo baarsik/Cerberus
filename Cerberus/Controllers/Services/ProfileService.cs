@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Cerberus.Models;
 using DataContext;
 using DataContext.Models;
@@ -25,6 +27,16 @@ namespace Cerberus.Controllers.Services
                 TotalForumPosts = await _db.ForumThreadReplies.CountAsync(c => c.Author == user)
             };
             return statistics;
+        }
+        
+        public async Task<ICollection<ProductLicense>> GetProductLicensesAsync(ApplicationUser user)
+        {
+            return await _db.ProductLicenses
+                .Include(c => c.User)
+                .Include(c => c.Product)
+                .Where(c => c.User == user)
+                .OrderByDescending(c => c.EndDate)
+                .ToListAsync();
         }
     }
 }

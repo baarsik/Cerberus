@@ -10,6 +10,7 @@
     public enum NavbarType
     {
         None,
+        Admin,
         Regular
     }
 }

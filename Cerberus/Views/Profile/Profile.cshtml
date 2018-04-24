@@ -43,13 +43,36 @@
                     <div class="panel-heading">
                         API data
                     </div>
-                    <div class="panel-body classified">
+                    <div class="panel-body confidential">
                         <div>
-                            API key (hover to reveal):
+                            <i class="fas fa-key"></i> API key:
                             <span class="spoiler">@Model.User.ApiKey</span>
                         </div>
-                        <div>
+                        <div class="m-t-xs">
                             <a class="btn btn-default btn-xs" asp-action="RegenerateApiKey" asp-controller="Profile">Generate new API key</a>
+                        </div>
+                        <div class="m-t">
+                            Your products:
+                            @if (Model.ProductLicenses.Any())
+                            {
+                                <ol>
+                                    @foreach (var license in Model.ProductLicenses)
+                                    {
+                                        if (license.IsExpired() || license.IsBlocked)
+                                        {
+                                            <li class="text-danger">@license</li>
+                                        }
+                                        else
+                                        {
+                                            <li>@license</li>
+                                        }
+                                    }
+                                </ol>
+                            }
+                            else
+                            {
+                                <span>None</span>
+                            }
                         </div>
                     </div>
                 </div>

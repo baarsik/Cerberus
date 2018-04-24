@@ -1,0 +1,23 @@
+﻿@Html.Partial("Navbars/Regular")
+<aside class="navigation">
+    <nav>
+        <ul class="nav cerberus-nav">
+            <li class="nav-category">Main</li>
+            <li class="@ViewContext.FillClassIfActive("Index", "Settings")">
+                <a asp-controller="Settings" asp-action="Index">Dashboard</a>
+            </li>
+            
+            <li class="nav-category">Manageable Data</li>
+            <li class="@ViewContext.FillClassIfActive("Users", "Settings")">
+                <a asp-controller="Settings" asp-action="Users">User List</a>
+            </li>
+            <li class="@ViewContext.FillClassIfActive("Products", "Settings")">
+                <a asp-controller="Settings" asp-action="Products">Products</a>
+            </li>
+            
+            <li class="nav-info">
+                Admin panel may contain privileged information. Please make sure not to release this info to the public.
+            </li>
+        </ul>
+    </nav>
+</aside>

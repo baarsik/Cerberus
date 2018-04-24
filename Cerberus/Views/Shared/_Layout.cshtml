@@ -23,6 +23,9 @@
         case NavbarType.Regular:
             @Html.Partial("Navbars/Regular")
             break;
+        case NavbarType.Admin:
+            @Html.Partial("Navbars/Admin")
+            break;
     }
     <div class="container @(settings.IsContainerCentered ? "container-center" : "") body-content">
         @RenderBody()

@@ -23,12 +23,14 @@ namespace Cerberus.Controllers
             var user = await _authService.GetUserByDisplayNameAsync(name);
             if (user == null)
                 return new NotFoundResult();
-            
+
+            var isOwnProfile = User.GetDisplayName() == user.DisplayName;
             var model = new ProfileViewModel
             {
-                IsOwnProfile = User.GetDisplayName() == user.DisplayName,
+                IsOwnProfile = isOwnProfile,
                 User = user,
-                Statistics = await _profileService.GetUserStatisticsAsync(user)
+                Statistics = await _profileService.GetUserStatisticsAsync(user),
+                ProductLicenses = isOwnProfile ? await _profileService.GetProductLicensesAsync(user) : null
             };
             return View(model);
         }

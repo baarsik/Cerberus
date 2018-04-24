@@ -1,4 +1,5 @@
-﻿using DataContext.Models;
+﻿using System.Collections.Generic;
+using DataContext.Models;
 
 namespace Cerberus.Models
 {
@@ -9,6 +10,8 @@ namespace Cerberus.Models
         public ApplicationUser User { get; set; }
         
         public ProfileStatistics Statistics { get; set; }
+        
+        public ICollection<ProductLicense> ProductLicenses { get; set; }
     }
 
     public class ProfileStatistics
