@@ -17,7 +17,7 @@ namespace DataContext.Models
         public bool IsDeleted { get; set; } = false;
 
         [Required]
-        public virtual Forum Forum { get; set; }
+        public bool IsMainReply { get; set; } = false;
 
         [Required]
         public virtual ForumThread Thread { get; set; }

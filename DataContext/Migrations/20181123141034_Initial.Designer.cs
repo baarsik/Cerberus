@@ -12,15 +12,15 @@ using System;
 namespace DataContext.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20180319090233_UserApiIpBinding")]
-    partial class UserApiIpBinding
+    [Migration("20181123141034_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
+                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("DataContext.Models.ApplicationUser", b =>
                 {
@@ -53,6 +53,8 @@ namespace DataContext.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<Guid>("LastApiTokenId");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -89,7 +91,8 @@ namespace DataContext.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex");
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -105,6 +108,8 @@ namespace DataContext.Migrations
 
                     b.Property<Guid?>("NewsId");
 
+                    b.Property<Guid?>("ProductId");
+
                     b.Property<string>("Title")
                         .IsRequired();
 
@@ -119,6 +124,8 @@ namespace DataContext.Migrations
                     b.HasIndex("ForumThreadId");
 
                     b.HasIndex("NewsId");
+
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("UploaderId");
 
@@ -202,10 +209,6 @@ namespace DataContext.Migrations
 
                     b.Property<bool>("IsPinned");
 
-                    b.Property<Guid>("LastReplyId");
-
-                    b.Property<Guid>("MainReplyId");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(64);
@@ -215,10 +218,6 @@ namespace DataContext.Migrations
                     b.HasIndex("AuthorId");
 
                     b.HasIndex("ForumId");
-
-                    b.HasIndex("LastReplyId");
-
-                    b.HasIndex("MainReplyId");
 
                     b.ToTable("ForumThreads");
                 });
@@ -236,9 +235,9 @@ namespace DataContext.Migrations
 
                     b.Property<DateTime>("CreateDate");
 
-                    b.Property<Guid>("ForumId");
-
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<bool>("IsMainReply");
 
                     b.Property<DateTime?>("LastEditDate");
 
@@ -247,8 +246,6 @@ namespace DataContext.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
-
-                    b.HasIndex("ForumId");
 
                     b.HasIndex("ThreadId");
 
@@ -352,6 +349,98 @@ namespace DataContext.Migrations
                     b.ToTable("PrivateMessages");
                 });
 
+            modelBuilder.Entity("DataContext.Models.Product", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(32);
+
+                    b.Property<bool>("RequiresLicense");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("DataContext.Models.ProductLicense", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("EndDate");
+
+                    b.Property<bool>("IsBlocked");
+
+                    b.Property<Guid>("ProductId");
+
+                    b.Property<DateTime>("StartDate");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ProductLicenses");
+                });
+
+            modelBuilder.Entity("DataContext.Models.ProductSettings", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(64);
+
+                    b.Property<Guid>("ProductId");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(64);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ProductSettings");
+                });
+
+            modelBuilder.Entity("DataContext.Models.ProductSharedData", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Key")
+                        .IsRequired();
+
+                    b.Property<Guid>("ProductId");
+
+                    b.Property<string>("Value")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductSharedData");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -370,7 +459,8 @@ namespace DataContext.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -462,12 +552,19 @@ namespace DataContext.Migrations
             modelBuilder.Entity("DataContext.Models.Attachment", b =>
                 {
                     b.HasOne("DataContext.Models.ForumThread", "ForumThread")
-                        .WithMany()
-                        .HasForeignKey("ForumThreadId");
+                        .WithMany("Attachments")
+                        .HasForeignKey("ForumThreadId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DataContext.Models.News", "News")
-                        .WithMany()
-                        .HasForeignKey("NewsId");
+                        .WithMany("Attachments")
+                        .HasForeignKey("NewsId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("DataContext.Models.Product", "Product")
+                        .WithMany("Attachments")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DataContext.Models.ApplicationUser", "Uploader")
                         .WithMany()
@@ -480,7 +577,7 @@ namespace DataContext.Migrations
                     b.HasOne("DataContext.Models.Attachment", "Attachment")
                         .WithMany("Downloads")
                         .HasForeignKey("AttachmentId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DataContext.Models.ApplicationUser", "User")
                         .WithMany()
@@ -493,7 +590,7 @@ namespace DataContext.Migrations
                     b.HasOne("DataContext.Models.Forum", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("DataContext.Models.ForumModerator", b =>
@@ -501,7 +598,7 @@ namespace DataContext.Migrations
                     b.HasOne("DataContext.Models.Forum", "Forum")
                         .WithMany("Moderators")
                         .HasForeignKey("ForumId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DataContext.Models.ApplicationUser", "User")
                         .WithMany()
@@ -518,17 +615,7 @@ namespace DataContext.Migrations
                     b.HasOne("DataContext.Models.Forum", "Forum")
                         .WithMany("Threads")
                         .HasForeignKey("ForumId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("DataContext.Models.ForumThreadReply", "LastReply")
-                        .WithMany()
-                        .HasForeignKey("LastReplyId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("DataContext.Models.ForumThreadReply", "MainReply")
-                        .WithMany()
-                        .HasForeignKey("MainReplyId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("DataContext.Models.ForumThreadReply", b =>
@@ -538,15 +625,10 @@ namespace DataContext.Migrations
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("DataContext.Models.Forum", "Forum")
-                        .WithMany()
-                        .HasForeignKey("ForumId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("DataContext.Models.ForumThread", "Thread")
                         .WithMany("Replies")
                         .HasForeignKey("ThreadId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("DataContext.Models.News", b =>
@@ -567,12 +649,12 @@ namespace DataContext.Migrations
                     b.HasOne("DataContext.Models.News", "News")
                         .WithMany("Comments")
                         .HasForeignKey("NewsId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DataContext.Models.NewsComment", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("DataContext.Models.PrivateMessage", b =>
@@ -585,6 +667,40 @@ namespace DataContext.Migrations
                     b.HasOne("DataContext.Models.ApplicationUser", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId");
+                });
+
+            modelBuilder.Entity("DataContext.Models.ProductLicense", b =>
+                {
+                    b.HasOne("DataContext.Models.Product", "Product")
+                        .WithMany("Licenses")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("DataContext.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DataContext.Models.ProductSettings", b =>
+                {
+                    b.HasOne("DataContext.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DataContext.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DataContext.Models.ProductSharedData", b =>
+                {
+                    b.HasOne("DataContext.Models.Product", "Product")
+                        .WithMany("SharedData")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/app.config.transform" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlCommand.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlCommandBuilder.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlConnection.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlConnectionStringBuilder.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlDataAdapter.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlDataReader.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlException.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlHelper.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlParameter.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlParameterCollection.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/docs/MySqlTransaction.xml" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/mysql.data/6.10.6/contentFiles/any/netcoreapp2.0/web.config.transform" t="Include" />
-    <e p="$USER_HOME$/Library/Caches/Rider2018.1/resharper-host/local/Transient/ReSharperHost/v12/SolutionCaches/_Cerberus.2038705725.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/.gitignore_global" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2018.2/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2018.2/resharper-host/local/Transient/ReSharperHost/v182/SolutionCaches/_Cerberus.2038705725.00" t="ExcludeRecursive" />
+    <e p="$APPLICATION_CONFIG_DIR$/consoles/db" t="IncludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeFlat">
+      <e p=".git/info/exclude" t="IncludeRecursive" />
       <e p="Cerberus" t="IncludeRecursive">
         <e p=".bowerrc" t="Include" />
         <e p="appsettings.Development.json" t="Include" />
@@ -40,7 +31,6 @@
           </e>
           <e p="Settings.cs" t="Include" />
         </e>
-        <e p="docs" t="Include" />
         <e p="Models" t="Include">
           <e p="ChangePasswordViewModel.cs" t="Include" />
           <e p="ErrorViewModel.cs" t="Include" />
@@ -207,20 +197,10 @@
         <e p="ApplicationContext.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="DataContext.csproj" t="IncludeRecursive" />
-        <e p="docs" t="Include" />
+        <e p="DesignTimeContext.cs" t="Include" />
         <e p="Migrations" t="Include">
-          <e p="20180313132438_Initial.cs" t="Include" />
-          <e p="20180313132438_Initial.Designer.cs" t="Include" />
-          <e p="20180316144458_PrivateMessages.cs" t="Include" />
-          <e p="20180316144458_PrivateMessages.Designer.cs" t="Include" />
-          <e p="20180319090233_UserApiIpBinding.cs" t="Include" />
-          <e p="20180319090233_UserApiIpBinding.Designer.cs" t="Include" />
-          <e p="20180319115723_Products.cs" t="Include" />
-          <e p="20180319115723_Products.Designer.cs" t="Include" />
-          <e p="20180319135128_ProductImprovements.cs" t="Include" />
-          <e p="20180319135128_ProductImprovements.Designer.cs" t="Include" />
-          <e p="20180321075608_SafetyUpdate.cs" t="Include" />
-          <e p="20180321075608_SafetyUpdate.Designer.cs" t="Include" />
+          <e p="20181123141034_Initial.cs" t="Include" />
+          <e p="20181123141034_Initial.Designer.cs" t="Include" />
           <e p="ApplicationContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="Models" t="Include">

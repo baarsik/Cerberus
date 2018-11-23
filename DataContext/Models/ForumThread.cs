@@ -11,12 +11,6 @@ namespace DataContext.Models
         public string Title { get; set; }
         
         [Required]
-        public virtual ForumThreadReply MainReply { get; set; }
-        
-        [Required]
-        public virtual ForumThreadReply LastReply { get; set; }
-        
-        [Required]
         public DateTime CreateDate { get; set; } = DateTime.Now;
 
         [Required]
@@ -37,7 +31,7 @@ namespace DataContext.Models
         public virtual ICollection<ForumThreadReply> Replies { get; set; }
         
         public virtual ICollection<Attachment> Attachments { get; set; }
-
+        
         public override string ToString()
         {
             return Title;

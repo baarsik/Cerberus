@@ -28,62 +28,62 @@ namespace DataContext
             builder.Entity<Forum>()
                 .HasMany(c => c.Threads)
                 .WithOne(c => c.Forum)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Forum>()
                 .HasMany(c => c.Children)
                 .WithOne(c => c.Parent)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
             
             builder.Entity<Forum>()
                 .HasMany(c => c.Moderators)
                 .WithOne(c => c.Forum)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<ForumThread>()
                 .HasMany(c => c.Replies)
                 .WithOne(c => c.Thread)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
             
             builder.Entity<ForumThread>()
                 .HasMany(c => c.Attachments)
                 .WithOne(c => c.ForumThread)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Attachment>()
                 .HasMany(c => c.Downloads)
                 .WithOne(c => c.Attachment)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<News>()
                 .HasMany(c => c.Comments)
                 .WithOne(c => c.News)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
             
             builder.Entity<News>()
                 .HasMany(c => c.Attachments)
                 .WithOne(c => c.News)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<NewsComment>()
                 .HasMany(c => c.Children)
                 .WithOne(c => c.Parent)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Product>()
                 .HasMany(c => c.Attachments)
                 .WithOne(c => c.Product)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Product>()
                 .HasMany(c => c.Licenses)
                 .WithOne(c => c.Product)
-                .OnDelete(DeleteBehavior.Restrict); // Should manually review licenses before product deletion
+                .OnDelete(DeleteBehavior.Restrict);
             
             builder.Entity<Product>()
                 .HasMany(c => c.SharedData)
                 .WithOne(c => c.Product)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
             
             base.OnModelCreating(builder);
         }

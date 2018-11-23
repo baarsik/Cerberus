@@ -29,6 +29,7 @@ namespace DataContext.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
+                    ApiBindedIp = table.Column<string>(maxLength: 15, nullable: true),
                     ApiKey = table.Column<string>(maxLength: 64, nullable: false),
                     Avatar = table.Column<string>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
@@ -36,6 +37,7 @@ namespace DataContext.Migrations
                     DisplayName = table.Column<string>(maxLength: 32, nullable: false),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
+                    LastApiTokenId = table.Column<Guid>(nullable: false),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutReason = table.Column<string>(maxLength: 100, nullable: true),
@@ -71,7 +73,22 @@ namespace DataContext.Migrations
                         column: x => x.ParentId,
                         principalTable: "Forums",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(maxLength: 32, nullable: false),
+                    RequiresLicense = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,7 +96,7 @@ namespace DataContext.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
                     RoleId = table.Column<string>(nullable: false)
@@ -100,7 +117,7 @@ namespace DataContext.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: false)
@@ -205,6 +222,37 @@ namespace DataContext.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PrivateMessages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Content = table.Column<string>(nullable: false),
+                    DateTime = table.Column<DateTime>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    IsRead = table.Column<bool>(nullable: false),
+                    IsSentByAdministration = table.Column<bool>(nullable: false),
+                    ReceiverId = table.Column<string>(nullable: false),
+                    SenderId = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(maxLength: 64, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PrivateMessages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PrivateMessages_AspNetUsers_ReceiverId",
+                        column: x => x.ReceiverId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PrivateMessages_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ForumModerators",
                 columns: table => new
                 {
@@ -221,11 +269,116 @@ namespace DataContext.Migrations
                         column: x => x.ForumId,
                         principalTable: "Forums",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ForumModerators_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ForumThreads",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    AuthorId = table.Column<string>(nullable: false),
+                    CreateDate = table.Column<DateTime>(nullable: false),
+                    ForumId = table.Column<Guid>(nullable: false),
+                    IsClosed = table.Column<bool>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    IsPinned = table.Column<bool>(nullable: false),
+                    Title = table.Column<string>(maxLength: 64, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ForumThreads", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ForumThreads_AspNetUsers_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ForumThreads_Forums_ForumId",
+                        column: x => x.ForumId,
+                        principalTable: "Forums",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductLicenses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: false),
+                    IsBlocked = table.Column<bool>(nullable: false),
+                    ProductId = table.Column<Guid>(nullable: false),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductLicenses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductLicenses_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductLicenses_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductSettings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Key = table.Column<string>(maxLength: 64, nullable: false),
+                    ProductId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
+                    Value = table.Column<string>(maxLength: 64, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductSettings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductSettings_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductSettings_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductSharedData",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Key = table.Column<string>(nullable: false),
+                    ProductId = table.Column<Guid>(nullable: false),
+                    Value = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductSharedData", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductSharedData_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -240,7 +393,8 @@ namespace DataContext.Migrations
                     CreateDate = table.Column<DateTime>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
                     LastEditDate = table.Column<DateTime>(nullable: true),
-                    NewsId = table.Column<Guid>(nullable: false)
+                    NewsId = table.Column<Guid>(nullable: false),
+                    ParentId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -256,26 +410,13 @@ namespace DataContext.Migrations
                         column: x => x.NewsId,
                         principalTable: "News",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AttachmentDownloads",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    AttachmentId = table.Column<Guid>(nullable: false),
-                    UserId = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AttachmentDownloads", x => x.Id);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AttachmentDownloads_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
+                        name: "FK_NewsComments_NewsComments_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "NewsComments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -286,6 +427,7 @@ namespace DataContext.Migrations
                     CreateDate = table.Column<DateTime>(nullable: false),
                     ForumThreadId = table.Column<Guid>(nullable: true),
                     NewsId = table.Column<Guid>(nullable: true),
+                    ProductId = table.Column<Guid>(nullable: true),
                     Title = table.Column<string>(nullable: false),
                     UploaderId = table.Column<string>(nullable: false),
                     Uri = table.Column<string>(nullable: false)
@@ -294,9 +436,21 @@ namespace DataContext.Migrations
                 {
                     table.PrimaryKey("PK_Attachments", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Attachments_ForumThreads_ForumThreadId",
+                        column: x => x.ForumThreadId,
+                        principalTable: "ForumThreads",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Attachments_News_NewsId",
                         column: x => x.NewsId,
                         principalTable: "News",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Attachments_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -315,8 +469,8 @@ namespace DataContext.Migrations
                     AuthorId = table.Column<string>(nullable: false),
                     Content = table.Column<string>(nullable: false),
                     CreateDate = table.Column<DateTime>(nullable: false),
-                    ForumId = table.Column<Guid>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
+                    IsMainReply = table.Column<bool>(nullable: false),
                     LastEditDate = table.Column<DateTime>(nullable: true),
                     ThreadId = table.Column<Guid>(nullable: false)
                 },
@@ -330,53 +484,34 @@ namespace DataContext.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ForumThreadReplies_Forums_ForumId",
-                        column: x => x.ForumId,
-                        principalTable: "Forums",
+                        name: "FK_ForumThreadReplies_ForumThreads_ThreadId",
+                        column: x => x.ThreadId,
+                        principalTable: "ForumThreads",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ForumThreads",
+                name: "AttachmentDownloads",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    AuthorId = table.Column<string>(nullable: false),
-                    CreateDate = table.Column<DateTime>(nullable: false),
-                    ForumId = table.Column<Guid>(nullable: false),
-                    IsClosed = table.Column<bool>(nullable: false),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    IsPinned = table.Column<bool>(nullable: false),
-                    LastReplyId = table.Column<Guid>(nullable: false),
-                    MainReplyId = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(maxLength: 64, nullable: false)
+                    AttachmentId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ForumThreads", x => x.Id);
+                    table.PrimaryKey("PK_AttachmentDownloads", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ForumThreads_AspNetUsers_AuthorId",
-                        column: x => x.AuthorId,
+                        name: "FK_AttachmentDownloads_Attachments_AttachmentId",
+                        column: x => x.AttachmentId,
+                        principalTable: "Attachments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AttachmentDownloads_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ForumThreads_Forums_ForumId",
-                        column: x => x.ForumId,
-                        principalTable: "Forums",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ForumThreads_ForumThreadReplies_LastReplyId",
-                        column: x => x.LastReplyId,
-                        principalTable: "ForumThreadReplies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ForumThreads_ForumThreadReplies_MainReplyId",
-                        column: x => x.MainReplyId,
-                        principalTable: "ForumThreadReplies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -390,7 +525,8 @@ namespace DataContext.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -416,7 +552,8 @@ namespace DataContext.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AttachmentDownloads_AttachmentId",
@@ -437,6 +574,11 @@ namespace DataContext.Migrations
                 name: "IX_Attachments_NewsId",
                 table: "Attachments",
                 column: "NewsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Attachments_ProductId",
+                table: "Attachments",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Attachments_UploaderId",
@@ -464,11 +606,6 @@ namespace DataContext.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ForumThreadReplies_ForumId",
-                table: "ForumThreadReplies",
-                column: "ForumId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ForumThreadReplies_ThreadId",
                 table: "ForumThreadReplies",
                 column: "ThreadId");
@@ -482,16 +619,6 @@ namespace DataContext.Migrations
                 name: "IX_ForumThreads_ForumId",
                 table: "ForumThreads",
                 column: "ForumId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ForumThreads_LastReplyId",
-                table: "ForumThreads",
-                column: "LastReplyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ForumThreads_MainReplyId",
-                table: "ForumThreads",
-                column: "MainReplyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_News_AuthorId",
@@ -508,45 +635,49 @@ namespace DataContext.Migrations
                 table: "NewsComments",
                 column: "NewsId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_AttachmentDownloads_Attachments_AttachmentId",
-                table: "AttachmentDownloads",
-                column: "AttachmentId",
-                principalTable: "Attachments",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.CreateIndex(
+                name: "IX_NewsComments_ParentId",
+                table: "NewsComments",
+                column: "ParentId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Attachments_ForumThreads_ForumThreadId",
-                table: "Attachments",
-                column: "ForumThreadId",
-                principalTable: "ForumThreads",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.CreateIndex(
+                name: "IX_PrivateMessages_ReceiverId",
+                table: "PrivateMessages",
+                column: "ReceiverId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_ForumThreadReplies_ForumThreads_ThreadId",
-                table: "ForumThreadReplies",
-                column: "ThreadId",
-                principalTable: "ForumThreads",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.CreateIndex(
+                name: "IX_PrivateMessages_SenderId",
+                table: "PrivateMessages",
+                column: "SenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductLicenses_ProductId",
+                table: "ProductLicenses",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductLicenses_UserId",
+                table: "ProductLicenses",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductSettings_ProductId",
+                table: "ProductSettings",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductSettings_UserId",
+                table: "ProductSettings",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductSharedData_ProductId",
+                table: "ProductSharedData",
+                column: "ProductId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_ForumThreadReplies_AspNetUsers_AuthorId",
-                table: "ForumThreadReplies");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_ForumThreads_AspNetUsers_AuthorId",
-                table: "ForumThreads");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_ForumThreadReplies_ForumThreads_ThreadId",
-                table: "ForumThreadReplies");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -569,7 +700,22 @@ namespace DataContext.Migrations
                 name: "ForumModerators");
 
             migrationBuilder.DropTable(
+                name: "ForumThreadReplies");
+
+            migrationBuilder.DropTable(
                 name: "NewsComments");
+
+            migrationBuilder.DropTable(
+                name: "PrivateMessages");
+
+            migrationBuilder.DropTable(
+                name: "ProductLicenses");
+
+            migrationBuilder.DropTable(
+                name: "ProductSettings");
+
+            migrationBuilder.DropTable(
+                name: "ProductSharedData");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -578,19 +724,19 @@ namespace DataContext.Migrations
                 name: "Attachments");
 
             migrationBuilder.DropTable(
-                name: "News");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "ForumThreads");
 
             migrationBuilder.DropTable(
-                name: "ForumThreadReplies");
+                name: "News");
+
+            migrationBuilder.DropTable(
+                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "Forums");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

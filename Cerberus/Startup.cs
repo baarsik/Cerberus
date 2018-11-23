@@ -40,7 +40,7 @@ namespace Cerberus
         {
             services.AddDbContext<ApplicationContext>(options =>
             {
-                options.UseMySql(Configuration.GetConnectionString("AppDatabase"));
+                options.UseSqlServer(Configuration.GetConnectionString("AppDatabase"));
             });
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationContext>()

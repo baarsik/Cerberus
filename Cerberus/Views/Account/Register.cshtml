@@ -23,10 +23,8 @@
 
 <div class="panel panel-filled">
     <div class="panel-body">
-        <p>
-
-        </p>
         <form asp-action="Register" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
             <div class="form-group">
                 <label>Display Name</label>
                 <input type="" asp-for="DisplayName" class="form-control" placeholder="Display Name">
@@ -34,7 +32,6 @@
                     <div>Unique name that will be visible to everyone</div>
                     <span asp-validation-for="DisplayName" class="text-danger"></span>
                 </span>
-                
             </div>
             <div class="form-group">
                 <label>E-Mail</label>
