@@ -22,6 +22,7 @@
   <ItemGroup>
     <Folder Include="Controllers\Services\" />
     <Folder Include="Models\Services\" />
+    <Folder Include="Resources" />
     <Folder Include="Views\Account\" />
     <Folder Include="wwwroot\images\avatars" />
   </ItemGroup>

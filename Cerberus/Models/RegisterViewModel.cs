@@ -1,5 +1,5 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Cerberus.ValidationAttributes;
 
 namespace Cerberus.Models
 {
@@ -25,18 +25,7 @@ namespace Cerberus.Models
         public string ConfirmPassword { get; set; }
         
         [Required(ErrorMessage = "Please read and accept rules")]
-        [MustBeTrue(ErrorMessage = "Please read and accept rules")]
+        [True(ErrorMessage = "Please read and accept rules")]
         public bool AreRulesAccepted { get; set; }
-    }
-    
-    public class MustBeTrue : ValidationAttribute
-    {    
-        public override bool IsValid(object obj)
-        {
-            if (obj is bool value)
-                return value;
-
-            throw new InvalidOperationException("This attribute is only valid for Foo objects");
-        }
     }
 }

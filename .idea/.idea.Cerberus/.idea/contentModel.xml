@@ -63,11 +63,11 @@
         <e p="Properties" t="Include">
           <e p="launchSettings.json" t="Include" />
         </e>
-        <e p="Resources" t="Include">
-          <e p="Models.LoginModel.en-US.Designer.cs" t="Include" />
-          <e p="Models.LoginModel.en-US.resx" t="Include" />
-        </e>
+        <e p="Resources" t="Include" />
         <e p="Startup.cs" t="Include" />
+        <e p="ValidationAttributes" t="Include">
+          <e p="TrueAttribute.cs" t="Include" />
+        </e>
         <e p="Views" t="Include">
           <e p="_ViewImports.cshtml" t="Include" />
           <e p="_ViewStart.cshtml" t="Include" />
@@ -145,25 +145,11 @@
               <e p="LICENSE" t="Include" />
             </e>
             <e p="font-awesome-pro" t="Include">
-              <e p="css" t="Include">
-                <e p="fa-svg-with-js.css" t="Include" />
-              </e>
               <e p="js" t="Include">
-                <e p="fa-brands.js" t="Include" />
-                <e p="fa-brands.min.js" t="Include" />
-                <e p="fa-light.js" t="Include" />
-                <e p="fa-light.min.js" t="Include" />
-                <e p="fa-regular.js" t="Include" />
-                <e p="fa-regular.min.js" t="Include" />
-                <e p="fa-solid.js" t="Include" />
-                <e p="fa-solid.min.js" t="Include" />
-                <e p="fa-v4-shims.js" t="Include" />
-                <e p="fa-v4-shims.min.js" t="Include" />
-                <e p="fontawesome-all.js" t="Include" />
-                <e p="fontawesome-all.min.js" t="Include" />
-                <e p="fontawesome.js" t="Include" />
-                <e p="fontawesome.min.js" t="Include" />
+                <e p="all.js" t="Include" />
+                <e p="all.min.js" t="Include" />
               </e>
+              <e p="LICENSE.txt" t="Include" />
             </e>
             <e p="jquery" t="Include">
               <e p=".bower.json" t="Include" />
