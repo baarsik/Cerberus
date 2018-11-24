@@ -28,8 +28,9 @@
           <e p="Services" t="Include">
             <e p="AuthService.cs" t="Include" />
             <e p="ProfileService.cs" t="Include" />
+            <e p="SettingsService.cs" t="Include" />
           </e>
-          <e p="Settings.cs" t="Include" />
+          <e p="SettingsController.cs" t="Include" />
         </e>
         <e p="Models" t="Include">
           <e p="ChangePasswordViewModel.cs" t="Include" />
@@ -39,11 +40,14 @@
             <e p="StringExtensions.cs" t="Include" />
             <e p="ViewContextExtensions.cs" t="Include" />
           </e>
+          <e p="ForumSettingsViewModel.cs" t="Include" />
           <e p="GenerateJwtResult.cs" t="Include" />
           <e p="Helpers" t="Include">
             <e p="StringHelpers.cs" t="Include" />
           </e>
           <e p="LayoutSettings.cs" t="Include" />
+          <e p="Library.cs" t="Include" />
+          <e p="LibraryManager.cs" t="Include" />
           <e p="LoginModel.cs" t="Include" />
           <e p="ProfileViewModel.cs" t="Include" />
           <e p="RegisterViewModel.cs" t="Include" />
@@ -86,6 +90,7 @@
             <e p="Profile.cshtml" t="Include" />
           </e>
           <e p="Settings" t="Include">
+            <e p="Forums.cshtml" t="Include" />
             <e p="Index.cshtml" t="Include" />
           </e>
           <e p="Shared" t="Include">
@@ -174,6 +179,10 @@
               <e p=".bower.json" t="Include" />
               <e p="jquery.validate.unobtrusive.js" t="Include" />
               <e p="jquery.validate.unobtrusive.min.js" t="Include" />
+            </e>
+            <e p="nestable" t="Include">
+              <e p="jquery.nestable.js" t="Include" />
+              <e p="jquery.nestable.min.js" t="Include" />
             </e>
           </e>
         </e>

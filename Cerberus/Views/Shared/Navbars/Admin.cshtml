@@ -11,6 +11,9 @@
             <li class="@ViewContext.FillClassIfActive("Users", "Settings")">
                 <a asp-controller="Settings" asp-action="Users">User List</a>
             </li>
+            <li class="@ViewContext.FillClassIfActive("Forums", "Settings")">
+                <a asp-controller="Settings" asp-action="Forums">Forums</a>
+            </li>
             <li class="@ViewContext.FillClassIfActive("Products", "Settings")">
                 <a asp-controller="Settings" asp-action="Products">Products</a>
             </li>

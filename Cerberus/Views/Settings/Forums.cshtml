@@ -1,0 +1,143 @@
+@model ForumSettingsViewModel
+
+@{
+    ViewBag.Title = "Forum Settings";
+    var settings = new LayoutSettings
+    {
+        NavbarType = NavbarType.Admin,
+        IsFooterVisible = false
+    };
+    settings.LibraryManager.Library("nestable").Activate();
+    ViewBag.Settings = settings;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="view-header">
+            <div class="header-icon">
+                <i class="fal fa-comments fa-sm"></i>
+            </div>
+            <div class="header-title">
+                <h3>Forums</h3>
+                <small>
+                    List of existing forums
+                </small>
+            </div>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="dd" id="nestable">
+                    <ol class="dd-list">
+                        <li class="dd-item" data-id="1">
+                            <div class="dd-handle">
+                                <span><i class="fa fa-cog m-r-xs"></i></span>
+                                Lorem Ipsum has been the industry's
+                            </div>
+                            <ol class="dd-list">
+                                <li class="dd-item" data-id="2">
+                                    <div class="dd-handle">
+                                        <span class="pull-right"> 12:00 pm </span>
+                                        Vivamus vestibulum nulla nec ante.
+                                    </div>
+                                </li>
+                                <li class="dd-item" data-id="3">
+                                    <div class="dd-handle">
+                                        <span class="pull-right"> 11:00 pm </span>
+                                        Nunc dignissim risus id metus.
+                                    </div>
+                                </li>
+                                <li class="dd-item" data-id="4">
+                                    <div class="dd-handle">
+                                        <span class="pull-right"> 11:00 pm </span>
+                                        Vestibulum commodo
+                                    </div>
+                                </li>
+                            </ol>
+                        </li>
+
+                        <li class="dd-item" data-id="5">
+                            <div class="dd-handle">
+                                <span><i class="fa fa-bolt m-r-xs"></i></span> Integer
+                                Many desktop publishing packages
+                            </div>
+                            <ol class="dd-list">
+                                <li class="dd-item" data-id="6">
+                                    <div class="dd-handle">
+                                        <span class="pull-right"> 15:00 pm </span>
+                                        Nam convallis pellentesque nisl.
+                                    </div>
+                                </li>
+                                <li class="dd-item" data-id="7">
+                                    <div class="dd-handle">
+                                        <span class="pull-right"> 16:00 pm </span>
+                                        Vivamus molestie gravida turpis
+                                    </div>
+                                </li>
+                                <li class="dd-item" data-id="8">
+                                    <div class="dd-handle">
+                                        <span class="pull-right"> 21:00 pm </span>
+                                        Ut aliquam sollicitudin leo.
+                                    </div>
+                                </li>
+                            </ol>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="panel panel-filled">
+            <div class="panel-heading">
+                Control Buttons
+            </div>
+            <div class="panel-body flex-column">
+                <a class="btn btn-accent">
+                    <div class="pull-left">
+                        <i class="fas fa-file"></i>
+                    </div>
+                    Create New
+                </a>
+                <a class="btn btn-accent m-t-sm">
+                    <div class="pull-left">
+                        <i class="fas fa-save"></i>
+                    </div>
+                    Save
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        // Log for nestable list
+        var updateOutput = function (e) {
+            var list = e.length ? e : $(e.target),
+                output = list.data('output');
+            if (window.JSON) {
+                output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
+            } else {
+                output.val('JSON browser support required for this demo.');
+            }
+        };
+
+        // Activate Nestable for list 1
+        $('#nestable').nestable({
+            group: 1
+        }).on('change', updateOutput);
+
+
+        // Output initial serialised data
+        updateOutput($('#nestable').data('output', $('#nestable-output')));
+
+    });
+</script>
