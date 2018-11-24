@@ -58,7 +58,7 @@
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
-            <e p="netcoreapp2.0" t="Include">
+            <e p="netcoreapp2.1" t="Include">
               <e p="Cerberus.AssemblyInfo.cs" t="Include" />
             </e>
           </e>
@@ -217,7 +217,7 @@
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
-            <e p="netcoreapp2.0" t="Include">
+            <e p="netcoreapp2.1" t="Include">
               <e p="DataContext.AssemblyInfo.cs" t="Include" />
             </e>
           </e>

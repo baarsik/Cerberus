@@ -16,13 +16,12 @@ namespace Cerberus
     {
         public static void Main(string[] args)
         {
-            var host = BuildWebHost(args);
-            host.Run();
+            var host = CreateWebHostBuilder(args);
+            host.Build().Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+                .UseStartup<Startup>();
     }
 }
