@@ -109,6 +109,9 @@
             <e p="site.min.css" t="Include" />
           </e>
           <e p="favicon.ico" t="Include" />
+          <e p="fonts" t="Include">
+            <e p="Furore.otf" t="Include" />
+          </e>
           <e p="images" t="Include">
             <e p="avatars" t="Include" />
             <e p="banner1.svg" t="Include" />

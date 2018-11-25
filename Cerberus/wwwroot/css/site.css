@@ -1283,6 +1283,7 @@ img.image-xl {
 
 .navbar-default .navbar-brand,
 .navbar-default .navbar-brand:focus {
+    font-family: Furore, Roboto, sans-serif;
     width: 200px;
     background-color: #f6a821;
     height: 60px;
@@ -1290,11 +1291,7 @@ img.image-xl {
     font-weight: 600;
     letter-spacing: 3px;
     text-align: center;
-    color: #FFFFFF
-}
-
-.navbar-default .navbar-brand {
-    color: #FFFFFF
+    color: #FFFFFF;
 }
 
     .navbar-default .navbar-brand:hover {
@@ -3517,5 +3514,12 @@ ol.counter > li:before {
 }
 
 .confidential {
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='75px' width='120px'><text x='5' y='30' fill='#f7af3e' style='opacity:0.25' transform='translate(30) rotate(45 50 50)' font-size='14'>Confidential</text></svg>");
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='75px' width='120px'><text x='5' y='30' fill='#f7af3e' style='opacity:0.15' transform='translate(30) rotate(45 50 50)' font-size='14'>Confidential</text></svg>");
+}
+
+@font-face {
+    font-family: 'Furore';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Furore'), url('/fonts/Furore.otf') format('opentype');
 }
