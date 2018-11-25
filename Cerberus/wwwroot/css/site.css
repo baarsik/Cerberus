@@ -3483,14 +3483,14 @@ div.dt-button-info {
 }
 
 
-ol {
+ol.counter {
     counter-reset: item;
     padding-left: 1.25em;
 }
-ol > li {
+ol.counter > li {
     display: block;
 }
-ol > li:before {
+ol.counter > li:before {
     content: counters(item, ".") ". ";
     counter-increment: item;
 }

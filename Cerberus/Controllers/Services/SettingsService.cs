@@ -2,6 +2,7 @@
 using Cerberus.Models;
 using DataContext;
 using DataContext.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cerberus.Controllers.Services
 {
@@ -19,6 +20,8 @@ namespace Cerberus.Controllers.Services
             var model = new ForumSettingsViewModel
             {
                 ForumTree = _db.Forums
+                    .Include(c => c.Children)
+                    .Include(c => c.Threads)
                     .Where(c => c.Parent == null)
                     .OrderBy(c => c.DisplayOrderId)
                     .Select(ToForumInfo)
@@ -33,7 +36,13 @@ namespace Cerberus.Controllers.Services
             {
                 Forum = forum,
                 ThreadCount = forum.Threads.Count,
-                Children = forum.Children.Select(ToForumInfo).ToList()
+                Children = _db.Forums
+                    .Include(c => c.Children)
+                    .Include(c => c.Threads)
+                    .Where(c => forum.Children.Select(x => x.Id).Contains(c.Id))
+                    .AsEnumerable()
+                    .Select(ToForumInfo)
+                    .ToList()
             };
         }
     }

@@ -55,7 +55,7 @@
                             Your products:
                             @if (Model.ProductLicenses.Any())
                             {
-                                <ol>
+                                <ol class="counter">
                                     @foreach (var license in Model.ProductLicenses)
                                     {
                                         if (license.IsExpired() || license.IsBlocked)

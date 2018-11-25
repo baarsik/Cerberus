@@ -34,59 +34,32 @@
             <div class="panel-body">
                 <div class="dd" id="nestable">
                     <ol class="dd-list">
-                        <li class="dd-item" data-id="1">
-                            <div class="dd-handle">
-                                <span><i class="fa fa-cog m-r-xs"></i></span>
-                                Lorem Ipsum has been the industry's
-                            </div>
-                            <ol class="dd-list">
-                                <li class="dd-item" data-id="2">
+                        @{
+                            var listItemId = 1;
+                            foreach (var forumInfo in Model.ForumTree)
+                            {
+                                <li class="dd-item" data-id="@(listItemId++)">
                                     <div class="dd-handle">
-                                        <span class="pull-right"> 12:00 pm </span>
-                                        Vivamus vestibulum nulla nec ante.
+                                        <span class="pull-right"> @forumInfo.ThreadCount thread(s) </span>
+                                        @forumInfo.Forum.Title
                                     </div>
+                                    @if (forumInfo.Children.Any())
+                                    {
+                                        <ol class="dd-list">
+                                            @foreach (var childInfo in forumInfo.Children)
+                                            {
+                                                <li class="dd-item" data-id="@(listItemId++)">
+                                                    <div class="dd-handle">
+                                                        <span class="pull-right"> @childInfo.ThreadCount thread(s) </span>
+                                                        @childInfo.Forum.Title
+                                                    </div>
+                                                </li>
+                                            }
+                                        </ol>
+                                    }
                                 </li>
-                                <li class="dd-item" data-id="3">
-                                    <div class="dd-handle">
-                                        <span class="pull-right"> 11:00 pm </span>
-                                        Nunc dignissim risus id metus.
-                                    </div>
-                                </li>
-                                <li class="dd-item" data-id="4">
-                                    <div class="dd-handle">
-                                        <span class="pull-right"> 11:00 pm </span>
-                                        Vestibulum commodo
-                                    </div>
-                                </li>
-                            </ol>
-                        </li>
-
-                        <li class="dd-item" data-id="5">
-                            <div class="dd-handle">
-                                <span><i class="fa fa-bolt m-r-xs"></i></span> Integer
-                                Many desktop publishing packages
-                            </div>
-                            <ol class="dd-list">
-                                <li class="dd-item" data-id="6">
-                                    <div class="dd-handle">
-                                        <span class="pull-right"> 15:00 pm </span>
-                                        Nam convallis pellentesque nisl.
-                                    </div>
-                                </li>
-                                <li class="dd-item" data-id="7">
-                                    <div class="dd-handle">
-                                        <span class="pull-right"> 16:00 pm </span>
-                                        Vivamus molestie gravida turpis
-                                    </div>
-                                </li>
-                                <li class="dd-item" data-id="8">
-                                    <div class="dd-handle">
-                                        <span class="pull-right"> 21:00 pm </span>
-                                        Ut aliquam sollicitudin leo.
-                                    </div>
-                                </li>
-                            </ol>
-                        </li>
+                            }
+                        }
                     </ol>
                 </div>
             </div>

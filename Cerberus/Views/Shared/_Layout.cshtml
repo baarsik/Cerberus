@@ -33,10 +33,10 @@
     @switch (settings.NavbarType)
     {
         case NavbarType.Regular:
-            @Html.Partial("Navbars/Regular")
+            <partial name="Navbars/Regular"/>
             break;
         case NavbarType.Admin:
-            @Html.Partial("Navbars/Admin")
+            <partial name="Navbars/Admin"/>
             break;
     }
     <div class="container @(settings.IsContainerCentered ? "container-center" : "") body-content">
