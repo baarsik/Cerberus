@@ -33,34 +33,7 @@
         <div class="panel">
             <div class="panel-body">
                 <div class="dd" id="nestable">
-                    <ol class="dd-list">
-                        @{
-                            var listItemId = 1;
-                            foreach (var forumInfo in Model.ForumTree)
-                            {
-                                <li class="dd-item" data-id="@(listItemId++)">
-                                    <div class="dd-handle">
-                                        <span class="pull-right"> @forumInfo.ThreadCount thread(s) </span>
-                                        @forumInfo.Forum.Title
-                                    </div>
-                                    @if (forumInfo.Children.Any())
-                                    {
-                                        <ol class="dd-list">
-                                            @foreach (var childInfo in forumInfo.Children)
-                                            {
-                                                <li class="dd-item" data-id="@(listItemId++)">
-                                                    <div class="dd-handle">
-                                                        <span class="pull-right"> @childInfo.ThreadCount thread(s) </span>
-                                                        @childInfo.Forum.Title
-                                                    </div>
-                                                </li>
-                                            }
-                                        </ol>
-                                    }
-                                </li>
-                            }
-                        }
-                    </ol>
+                    <partial name="Forums/ForumInfo" model="@Model.ForumTree"/>
                 </div>
             </div>
         </div>
@@ -72,7 +45,7 @@
                 Control Buttons
             </div>
             <div class="panel-body flex-column">
-                <a class="btn btn-accent">
+                <a class="btn btn-accent" asp-action="CreateForum">
                     <div class="pull-left">
                         <i class="fas fa-file"></i>
                     </div>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -161,7 +163,12 @@ namespace Cerberus
         private async Task CreateRolesAsync(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            string[] roleNames = { "admin", "user", "webNovelEditor" };
+            
+            var roleNames = typeof(Constants.Roles)
+                .GetMembers(BindingFlags.Public | BindingFlags.Static)
+                .Select(c => c.Name)
+                .ToList();
+            
             foreach (var roleName in roleNames)
             {
                 var roleExist = await roleManager.RoleExistsAsync(roleName);
@@ -185,8 +192,8 @@ namespace Cerberus
                 if (createPowerUser.Succeeded)
                 {
                     await userManager.AddClaimAsync(defaultUser, new Claim("DisplayName", defaultUser.DisplayName));
-                    await userManager.AddToRoleAsync(defaultUser, "admin");
-                    await userManager.AddToRoleAsync(defaultUser, "user");
+                    await userManager.AddToRoleAsync(defaultUser, Constants.Roles.Admin);
+                    await userManager.AddToRoleAsync(defaultUser, Constants.Roles.User);
                 }
             }
         }

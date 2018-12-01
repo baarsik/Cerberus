@@ -4,7 +4,7 @@ namespace Cerberus.Controllers
 {
     public class PageController : BaseController
     {
-        public IActionResult Rules(string name)
+        public IActionResult Rules()
         {
             return View();
         }

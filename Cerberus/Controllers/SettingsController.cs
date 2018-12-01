@@ -22,7 +22,13 @@ namespace Cerberus.Controllers
         public IActionResult Forums()
         {
             var model = _settingsService.GetForumSettingsViewModel();
-            return View(model);
+            return View("Forums/Index", model);
+        }
+
+        [Route("[controller]/forums/create")]
+        public IActionResult CreateForum()
+        {
+            return View("Forums/Create");
         }
     }
 }

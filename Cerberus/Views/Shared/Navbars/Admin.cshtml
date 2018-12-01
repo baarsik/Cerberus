@@ -1,9 +1,10 @@
-﻿<partial name="Navbars/Regular"/>
+﻿@using Cerberus.Controllers
+<partial name="Navbars/Regular"/>
 <aside class="navigation">
     <nav>
         <ul class="nav cerberus-nav">
             <li class="nav-category">Main</li>
-            <li class="@ViewContext.FillClassIfActive("Index", "Settings")">
+            <li class="@ViewContext.FillClassIfActive(nameof(SettingsController.Index), "Settings")">
                 <a asp-controller="Settings" asp-action="Index">Dashboard</a>
             </li>
             
@@ -11,7 +12,11 @@
             <li class="@ViewContext.FillClassIfActive("Users", "Settings")">
                 <a asp-controller="Settings" asp-action="Users">User List</a>
             </li>
-            <li class="@ViewContext.FillClassIfActive("Forums", "Settings")">
+            <li class="@ViewContext.FillClassIfActive(new List<string>
+                       {
+                           nameof(SettingsController.Forums),
+                           nameof(SettingsController.CreateForum)
+                       }, "Settings")">
                 <a asp-controller="Settings" asp-action="Forums">Forums</a>
             </li>
             <li class="@ViewContext.FillClassIfActive("Products", "Settings")">

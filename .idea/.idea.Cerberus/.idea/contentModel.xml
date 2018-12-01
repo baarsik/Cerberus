@@ -15,6 +15,7 @@
         <e p="bower.json" t="Include" />
         <e p="bundleconfig.json" t="Include" />
         <e p="Cerberus.csproj" t="IncludeRecursive" />
+        <e p="Constants.cs" t="Include" />
         <e p="Controllers" t="Include">
           <e p="AccountController.cs" t="Include" />
           <e p="Api" t="Include">
@@ -90,7 +91,11 @@
             <e p="Profile.cshtml" t="Include" />
           </e>
           <e p="Settings" t="Include">
-            <e p="Forums.cshtml" t="Include" />
+            <e p="Forums" t="Include">
+              <e p="Create.cshtml" t="Include" />
+              <e p="ForumInfo.cshtml" t="Include" />
+              <e p="Index.cshtml" t="Include" />
+            </e>
             <e p="Index.cshtml" t="Include" />
           </e>
           <e p="Shared" t="Include">
