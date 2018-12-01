@@ -21,5 +21,6 @@
     <Folder Include="Resources" />
     <Folder Include="Views\Account\" />
     <Folder Include="wwwroot\images\avatars" />
+    <Folder Include="wwwroot\images\webnovel" />
   </ItemGroup>
 </Project>

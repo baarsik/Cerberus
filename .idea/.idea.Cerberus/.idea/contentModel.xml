@@ -118,6 +118,7 @@
             <e p="banner2.svg" t="Include" />
             <e p="banner3.svg" t="Include" />
             <e p="banner4.svg" t="Include" />
+            <e p="webnovel" t="Include" />
           </e>
           <e p="js" t="Include">
             <e p="site.js" t="Include" />
@@ -199,6 +200,8 @@
         <e p="Migrations" t="Include">
           <e p="20181123141034_Initial.cs" t="Include" />
           <e p="20181123141034_Initial.Designer.cs" t="Include" />
+          <e p="20181201193907_WebNovel.cs" t="Include" />
+          <e p="20181201193907_WebNovel.Designer.cs" t="Include" />
           <e p="ApplicationContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="Models" t="Include">
@@ -217,6 +220,10 @@
           <e p="ProductLicense.cs" t="Include" />
           <e p="ProductSettings.cs" t="Include" />
           <e p="ProductSharedData.cs" t="Include" />
+          <e p="Settings.cs" t="Include" />
+          <e p="WebNovel.cs" t="Include" />
+          <e p="WebNovelChapter.cs" t="Include" />
+          <e p="WebNovelChapterAccess.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">

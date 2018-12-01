@@ -14,6 +14,9 @@ namespace DataContext.Models
         [Required]
         public int DisplayOrderId { get; set; }
 
+        [Required]
+        public bool IsEnabled { get; set; } = true;
+
         public Guid? ParentId { get; set; }
         
         [ForeignKey("ParentId")]

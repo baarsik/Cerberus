@@ -22,9 +22,22 @@ namespace DataContext
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductSettings> ProductSettings { get; set; }
         public DbSet<ProductLicense> ProductLicenses { get; set; }
+        public DbSet<Settings> Settings { get; set; }
+        public DbSet<WebNovel> WebNovels { get; set; }
+        public DbSet<WebNovelChapter> WebNovelChapters { get; set; }
+        public DbSet<WebNovelChapterAccess> WebNovelChapterAccess { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Forum>()
+                .HasQueryFilter(c => c.IsEnabled);
+            
+            builder.Entity<NewsComment>()
+                .HasQueryFilter(c => !c.IsDeleted);
+            
+            builder.Entity<ForumThreadReply>()
+                .HasQueryFilter(c => !c.IsDeleted);
+            
             builder.Entity<Forum>()
                 .HasMany(c => c.Threads)
                 .WithOne(c => c.Forum)
@@ -84,6 +97,10 @@ namespace DataContext
                 .HasMany(c => c.SharedData)
                 .WithOne(c => c.Product)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<WebNovel>()
+                .HasIndex(c => c.UrlName)
+                .IsUnique();
             
             base.OnModelCreating(builder);
         }

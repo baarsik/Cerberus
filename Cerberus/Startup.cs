@@ -161,7 +161,7 @@ namespace Cerberus
         private async Task CreateRolesAsync(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            string[] roleNames = { "admin", "user" };
+            string[] roleNames = { "admin", "user", "webNovelEditor" };
             foreach (var roleName in roleNames)
             {
                 var roleExist = await roleManager.RoleExistsAsync(roleName);
