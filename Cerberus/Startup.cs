@@ -125,6 +125,7 @@ namespace Cerberus
             services.AddScoped<AuthService>();
             services.AddScoped<ProfileService>();
             services.AddScoped<SettingsService>();
+            services.AddScoped<WebNovelService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

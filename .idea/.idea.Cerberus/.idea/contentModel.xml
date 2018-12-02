@@ -30,8 +30,10 @@
             <e p="AuthService.cs" t="Include" />
             <e p="ProfileService.cs" t="Include" />
             <e p="SettingsService.cs" t="Include" />
+            <e p="WebNovelService.cs" t="Include" />
           </e>
           <e p="SettingsController.cs" t="Include" />
+          <e p="WebNovelController.cs" t="Include" />
         </e>
         <e p="Models" t="Include">
           <e p="ChangePasswordViewModel.cs" t="Include" />
@@ -58,6 +60,7 @@
             <e p="LoginResult.cs" t="Include" />
             <e p="RegisterResult.cs" t="Include" />
           </e>
+          <e p="WebNovelIndexViewModel.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
@@ -108,6 +111,9 @@
               <e p="Admin.cshtml" t="Include" />
               <e p="Regular.cshtml" t="Include" />
             </e>
+          </e>
+          <e p="webnovel" t="Include">
+            <e p="Index.cshtml" t="Include" />
           </e>
         </e>
         <e p="wwwroot" t="Include">

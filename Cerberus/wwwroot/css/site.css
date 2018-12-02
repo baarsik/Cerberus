@@ -1427,6 +1427,10 @@ img.image-xl {
 .flex-column.justify-between {
     justify-content: space-between;
 }
+.flex-row.justify-center,
+.flex-column.justify-center {
+    justify-content: center;
+}
 .flex-row.align-center,
 .flex-column.align-center {
     align-items: center;
@@ -1519,10 +1523,20 @@ img.image-xl {
         color: #848c94
     }
 
-    .cerberus-nav.nav li.active a {
+    nav.navbar-side .cerberus-nav.nav li.active > a {
         border-left: 6px solid #f6a821;
         padding-left: 19px;
         color: #c0c4c8
+    }
+
+    .navbar-default .cerberus-nav.nav > li.active > a {
+        color: #f6a821;
+        background-color: transparent;
+    }
+
+    .navbar-default .cerberus-nav.nav > li.active > a:hover,
+    .navbar-default .cerberus-nav.nav > li.active > a:focus {
+        color: #f8bb52;
     }
 
     .cerberus-nav.nav li a:hover,

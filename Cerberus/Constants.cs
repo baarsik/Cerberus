@@ -13,5 +13,10 @@ namespace Cerberus
             public const string WebNovelEditor = "webNovelEditor";
             public const string User = "user";
         }
+
+        public static class WebNovel
+        {
+            public const int ItemsPerIndexPage = 20;
+        }
     }
 }

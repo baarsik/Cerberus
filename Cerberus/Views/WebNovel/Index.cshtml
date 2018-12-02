@@ -1,0 +1,46 @@
+@using Microsoft.EntityFrameworkCore.Internal
+@model WebNovelIndexViewModel
+
+@{
+    ViewBag.Title = "Web Novels";
+    var prevPage = Model.Page == 1 ? 1 : Model.Page - 1;
+    var nextPage = Model.Page == Model.TotalPages ? Model.Page : Model.TotalPages + 1;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="view-header">
+            <div class="header-icon">
+                <i class="fal fa-book fa-sm"></i>
+            </div>
+            <div class="header-title">
+                <h3>Web Novels</h3>
+                <small>
+                    List of web novels
+                </small>
+            </div>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-body">
+                @if (Model.WebNovels.Any())
+                {
+                    <div class="btn-group m-t flex-row justify-center">
+                        <a class="btn btn-default" asp-action="Index" asp-route-page="@(prevPage)"><i class="fas fa-chevron-left"></i></a>
+                        <a class="btn btn-default text-accent font-bold">@Model.Page</a>
+                        <a class="btn btn-default" asp-action="Index" asp-route-page="@(nextPage)"><i class="fas fa-chevron-right"></i></a>
+                    </div>
+                }
+                else
+                {
+                    <div>Sorry, the list of web novels is empty</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
