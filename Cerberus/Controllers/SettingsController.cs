@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Cerberus.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = Constants.Roles.Admin)]
     public class SettingsController : BaseController
     {
         private readonly SettingsService _settingsService;
@@ -33,6 +33,17 @@ namespace Cerberus.Controllers
         public IActionResult CreateForum()
         {
             return View("Forums/Create");
+        }
+        
+        [HttpPost]
+        [Route("[controller]/forums/create")]
+        public async Task<IActionResult> CreateForum(CreateForumViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View("Forums/Create", model);
+            
+            await _settingsService.CreateForum(model);
+            return RedirectToAction(nameof(Forums));
         }
 
         [HttpPost]

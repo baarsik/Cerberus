@@ -35,6 +35,7 @@
         </e>
         <e p="Models" t="Include">
           <e p="ChangePasswordViewModel.cs" t="Include" />
+          <e p="CreateForumViewModel.cs" t="Include" />
           <e p="ErrorViewModel.cs" t="Include" />
           <e p="Extensions" t="Include">
             <e p="ClaimsPrincipalExtensions.cs" t="Include" />

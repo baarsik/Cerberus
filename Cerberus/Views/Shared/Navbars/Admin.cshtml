@@ -9,9 +9,9 @@
             </li>
             
             <li class="nav-category">Manageable Data</li>
-            <li class="@ViewContext.FillClassIfActive("Users", "Settings")">
+            @*<li class="@ViewContext.FillClassIfActive("Users", "Settings")">
                 <a asp-controller="Settings" asp-action="Users">User List</a>
-            </li>
+            </li>*@
             <li class="@ViewContext.FillClassIfActive(new List<string>
                        {
                            nameof(SettingsController.Forums),
@@ -19,12 +19,12 @@
                        }, "Settings")">
                 <a asp-controller="Settings" asp-action="Forums">Forums</a>
             </li>
-            <li class="@ViewContext.FillClassIfActive("Products", "Settings")">
+            @*<li class="@ViewContext.FillClassIfActive("Products", "Settings")">
                 <a asp-controller="Settings" asp-action="Products">Products</a>
-            </li>
+            </li>*@
             
             <li class="nav-info">
-                Admin panel may contain privileged information. Please make sure not to release this info to the public.
+                Admin panel may contain privileged information. Please make sure not to release this info to the general public.
             </li>
         </ul>
     </nav>

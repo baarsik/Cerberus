@@ -34,6 +34,20 @@ namespace Cerberus.Controllers.Services
             return model;
         }
 
+        public async Task CreateForum(CreateForumViewModel model)
+        {
+            var forum = new Forum
+            {
+                Id = Guid.NewGuid(),
+                DisplayOrderId = await _db.Forums.MaxAsync(c => c.DisplayOrderId) + 1,
+                IsEnabled = false,
+                Title = model.Title
+            };
+            _db.Add(forum);
+            
+            await _db.SaveChangesAsync();
+        }
+        
         public async Task UpdateForums(IEnumerable<ForumHierarchyJson> forumHierarchy)
         {
             var displayOrderId = 0;

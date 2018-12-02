@@ -1,4 +1,4 @@
-@model object
+@model CreateForumViewModel
 
 @{
     ViewBag.Title = "Create Forum";
@@ -31,7 +31,20 @@
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-body">
-                TBD
+                <form method="post">
+                    <div class="form-group">
+                        <label>Forum Title</label>
+                        <input type="" asp-for="Title" class="form-control" placeholder="Title">
+                        <span class="help-block small">
+                            <div>Forum title (3-64 chars)</div>
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </span>
+                    </div>
+                    <button type="submit" class="btn btn-accent">
+                        Create Forum
+                    </button>
+                    <a class="btn btn-default" asp-action="Forums">Cancel</a>
+                </form>
             </div>
         </div>
     </div>
