@@ -1,11 +1,15 @@
-﻿using Cerberus.Controllers.Services;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Cerberus.Controllers.Services;
+using Cerberus.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Cerberus.Controllers
 {
     [Authorize(Roles = "admin")]
-    public class SettingsController : Controller
+    public class SettingsController : BaseController
     {
         private readonly SettingsService _settingsService;
 
@@ -29,6 +33,15 @@ namespace Cerberus.Controllers
         public IActionResult CreateForum()
         {
             return View("Forums/Create");
+        }
+
+        [HttpPost]
+        [Route("[controller]/forums/save")]
+        public async Task<IActionResult> SaveForums(string forumHierarchy)
+        {
+            var forumHierarchyParsed = JsonConvert.DeserializeObject<ICollection<ForumHierarchyJson>>(forumHierarchy);
+            await _settingsService.UpdateForums(forumHierarchyParsed);
+            return RedirectToAction(nameof(Forums));
         }
     }
 }

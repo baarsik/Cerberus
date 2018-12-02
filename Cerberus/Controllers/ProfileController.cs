@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cerberus.Controllers
 {
-    public class ProfileController : Controller
+    public class ProfileController : BaseController
     {
         private readonly AuthService _authService;
         private readonly ProfileService _profileService;

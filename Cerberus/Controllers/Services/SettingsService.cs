@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Cerberus.Models;
 using DataContext;
 using DataContext.Models;
@@ -31,6 +34,39 @@ namespace Cerberus.Controllers.Services
             return model;
         }
 
+        public async Task UpdateForums(IEnumerable<ForumHierarchyJson> forumHierarchy)
+        {
+            var displayOrderId = 0;
+            foreach (var item in forumHierarchy)
+            {
+                displayOrderId = await UpdateForum(item, ++displayOrderId, null);
+            }
+
+            await _db.SaveChangesAsync();
+        }
+
+        private async Task<int> UpdateForum(ForumHierarchyJson item, int displayOrderId, Guid? parentId)
+        {
+            var forum = await _db.Forums.IgnoreQueryFilters().SingleOrDefaultAsync(c => c.Id == item.Id);
+            
+            if (forum == null)
+            {
+                return displayOrderId;
+            }
+            
+            forum.IsEnabled = item.Enabled;
+            forum.ParentId = parentId;
+            forum.DisplayOrderId = displayOrderId;
+            _db.Update(forum);
+
+            foreach (var child in item.Children)
+            {
+                await UpdateForum(child, ++displayOrderId, item.Id);
+            }
+
+            return displayOrderId;
+        }
+        
         private ForumInfo ToForumInfo(Forum forum)
         {
             return new ForumInfo

@@ -33,7 +33,11 @@
         <div class="panel">
             <div class="panel-body">
                 <div class="dd" id="nestable">
-                    <partial name="Forums/ForumInfo" model="@Model.ForumTree"/>
+                    <partial name="Forums/_ForumInfo" model="@Model.ForumTree"/>
+                </div>
+                <div id="saveReminder" class="alert alert-danger m-t" style="display: none">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    You have unsaved changes
                 </div>
             </div>
         </div>
@@ -51,39 +55,63 @@
                     </div>
                     Create New
                 </a>
-                <a class="btn btn-accent m-t-sm">
-                    <div class="pull-left">
-                        <i class="fas fa-save"></i>
-                    </div>
-                    Save
-                </a>
+                <form class="flex-column" method="post" asp-action="SaveForums">
+                    <input id="ForumHierarchy" name="ForumHierarchy" style="display: none"/>
+                    <button type="submit" class="btn btn-accent m-t-sm">
+                        <div class="pull-left">
+                            <i class="fas fa-save"></i>
+                        </div>
+                        Save
+                    </button>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+    var forumHierarchy = '';
+    var originalForumHierarchy = '';
+    var isSaved = true;
+    
     $(document).ready(function () {
-
-        // Log for nestable list
-        var updateOutput = function (e) {
-            var list = e.length ? e : $(e.target),
-                output = list.data('output');
-            if (window.JSON) {
-                output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
-            } else {
-                output.val('JSON browser support required for this demo.');
-            }
-        };
-
-        // Activate Nestable for list 1
         $('#nestable').nestable({
             group: 1
-        }).on('change', updateOutput);
-
-
-        // Output initial serialised data
-        updateOutput($('#nestable').data('output', $('#nestable-output')));
-
+        }).on('change', updateForumHierarchy);
+        
+        updateForumHierarchy($('#nestable'));
     });
+    
+    function updateForumHierarchy(e) {
+        var prevForumHierarchy = forumHierarchy;
+        var list = e.length ? e : $(e.target);
+        forumHierarchy = window.JSON.stringify(list.nestable('serialize'));
+        $('#ForumHierarchy').val(forumHierarchy);
+        if (forumHierarchy !== prevForumHierarchy) {
+            if (prevForumHierarchy === '' && originalForumHierarchy === '') {
+                originalForumHierarchy = forumHierarchy;
+            }
+            else {
+                isSaved = forumHierarchy === originalForumHierarchy;
+            }
+        }
+        displaySaveReminder();
+    };
+    
+    function displaySaveReminder() {
+        isSaved
+            ? $('#saveReminder').hide()
+            : $('#saveReminder').show();
+    }
+    
+    function switchForumActivation(id) {
+        var el = $('.dd-item[data-id=' + id + ']');
+        var isEnabled = el.data('enabled') === 'True';
+        el.data('enabled', isEnabled ? 'False' : 'True');
+        el.children('a.badge').first().html(isEnabled
+            ? '<i class="fal fa-eye text-accent"></i> <span>Activate</span>'
+            : '<i class="fal fa-eye-slash text-danger"></i> <span>Deactivate</span>');
+        
+        updateForumHierarchy($('#nestable'));
+    }
 </script>

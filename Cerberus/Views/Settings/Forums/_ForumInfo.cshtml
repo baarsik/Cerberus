@@ -1,0 +1,33 @@
+@model IEnumerable<ForumInfo>
+
+@if (Model.Any())
+{
+    <ol class="dd-list">
+        @{
+            foreach (var forumInfo in Model)
+            {
+                <li class="dd-item" data-id="@forumInfo.Forum.Id" data-enabled="@forumInfo.IsEnabled">
+                    <div class="dd-handle">
+                        <span class="pull-right">
+                            @forumInfo.ThreadCount thread(s)
+                        </span>
+                        @forumInfo.Forum.Title
+                    </div>
+                    <a class="badge" onclick="switchForumActivation('@forumInfo.Forum.Id')">
+                    @if (forumInfo.IsEnabled)
+                    {
+                        <i class="fal fa-eye-slash text-danger"></i>
+                        <span>Deactivate</span>
+                    }
+                    else
+                    {
+                        <i class="fal fa-eye text-accent"></i>
+                        <span>Activate</span>
+                    }
+                    </a>
+                    <partial name="Forums/_ForumInfo" model="@forumInfo.Children"/>
+                </li>
+            }
+        }
+    </ol>
+}

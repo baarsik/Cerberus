@@ -41,6 +41,7 @@
             <e p="StringExtensions.cs" t="Include" />
             <e p="ViewContextExtensions.cs" t="Include" />
           </e>
+          <e p="ForumHierarchyJson.cs" t="Include" />
           <e p="ForumSettingsViewModel.cs" t="Include" />
           <e p="GenerateJwtResult.cs" t="Include" />
           <e p="Helpers" t="Include">
@@ -92,8 +93,8 @@
           </e>
           <e p="Settings" t="Include">
             <e p="Forums" t="Include">
+              <e p="_ForumInfo.cshtml" t="Include" />
               <e p="Create.cshtml" t="Include" />
-              <e p="ForumInfo.cshtml" t="Include" />
               <e p="Index.cshtml" t="Include" />
             </e>
             <e p="Index.cshtml" t="Include" />
