@@ -43,7 +43,7 @@ namespace Cerberus.Controllers
                 return new UnauthorizedResult();
 
             await _authService.RegenerateApiKey(user);
-            return RedirectToAction("Profile", "Profile", new { name = user.DisplayName });
+            return RedirectToAction(nameof(Profile), "Profile", new { name = user.DisplayName });
         }
     }
 }

@@ -35,21 +35,21 @@ namespace Cerberus.Models.Extensions
         {
             return viewContext.IsActive(controller)
                 ? "active"
-                : "";
+                : string.Empty;
         }
         
         public static string FillClassIfActive(this ViewContext viewContext, string action, string controller)
         {
             return viewContext.IsActive(action, controller)
                 ? "active"
-                : "";
+                : string.Empty;
         }
         
         public static string FillClassIfActive(this ViewContext viewContext, IEnumerable<string> actions, string controller)
         {
             return viewContext.IsActive(actions, controller)
                 ? "active"
-                : "";
+                : string.Empty;
         }
     }
 }

@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using Cerberus.Interfaces;
 using DataContext.Models;
 
 namespace Cerberus.Models
 {
-    public class WebNovelIndexViewModel
+    public class WebNovelIndexViewModel : IPageableViewModel<WebNovel>
     {
-        public IEnumerable<WebNovel> WebNovels { get; set; }
+        public IEnumerable<WebNovel> Items { get; set; }
         public int Page { get; set; }
         public int TotalPages { get; set; }
     }

@@ -134,7 +134,7 @@ namespace Cerberus.Controllers.Services
                 return new RegisterResult(RegisterStatus.Failure);
 
             await _userManager.AddClaimAsync(user, new Claim("DisplayName", user.DisplayName));
-            await _userManager.AddToRoleAsync(user, "user");
+            await _userManager.AddToRoleAsync(user, Constants.Roles.User);
             await _signInManager.SignInAsync(user, false);
             return new RegisterResult(RegisterStatus.Success);
         }

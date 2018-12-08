@@ -67,7 +67,7 @@ namespace Cerberus.Controllers
             switch (result.Status)
             {
                 case RegisterStatus.Success:
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction(nameof(HomeController.Index), "Home");
                 case RegisterStatus.DisplayNameInUse:
                     ModelState.AddModelError("", "Display Name is already in use");
                     break;
@@ -88,7 +88,7 @@ namespace Cerberus.Controllers
         public async Task<IActionResult> Logout()
         {
             await _authService.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
         [Authorize]
@@ -120,7 +120,7 @@ namespace Cerberus.Controllers
             }
 
             await _authService.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-            return RedirectToAction("Profile", "Profile", new {name = User.GetDisplayName()});
+            return RedirectToAction(nameof(ProfileController.Profile), "Profile", new {name = User.GetDisplayName()});
         }
     }
 }

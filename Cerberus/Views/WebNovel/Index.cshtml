@@ -1,4 +1,3 @@
-@using Microsoft.EntityFrameworkCore.Internal
 @model WebNovelIndexViewModel
 
 @{
@@ -28,7 +27,7 @@
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-body">
-                @if (Model.WebNovels.Any())
+                @if (Model.Items.Any())
                 {
                     <div class="btn-group m-t flex-row justify-center">
                         <a class="btn btn-default" asp-action="Index" asp-route-page="@(prevPage)"><i class="fas fa-chevron-left"></i></a>

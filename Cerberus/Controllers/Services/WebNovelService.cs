@@ -34,7 +34,7 @@ namespace Cerberus.Controllers.Services
                 TotalPages = totalPages,
             };
 
-            model.WebNovels = await _db.WebNovels
+            model.Items = await _db.WebNovels
                 .Take(Constants.WebNovel.ItemsPerIndexPage)
                 .Skip(Constants.WebNovel.ItemsPerIndexPage * (model.Page - 1))
                 .ToListAsync();

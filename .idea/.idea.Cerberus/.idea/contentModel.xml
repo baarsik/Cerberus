@@ -35,6 +35,9 @@
           <e p="SettingsController.cs" t="Include" />
           <e p="WebNovelController.cs" t="Include" />
         </e>
+        <e p="Interfaces" t="Include">
+          <e p="IPageableViewModel.cs" t="Include" />
+        </e>
         <e p="Models" t="Include">
           <e p="ChangePasswordViewModel.cs" t="Include" />
           <e p="CreateForumViewModel.cs" t="Include" />

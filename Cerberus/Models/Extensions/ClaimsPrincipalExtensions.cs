@@ -10,14 +10,14 @@ namespace Cerberus.Models.Extensions
         /// </summary>
         public static bool IsAdmin(this ClaimsPrincipal user)
         {
-            return user.IsInRole("admin");
+            return user.IsInRole(Constants.Roles.Admin);
         }
         
         public static string GetDisplayName(this ClaimsPrincipal user)
         {
             return user.Identity.IsAuthenticated
-                ? user.Claims.FirstOrDefault(c => c.Type == "DisplayName")?.Value
-                : "";
+                ? user.Claims.Where(c => c.Type == "DisplayName").Select(c => c.Value).FirstOrDefault()
+                : string.Empty;
         }
     }
 }

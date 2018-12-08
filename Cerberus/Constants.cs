@@ -18,5 +18,10 @@ namespace Cerberus
         {
             public const int ItemsPerIndexPage = 20;
         }
+
+        public static class Misc
+        {
+            public const string RandomStringSymbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        }
     }
 }

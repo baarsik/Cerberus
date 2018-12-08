@@ -9,8 +9,7 @@ namespace Cerberus.Models.Helpers
         
         public static string GenerateRandomString(int length)
         {
-            const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            var chosenChars = Enumerable.Repeat(chars, length)
+            var chosenChars = Enumerable.Repeat(Constants.Misc.RandomStringSymbols, length)
                 .Select(s => s[Random.Next(s.Length)])
                 .ToArray();
             return new string(chosenChars);

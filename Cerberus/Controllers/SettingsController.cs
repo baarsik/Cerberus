@@ -50,8 +50,8 @@ namespace Cerberus.Controllers
         [Route("[controller]/forums/save")]
         public async Task<IActionResult> SaveForums(string forumHierarchy)
         {
-            var forumHierarchyParsed = JsonConvert.DeserializeObject<ICollection<ForumHierarchyJson>>(forumHierarchy);
-            await _settingsService.UpdateForums(forumHierarchyParsed);
+            var forumHierarchyList = JsonConvert.DeserializeObject<ICollection<ForumHierarchyJson>>(forumHierarchy);
+            await _settingsService.UpdateForums(forumHierarchyList);
             return RedirectToAction(nameof(Forums));
         }
     }
