@@ -37,6 +37,15 @@ namespace Cerberus.Controllers.Services
             model.Items = await _db.WebNovels
                 .Take(Constants.WebNovel.ItemsPerIndexPage)
                 .Skip(Constants.WebNovel.ItemsPerIndexPage * (model.Page - 1))
+                .Include(c => c.Chapters)
+                .Select(webNovel => new WebNovelInfo
+                {
+                    WebNovel = webNovel,
+                    TotalChapters = webNovel.Chapters.Count,
+                    LastChapter = webNovel.Chapters
+                        .OrderBy(c => c.CreationDate)
+                        .LastOrDefault()
+                })
                 .ToListAsync();
             
             return model;

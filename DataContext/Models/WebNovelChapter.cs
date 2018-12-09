@@ -19,6 +19,7 @@ namespace DataContext.Models
         [Required]
         public DateTime FreeToAccessDate { get; set; } = DateTime.Now;
         
+        public virtual WebNovel WebNovel { get; set; }
         public virtual WebNovelChapter PreviousChapter { get; set; }
         public virtual WebNovelChapter NextChapter { get; set; }
     }

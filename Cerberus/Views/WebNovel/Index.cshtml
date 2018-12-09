@@ -29,6 +29,33 @@
             <div class="panel-body">
                 @if (Model.Items.Any())
                 {
+                    foreach (var item in Model.Items)
+                    {
+                         <div class="panel panel-filled panel-c-warning">
+                             <div class="panel-heading">
+                                 <h3>@item.WebNovel.Name</h3>
+                                 <div class="badge">Chapters: @item.TotalChapters</div>
+                                 @if (item.TotalChapters > 0)
+                                 {
+                                     <div class="badge">Last update: @item.LastChapter.CreationDate.ToFormattedString()</div>
+                                 }
+                             </div>
+                             <div class="panel-body">
+                                 @item.WebNovel.Description
+                             </div>
+                             <div class="panel-footer">
+                                 <a class="btn btn-sm btn-default" asp-action="Details" asp-route-webNovelUrl="@item.WebNovel.UrlName">Details</a>
+                                 @if (item.TotalChapters > 0)
+                                 {
+                                     <a class="btn btn-sm btn-default" asp-action="Read"
+                                        asp-route-webNovelUrl="@item.WebNovel.UrlName"
+                                        asp-route-chapterNumber="@item.LastChapter.Number">
+                                         Read chapter @item.LastChapter.Number
+                                     </a>
+                                 }
+                             </div>
+                         </div>
+                    }
                     <div class="btn-group m-t flex-row justify-center">
                         <a class="btn btn-default" asp-action="Index" asp-route-page="@(prevPage)"><i class="fas fa-chevron-left"></i></a>
                         <a class="btn btn-default text-accent font-bold">@Model.Page</a>

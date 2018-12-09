@@ -16,11 +16,12 @@ namespace Cerberus
 
         public static class WebNovel
         {
-            public const int ItemsPerIndexPage = 20;
+            public const int ItemsPerIndexPage = 10;
         }
 
         public static class Misc
         {
+            public const string DateTimeFormat = "dd.MM.yyyy";
             public const string RandomStringSymbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         }
     }

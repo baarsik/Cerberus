@@ -4,9 +4,9 @@ using DataContext.Models;
 
 namespace Cerberus.Models
 {
-    public class WebNovelIndexViewModel : IPageableViewModel<WebNovel>
+    public class WebNovelIndexViewModel : IPageableViewModel<WebNovelInfo>
     {
-        public IEnumerable<WebNovel> Items { get; set; }
+        public IEnumerable<WebNovelInfo> Items { get; set; }
         public int Page { get; set; }
         public int TotalPages { get; set; }
     }

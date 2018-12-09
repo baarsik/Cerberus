@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DataContext.Models
@@ -17,10 +18,12 @@ namespace DataContext.Models
         public string CoverUrl { get; set; }
         
         public string OriginalName { get; set; }
+
+        public string Author { get; set; }
         
         [Required]
         public DateTime CreationDate { get; set; } = DateTime.Now;
         
-        public virtual WebNovelChapter FirstChapter { get; set; }
+        public virtual ICollection<WebNovelChapter> Chapters { get; set; }
     }
 }
