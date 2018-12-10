@@ -44,7 +44,11 @@ namespace Cerberus.Controllers.Services
                     TotalChapters = webNovel.Chapters.Count,
                     LastChapter = webNovel.Chapters
                         .OrderBy(c => c.CreationDate)
-                        .LastOrDefault()
+                        .LastOrDefault(),
+                    TotalVolumes = webNovel.Chapters
+                        .Select(c => c.Volume)
+                        .OrderByDescending(c => c)
+                        .FirstOrDefault()
                 })
                 .ToListAsync();
             

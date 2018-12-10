@@ -222,6 +222,8 @@
           <e p="20181201193907_WebNovel.Designer.cs" t="Include" />
           <e p="20181209185037_WebNovel2.cs" t="Include" />
           <e p="20181209185037_WebNovel2.Designer.cs" t="Include" />
+          <e p="20181210115715_WebNovel3.cs" t="Include" />
+          <e p="20181210115715_WebNovel3.Designer.cs" t="Include" />
           <e p="ApplicationContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="Models" t="Include">

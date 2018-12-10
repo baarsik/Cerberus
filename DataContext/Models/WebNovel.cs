@@ -20,7 +20,10 @@ namespace DataContext.Models
         public string OriginalName { get; set; }
 
         public string Author { get; set; }
-        
+
+        [Required]
+        public bool UsesVolumes { get; set; } = true;
+
         [Required]
         public DateTime CreationDate { get; set; } = DateTime.Now;
         

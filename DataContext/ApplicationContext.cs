@@ -101,6 +101,11 @@ namespace DataContext
             builder.Entity<WebNovel>()
                 .HasIndex(c => c.UrlName)
                 .IsUnique();
+
+            builder.Entity<WebNovelChapter>()
+                .HasOne(c => c.Uploader)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
             
             base.OnModelCreating(builder);
         }

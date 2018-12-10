@@ -34,6 +34,10 @@
                          <div class="panel panel-filled panel-c-warning">
                              <div class="panel-heading">
                                  <h3>@item.WebNovel.Name</h3>
+                                 @if (item.WebNovel.UsesVolumes)
+                                 {
+                                     <div class="badge">Volumes: @item.TotalVolumes</div>
+                                 }
                                  <div class="badge">Chapters: @item.TotalChapters</div>
                                  @if (item.TotalChapters > 0)
                                  {
