@@ -157,6 +157,7 @@ namespace Cerberus
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+            app.UseStatusCodePagesWithRedirects("/error/{0}.html");
             
             context.Database.Migrate();
         }

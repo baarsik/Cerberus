@@ -8,5 +8,11 @@ namespace Cerberus.Controllers
         {
             return View();
         }
+
+        [Route("error/404.html")]
+        public IActionResult NotFound()
+        {
+            return View();
+        }
     }
 }

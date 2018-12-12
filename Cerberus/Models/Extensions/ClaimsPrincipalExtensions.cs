@@ -13,6 +13,12 @@ namespace Cerberus.Models.Extensions
             return user.IsInRole(Constants.Roles.Admin);
         }
         
+        public static bool HasWebNovelEditorAccess(this ClaimsPrincipal user)
+        {
+            return user.IsInRole(Constants.Roles.Admin)
+                || user.IsInRole(Constants.Roles.WebNovelEditor);
+        }
+        
         public static string GetDisplayName(this ClaimsPrincipal user)
         {
             return user.Identity.IsAuthenticated

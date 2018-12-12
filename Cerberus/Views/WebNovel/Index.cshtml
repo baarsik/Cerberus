@@ -12,6 +12,15 @@
             <div class="header-icon">
                 <i class="fal fa-book fa-sm"></i>
             </div>
+            <div class="pull-right text-right">
+                @if (User.HasWebNovelEditorAccess())
+                {
+                    <a class="btn btn-lg btn-default">
+                        <i class="far fa-plus"></i>
+                        New
+                    </a>
+                }
+            </div>
             <div class="header-title">
                 <h3>Web Novels</h3>
                 <small>

@@ -95,6 +95,7 @@
             <e p="Index.cshtml" t="Include" />
           </e>
           <e p="Page" t="Include">
+            <e p="NotFound.cshtml" t="Include" />
             <e p="Rules.cshtml" t="Include" />
           </e>
           <e p="Profile" t="Include">

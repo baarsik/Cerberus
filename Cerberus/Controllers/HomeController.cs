@@ -8,7 +8,7 @@ namespace Cerberus.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction(nameof(WebNovelController.Index), "WebNovel");
         }
 
         public IActionResult Error()
