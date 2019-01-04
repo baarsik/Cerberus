@@ -69,11 +69,7 @@
                              </div>
                          </div>
                     }
-                    <div class="btn-group m-t flex-row justify-center">
-                        <a class="btn btn-default" asp-action="Index" asp-route-page="@(prevPage)"><i class="fas fa-chevron-left"></i></a>
-                        <a class="btn btn-default text-accent font-bold">@Model.Page</a>
-                        <a class="btn btn-default" asp-action="Index" asp-route-page="@(nextPage)"><i class="fas fa-chevron-right"></i></a>
-                    </div>
+                    <paginator asp-action="Index" model="@Model"/>
                 }
                 else
                 {

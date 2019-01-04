@@ -64,6 +64,9 @@
             <e p="LoginResult.cs" t="Include" />
             <e p="RegisterResult.cs" t="Include" />
           </e>
+          <e p="TagHelpers" t="Include">
+            <e p="PaginatorTagHelper.cs" t="Include" />
+          </e>
           <e p="WebNovelIndexViewModel.cs" t="Include" />
           <e p="WebNovelInfo.cs" t="Include" />
         </e>
