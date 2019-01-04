@@ -79,19 +79,19 @@ namespace Cerberus.Models.TagHelpers
             
             if (shouldDisplayFirstPage)
             {
-                output.Content.AppendHtmlLine(GetHtmlLinkTextForPage(1));
-                output.Content.AppendHtmlLine(GetHtmlLinkTextNoHref("..."));
+                output.Content.AppendHtmlLine(GetHtmlLinkTag(1));
+                output.Content.AppendHtmlLine(GetHtmlLinkTag("..."));
             }
 
             for (var page = Model.Page - takePagesFromLeft; page <= Model.Page + takePagesFromRight; page++)
             {
-                output.Content.AppendHtmlLine(GetHtmlLinkTextForPage(page));
+                output.Content.AppendHtmlLine(GetHtmlLinkTag(page));
             }
             
             if (shouldDisplayLastPage)
             {
-                output.Content.AppendHtmlLine(GetHtmlLinkTextNoHref("..."));
-                output.Content.AppendHtmlLine(GetHtmlLinkTextForPage(Model.TotalPages));
+                output.Content.AppendHtmlLine(GetHtmlLinkTag("..."));
+                output.Content.AppendHtmlLine(GetHtmlLinkTag(Model.TotalPages));
             }
             
             output.Content.AppendHtmlLine(GetHtmlLinkTextForNextPage());
@@ -99,39 +99,36 @@ namespace Cerberus.Models.TagHelpers
             output.Content.AppendHtmlLine("</div>");
         }
 
-        private string GetHtmlLinkTextForPage(int page)
+        private string GetHtmlLinkTag(int? page, string text)
         {
+            if (!page.HasValue)
+                return $"<a class=\"btn btn-default\">{text}</a>";
+            
             return page == Model.Page
-                ? $"<a class=\"btn btn-default text-accent font-bold\">{page}</a>"
-                : $"<a class=\"btn btn-default\" href=\"{GetLinkToPage(page)}\">{page}</a>";
+                ? $"<a class=\"btn btn-default text-accent font-bold\">{text}</a>"
+                : $"<a class=\"btn btn-default\" href=\"{GetLinkToPage(page.Value)}\">{text}</a>";
         }
+
+        private string GetHtmlLinkTag(int page) => GetHtmlLinkTag(page, page.ToString());
+        
+        private string GetHtmlLinkTag(string text) => GetHtmlLinkTag(null, text);
         
         private string GetHtmlLinkTextForNextPage()
         {
-            var nextPage = Model.Page >= Model.TotalPages ? Model.TotalPages : Model.Page + 1;
-            return $"<a class=\"btn btn-default\" href=\"{GetLinkToPage(nextPage)}\"><i class=\"fas fa-chevron-right\"></i></a>";
+            int? nextPage = Model.Page >= Model.TotalPages ? Model.TotalPages : Model.Page + 1;
+            return GetHtmlLinkTag(nextPage == Model.Page ? null : nextPage, "<i class=\"fas fa-chevron-right\"></i>");
         }
         
         private string GetHtmlLinkTextForPreviousPage()
         {
-            var prevPage = Model.Page <= 1 ? 1 : Model.Page - 1;
-            return $"<a class=\"btn btn-default\" href=\"{GetLinkToPage(prevPage)}\"\"><i class=\"fas fa-chevron-left\"></i></a>";
-        }
-        
-        private string GetHtmlLinkTextNoHref(string text)
-        {
-            return $"<a class=\"btn btn-default\">{text}</a>";
-        }
-        
-        private string GetHtmlLinkTextNoHref(int page)
-        {
-            return GetHtmlLinkTextNoHref(page.ToString());
+            int? prevPage = Model.Page <= 1 ? 1 : Model.Page - 1;
+            return GetHtmlLinkTag(prevPage == Model.Page ? null : prevPage, "<i class=\"fas fa-chevron-left\"></i>");
         }
 
         private string GetLinkToPage(int page)
         {
             var urlHelper = _urlHelperFactory.GetUrlHelper(ViewContext);
-            return urlHelper.Action(AspAction, AspController, new {page = page});
+            return urlHelper.Action(AspAction, AspController, new {page});
         }
     }
 }
