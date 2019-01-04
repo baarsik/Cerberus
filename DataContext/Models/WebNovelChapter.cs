@@ -28,6 +28,9 @@ namespace DataContext.Models
         [Required]
         public virtual WebNovel WebNovel { get; set; }
         
+        [Required]
+        public virtual Language Language { get; set; }
+        
         public virtual WebNovelChapter PreviousChapter { get; set; }
         public virtual WebNovelChapter NextChapter { get; set; }
     }

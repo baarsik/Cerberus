@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -134,8 +135,6 @@ namespace Cerberus
             var localizationOption = serviceProvider.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(localizationOption.Value);
             
-            CreateRolesAsync(serviceProvider).Wait();
-            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -160,6 +159,9 @@ namespace Cerberus
             app.UseStatusCodePagesWithRedirects("/error/{0}.html");
             
             context.Database.Migrate();
+
+            CreateRolesAsync(serviceProvider).Wait();
+            CreateLanguagesAsync(serviceProvider).Wait();
         }
         
         private async Task CreateRolesAsync(IServiceProvider serviceProvider)
@@ -198,6 +200,25 @@ namespace Cerberus
                     await userManager.AddToRoleAsync(defaultUser, Constants.Roles.User);
                 }
             }
+        }
+
+        private async Task CreateLanguagesAsync(IServiceProvider serviceProvider)
+        {
+            var languages = new List<Language>
+            {
+                new Language {Code = "en", GlobalName = "English", LocalName = "English"},
+                new Language {Code = "ru", GlobalName = "Russian", LocalName = "Русский"}
+            };
+
+            var db = serviceProvider.GetRequiredService<ApplicationContext>();
+            foreach (var lang in languages)
+            {
+                if (await db.Languages.AnyAsync(c => c.Code == lang.Code))
+                    continue;
+
+                db.Languages.Add(lang);
+            }
+            await db.SaveChangesAsync();
         }
     }
 }

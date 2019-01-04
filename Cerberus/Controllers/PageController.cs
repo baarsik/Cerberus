@@ -10,7 +10,7 @@ namespace Cerberus.Controllers
         }
 
         [Route("error/404.html")]
-        public IActionResult NotFound()
+        public new IActionResult NotFound()
         {
             return View();
         }

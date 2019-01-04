@@ -26,6 +26,8 @@ namespace DataContext
         public DbSet<WebNovel> WebNovels { get; set; }
         public DbSet<WebNovelChapter> WebNovelChapters { get; set; }
         public DbSet<WebNovelChapterAccess> WebNovelChapterAccess { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<Language> Languages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -101,9 +103,19 @@ namespace DataContext
             builder.Entity<WebNovel>()
                 .HasIndex(c => c.UrlName)
                 .IsUnique();
+            
+            builder.Entity<WebNovel>()
+                .HasOne(c => c.Country)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<WebNovelChapter>()
                 .HasOne(c => c.Uploader)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<WebNovelChapter>()
+                .HasOne(c => c.Language)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
             
