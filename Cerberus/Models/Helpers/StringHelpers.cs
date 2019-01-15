@@ -14,5 +14,13 @@ namespace Cerberus.Models.Helpers
                 .ToArray();
             return new string(chosenChars);
         }
+
+        public static string GetCommaSpaceSeparatedString(params object[] args)
+        {
+            return args.Where(arg => arg != null)
+                .Aggregate(string.Empty, (current, arg) => current.Length > 0
+                    ? $"{current}, {arg}"
+                    : $"{arg}");
+        }
     }
 }

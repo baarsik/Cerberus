@@ -3531,6 +3531,16 @@ ol.counter > li:before {
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='75px' width='120px'><text x='5' y='30' fill='#f7af3e' style='opacity:0.15' transform='translate(30) rotate(45 50 50)' font-size='14'>Confidential</text></svg>");
 }
 
+.no-text-decoration {
+    text-decoration: none !important;
+}
+
+.overflow-100 {
+    max-height: 10em;
+    overflow: hidden;
+    position: relative;
+}
+
 @font-face {
     font-family: 'Furore';
     font-style: normal;

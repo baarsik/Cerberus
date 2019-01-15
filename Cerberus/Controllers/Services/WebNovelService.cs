@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Cerberus.Models;
 using DataContext;
+using DataContext.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cerberus.Controllers.Services
@@ -34,25 +36,50 @@ namespace Cerberus.Controllers.Services
                 TotalPages = totalPages,
             };
 
-            model.Items = await _db.WebNovels
+            model.Items = _db.WebNovels
                 .Take(Constants.WebNovel.ItemsPerIndexPage)
                 .Skip(Constants.WebNovel.ItemsPerIndexPage * (model.Page - 1))
                 .Include(c => c.Chapters)
-                .Select(webNovel => new WebNovelInfo
-                {
-                    WebNovel = webNovel,
-                    TotalChapters = webNovel.Chapters.Count,
-                    LastChapter = webNovel.Chapters
-                        .OrderBy(c => c.CreationDate)
-                        .LastOrDefault(),
-                    TotalVolumes = webNovel.Chapters
-                        .Select(c => c.Volume)
-                        .OrderByDescending(c => c)
-                        .FirstOrDefault()
-                })
-                .ToListAsync();
+                .Select(GetWebNovelInfo)
+                .ToList();
             
             return model;
+        }
+        
+        public async Task<WebNovelDetailsViewModel> GetWebNovelDetailsViewModelAsync(string webNovelUrl)
+        {
+            var webNovel = await _db.WebNovels
+                .Include(c => c.Chapters)
+                .SingleOrDefaultAsync(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture));
+
+            var model = new WebNovelDetailsViewModel
+            {
+                WebNovelInfo = GetWebNovelInfo(webNovel),
+                IsValid = webNovel != null
+            };
+            
+            return model;
+        }
+
+        private WebNovelInfo GetWebNovelInfo(WebNovel webNovel)
+        {
+            if (webNovel?.Chapters == null)
+            {
+                return null;
+            }
+
+            return new WebNovelInfo
+            {
+                WebNovel = webNovel,
+                TotalChapters = webNovel.Chapters.Count,
+                LastChapter = webNovel.Chapters
+                    .OrderBy(c => c.CreationDate)
+                    .LastOrDefault(),
+                TotalVolumes = webNovel.Chapters
+                    .Select(c => c.Volume)
+                    .OrderByDescending(c => c)
+                    .FirstOrDefault()
+            };
         }
     }
 }

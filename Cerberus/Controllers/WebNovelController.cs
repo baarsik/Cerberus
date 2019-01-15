@@ -23,9 +23,10 @@ namespace Cerberus.Controllers
         }
 
         [Route("[action]/{webNovelUrl}")]
-        public IActionResult Details(string webNovelUrl)
+        public async Task<IActionResult> Details(string webNovelUrl)
         {
-            throw new NotImplementedException();
+            var model = await _webNovelService.GetWebNovelDetailsViewModelAsync(webNovelUrl);
+            return View(model);
         }
         
         [Route("[action]/{webNovelUrl}/{chapterNumber}")]

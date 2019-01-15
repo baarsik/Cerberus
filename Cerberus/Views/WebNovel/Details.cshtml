@@ -1,0 +1,43 @@
+@using Cerberus.Models.Helpers
+@model WebNovelDetailsViewModel
+
+@{
+    ViewBag.Title = "Web Novels";
+    var webNovel = Model.WebNovelInfo.WebNovel;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="view-header">
+            <div class="header-icon">
+                <i class="fal fa-book fa-sm"></i>
+            </div>
+            <div class="pull-right text-right">
+                @if (User.HasWebNovelEditorAccess())
+                {
+                    <a class="btn btn-lg btn-default">
+                        <i class="far fa-pen"></i>
+                        Edit
+                    </a>
+                }
+            </div>
+            <div class="header-title">
+                <h3>@webNovel.Name</h3>
+                <small>
+                    @StringHelpers.GetCommaSpaceSeparatedString(webNovel.OriginalName, webNovel.Author)
+                </small>
+            </div>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-body">
+                @Html.Raw(webNovel.Description)
+            </div>
+        </div>
+    </div>
+</div>
