@@ -370,19 +370,6 @@
           <e p="WebNovelChapter.cs" t="Include" />
           <e p="WebNovelChapterAccess.cs" t="Include" />
         </e>
-        <e p="node_modules" t="Include">
-          <e p="yuicompressor" t="Include">
-            <e p="build" t="Include">
-              <e p="yuicompressor-2.4.8.jar" t="Include" />
-            </e>
-            <e p="nodejs" t="Include">
-              <e p="cli.js" t="Include" />
-              <e p="index.js" t="Include" />
-            </e>
-            <e p="package.json" t="Include" />
-            <e p="README.md" t="Include" />
-          </e>
-        </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp2.1" t="Include">
@@ -390,7 +377,6 @@
             </e>
           </e>
         </e>
-        <e p="package-lock.json" t="Include" />
       </e>
       <e p="packages" t="ExcludeRecursive" />
     </e>
