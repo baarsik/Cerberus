@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Cerberus.ValidationAttributes;
 
-namespace Cerberus.Models
+namespace Cerberus.Models.ViewModels
 {
     public class RegisterViewModel
     {

@@ -1,5 +1,4 @@
-﻿using System;
-namespace Cerberus.Models.Services
+﻿namespace Cerberus.Models.Services
 {
     public class RegisterResult
     {

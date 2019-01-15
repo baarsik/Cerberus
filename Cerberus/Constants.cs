@@ -24,5 +24,11 @@ namespace Cerberus
             public const string DateTimeFormat = "dd.MM.yyyy";
             public const string RandomStringSymbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         }
+
+        public static class Libraries
+        {
+            public const string NestableJs = "nestable";
+            public const string Summernote = "summernote";
+        }
     }
 }

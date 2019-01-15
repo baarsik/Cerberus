@@ -1,0 +1,74 @@
+@model AddChapterViewModel
+
+@{
+    ViewBag.Title = "Add Chapter";
+    var settings = new LayoutSettings();
+    settings.LibraryManager.Library(Constants.Libraries.Summernote).Activate();
+    ViewBag.Settings = settings;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="view-header">
+            <div class="header-icon">
+                <i class="fal fa-book fa-sm"></i>
+            </div>
+            <div class="header-title">
+                <h3>@Model.WebNovel.Name</h3>
+                <small>
+                    Add new chapter
+                </small>
+            </div>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-body">
+                <form method="post">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="" asp-for="Title" class="form-control" placeholder="Chapter Title">
+                        <span class="help-block small">
+                            <div>Chapter title (3-64 chars)</div>
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label>Body</label>
+                        <input type="text" asp-for="Text" class="form-control summernote">
+                        <span class="help-block small">
+                            <span asp-validation-for="Text" class="text-danger"></span>
+                        </span>
+                    </div>
+                    <button type="submit" class="btn btn-accent">
+                        Add Chapter
+                    </button>
+                    <a class="btn btn-default" asp-action="Details" asp-route-webNovelUrl="@Model.WebNovel.UrlName">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.summernote').summernote({
+                placeholder: 'Chapter Text',
+                callbacks: {
+                    onPaste: function(e) {
+                        // Paste plain text with no duplicated line breaks
+                        var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text').replace(/\n\s*\n/g, '\n');
+                        e.preventDefault();
+                        document.execCommand('insertText', false, bufferText);
+                    }
+                }
+            });
+        })
+    </script>
+}

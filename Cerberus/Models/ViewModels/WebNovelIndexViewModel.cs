@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using Cerberus.Interfaces;
-using DataContext.Models;
 
-namespace Cerberus.Models
+namespace Cerberus.Models.ViewModels
 {
     public class WebNovelIndexViewModel : IPageableViewModel<WebNovelInfo>
     {

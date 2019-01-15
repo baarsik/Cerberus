@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cerberus.Models;
+using Cerberus.Models.ViewModels;
 using DataContext;
 using DataContext.Models;
 using Microsoft.EntityFrameworkCore;

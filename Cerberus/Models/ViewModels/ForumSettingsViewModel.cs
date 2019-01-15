@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using DataContext.Models;
 
-namespace Cerberus.Models
+namespace Cerberus.Models.ViewModels
 {
     public class ForumSettingsViewModel
     {

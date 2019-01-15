@@ -1,4 +1,4 @@
-namespace Cerberus.Models
+namespace Cerberus.Models.ViewModels
 {
     public class WebNovelDetailsViewModel
     {

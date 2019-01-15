@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Cerberus.Models;
+using Cerberus.Models.ViewModels;
 using DataContext;
 using DataContext.Models;
 using Microsoft.EntityFrameworkCore;
@@ -57,6 +58,23 @@ namespace Cerberus.Controllers.Services
                 WebNovelInfo = GetWebNovelInfo(webNovel),
                 IsValid = webNovel != null
             };
+            
+            return model;
+        }
+        
+        public async Task<AddChapterViewModel> GetWebNovelAddChapterViewModelAsync(Guid webNovelId, AddChapterViewModel model = null)
+        {
+            if (model == null)
+            {
+                model = new AddChapterViewModel
+                {
+                    Id = webNovelId
+                };
+            }
+            
+            model.WebNovel = await _db.WebNovels
+                .Include(c => c.Chapters)
+                .SingleOrDefaultAsync(c => c.Id == model.Id);
             
             return model;
         }

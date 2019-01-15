@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Cerberus.Models;
+using Cerberus.Models.ViewModels;
 
 namespace Cerberus.Controllers
 {

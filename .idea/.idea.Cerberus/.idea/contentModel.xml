@@ -39,8 +39,6 @@
           <e p="IPageableViewModel.cs" t="Include" />
         </e>
         <e p="Models" t="Include">
-          <e p="ChangePasswordViewModel.cs" t="Include" />
-          <e p="ErrorViewModel.cs" t="Include" />
           <e p="Extensions" t="Include">
             <e p="ClaimsPrincipalExtensions.cs" t="Include" />
             <e p="DateTimeExtensions.cs" t="Include" />
@@ -64,7 +62,10 @@
             <e p="PaginatorTagHelper.cs" t="Include" />
           </e>
           <e p="ViewModels" t="Include">
+            <e p="AddChapterViewModel.cs" t="Include" />
+            <e p="ChangePasswordViewModel.cs" t="Include" />
             <e p="CreateForumViewModel.cs" t="Include" />
+            <e p="ErrorViewModel.cs" t="Include" />
             <e p="ForumSettingsViewModel.cs" t="Include" />
             <e p="ProfileViewModel.cs" t="Include" />
             <e p="RegisterViewModel.cs" t="Include" />
@@ -125,6 +126,7 @@
             </e>
           </e>
           <e p="webnovel" t="Include">
+            <e p="AddChapter.cshtml" t="Include" />
             <e p="Details.cshtml" t="Include" />
             <e p="Index.cshtml" t="Include" />
           </e>
@@ -214,6 +216,115 @@
               <e p="jquery.nestable.js" t="Include" />
               <e p="jquery.nestable.min.js" t="Include" />
             </e>
+            <e p="summernote" t="Include">
+              <e p="dist" t="Include">
+                <e p="font" t="Include">
+                  <e p="summernote.eot" t="Include" />
+                  <e p="summernote.ttf" t="Include" />
+                  <e p="summernote.woff" t="Include" />
+                </e>
+                <e p="lang" t="Include">
+                  <e p="summernote-ar-AR.js" t="Include" />
+                  <e p="summernote-ar-AR.min.js" t="Include" />
+                  <e p="summernote-bg-BG.js" t="Include" />
+                  <e p="summernote-bg-BG.min.js" t="Include" />
+                  <e p="summernote-ca-ES.js" t="Include" />
+                  <e p="summernote-ca-ES.min.js" t="Include" />
+                  <e p="summernote-cs-CZ.js" t="Include" />
+                  <e p="summernote-cs-CZ.min.js" t="Include" />
+                  <e p="summernote-da-DK.js" t="Include" />
+                  <e p="summernote-da-DK.min.js" t="Include" />
+                  <e p="summernote-de-DE.js" t="Include" />
+                  <e p="summernote-de-DE.min.js" t="Include" />
+                  <e p="summernote-es-ES.js" t="Include" />
+                  <e p="summernote-es-ES.min.js" t="Include" />
+                  <e p="summernote-es-EU.js" t="Include" />
+                  <e p="summernote-es-EU.min.js" t="Include" />
+                  <e p="summernote-fa-IR.js" t="Include" />
+                  <e p="summernote-fa-IR.min.js" t="Include" />
+                  <e p="summernote-fi-FI.js" t="Include" />
+                  <e p="summernote-fi-FI.min.js" t="Include" />
+                  <e p="summernote-fr-FR.js" t="Include" />
+                  <e p="summernote-fr-FR.min.js" t="Include" />
+                  <e p="summernote-gl-ES.js" t="Include" />
+                  <e p="summernote-gl-ES.min.js" t="Include" />
+                  <e p="summernote-he-IL.js" t="Include" />
+                  <e p="summernote-he-IL.min.js" t="Include" />
+                  <e p="summernote-hr-HR.js" t="Include" />
+                  <e p="summernote-hr-HR.min.js" t="Include" />
+                  <e p="summernote-hu-HU.js" t="Include" />
+                  <e p="summernote-hu-HU.min.js" t="Include" />
+                  <e p="summernote-id-ID.js" t="Include" />
+                  <e p="summernote-id-ID.min.js" t="Include" />
+                  <e p="summernote-it-IT.js" t="Include" />
+                  <e p="summernote-it-IT.min.js" t="Include" />
+                  <e p="summernote-ja-JP.js" t="Include" />
+                  <e p="summernote-ja-JP.min.js" t="Include" />
+                  <e p="summernote-ko-KR.js" t="Include" />
+                  <e p="summernote-ko-KR.min.js" t="Include" />
+                  <e p="summernote-lt-LT.js" t="Include" />
+                  <e p="summernote-lt-LT.min.js" t="Include" />
+                  <e p="summernote-lt-LV.js" t="Include" />
+                  <e p="summernote-lt-LV.min.js" t="Include" />
+                  <e p="summernote-nb-NO.js" t="Include" />
+                  <e p="summernote-nb-NO.min.js" t="Include" />
+                  <e p="summernote-nl-NL.js" t="Include" />
+                  <e p="summernote-nl-NL.min.js" t="Include" />
+                  <e p="summernote-pl-PL.js" t="Include" />
+                  <e p="summernote-pl-PL.min.js" t="Include" />
+                  <e p="summernote-pt-BR.js" t="Include" />
+                  <e p="summernote-pt-BR.min.js" t="Include" />
+                  <e p="summernote-pt-PT.js" t="Include" />
+                  <e p="summernote-pt-PT.min.js" t="Include" />
+                  <e p="summernote-ro-RO.js" t="Include" />
+                  <e p="summernote-ro-RO.min.js" t="Include" />
+                  <e p="summernote-ru-RU.js" t="Include" />
+                  <e p="summernote-ru-RU.min.js" t="Include" />
+                  <e p="summernote-sk-SK.js" t="Include" />
+                  <e p="summernote-sk-SK.min.js" t="Include" />
+                  <e p="summernote-sl-SI.js" t="Include" />
+                  <e p="summernote-sl-SI.min.js" t="Include" />
+                  <e p="summernote-sr-RS-Latin.js" t="Include" />
+                  <e p="summernote-sr-RS-Latin.min.js" t="Include" />
+                  <e p="summernote-sr-RS.js" t="Include" />
+                  <e p="summernote-sr-RS.min.js" t="Include" />
+                  <e p="summernote-sv-SE.js" t="Include" />
+                  <e p="summernote-sv-SE.min.js" t="Include" />
+                  <e p="summernote-th-TH.js" t="Include" />
+                  <e p="summernote-th-TH.min.js" t="Include" />
+                  <e p="summernote-tr-TR.js" t="Include" />
+                  <e p="summernote-tr-TR.min.js" t="Include" />
+                  <e p="summernote-uk-UA.js" t="Include" />
+                  <e p="summernote-uk-UA.min.js" t="Include" />
+                  <e p="summernote-vi-VN.js" t="Include" />
+                  <e p="summernote-vi-VN.min.js" t="Include" />
+                  <e p="summernote-zh-CN.js" t="Include" />
+                  <e p="summernote-zh-CN.min.js" t="Include" />
+                  <e p="summernote-zh-TW.js" t="Include" />
+                  <e p="summernote-zh-TW.min.js" t="Include" />
+                </e>
+                <e p="plugin" t="Include">
+                  <e p="databasic" t="Include">
+                    <e p="summernote-ext-databasic.css" t="Include" />
+                    <e p="summernote-ext-databasic.js" t="Include" />
+                    <e p="summernote-ext-databasic.min.css" t="Include" />
+                    <e p="summernote-ext-databasic.min.js" t="Include" />
+                  </e>
+                  <e p="hello" t="Include">
+                    <e p="summernote-ext-hello.js" t="Include" />
+                    <e p="summernote-ext-hello.min.js" t="Include" />
+                  </e>
+                  <e p="specialchars" t="Include">
+                    <e p="summernote-ext-specialchars.js" t="Include" />
+                    <e p="summernote-ext-specialchars.min.js" t="Include" />
+                  </e>
+                </e>
+                <e p="summernote.css" t="Include" />
+                <e p="summernote.js" t="Include" />
+                <e p="summernote.min.css" t="Include" />
+                <e p="summernote.min.js" t="Include" />
+              </e>
+            </e>
           </e>
         </e>
       </e>
@@ -259,6 +370,19 @@
           <e p="WebNovelChapter.cs" t="Include" />
           <e p="WebNovelChapterAccess.cs" t="Include" />
         </e>
+        <e p="node_modules" t="Include">
+          <e p="yuicompressor" t="Include">
+            <e p="build" t="Include">
+              <e p="yuicompressor-2.4.8.jar" t="Include" />
+            </e>
+            <e p="nodejs" t="Include">
+              <e p="cli.js" t="Include" />
+              <e p="index.js" t="Include" />
+            </e>
+            <e p="package.json" t="Include" />
+            <e p="README.md" t="Include" />
+          </e>
+        </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp2.1" t="Include">
@@ -266,6 +390,7 @@
             </e>
           </e>
         </e>
+        <e p="package-lock.json" t="Include" />
       </e>
       <e p="packages" t="ExcludeRecursive" />
     </e>

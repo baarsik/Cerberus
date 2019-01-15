@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Cerberus.Controllers.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cerberus.Controllers
@@ -15,7 +16,7 @@ namespace Cerberus.Controllers
             _webNovelService = webNovelService;
         }
 
-        [Route("{page?}")]
+        [Route("{page?}", Order = -1)]
         public async Task<IActionResult> Index(int? page)
         {
             var model = await _webNovelService.GetWebNovelIndexViewModelAsync(page ?? 1);
@@ -33,6 +34,14 @@ namespace Cerberus.Controllers
         public IActionResult Read(string webNovelUrl, string chapterNumber)
         {
             throw new NotImplementedException();
+        }
+        
+        [Authorize(Roles = Constants.Roles.Admin + "," + Constants.Roles.WebNovelEditor)]
+        [Route("[action]/{webNovelId}")]
+        public async Task<IActionResult> AddChapter(Guid webNovelId)
+        {
+            var model = await _webNovelService.GetWebNovelAddChapterViewModelAsync(webNovelId);
+            return View(model);
         }
     }
 }

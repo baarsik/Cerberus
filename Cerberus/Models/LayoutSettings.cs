@@ -4,9 +4,15 @@
     {
         public LayoutSettings()
         {
-            LibraryManager.Library("nestable")
+            LibraryManager.Library(Constants.Libraries.NestableJs)
                 .AddJs("/lib/nestable/jquery.nestable.js")
                 .AddJsMin("/lib/nestable/jquery.nestable.min.js");
+
+            LibraryManager.Library(Constants.Libraries.Summernote)
+                .AddJs("/lib/summernote/dist/summernote.js")
+                .AddJsMin("/lib/summernote/dist/summernote.min.js")
+                .AddCss("/lib/summernote/dist/summernote.css")
+                .AddCssMin("/lib/summernote/dist/summernote.min.css");
         }
         
         public bool IsContainerCentered { get; set; }

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Cerberus.Controllers.Services;
-using Cerberus.Models;
 using Cerberus.Models.Extensions;
+using Cerberus.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cerberus.Controllers

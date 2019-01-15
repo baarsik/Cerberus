@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Cerberus.Models
+namespace Cerberus.Models.ViewModels
 {
     public class CreateForumViewModel
     {
