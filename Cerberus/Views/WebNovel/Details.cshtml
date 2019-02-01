@@ -39,7 +39,16 @@
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-body">
-                @Html.Raw(webNovel.Description)
+                <div class="panel panel-filled">
+                    <div class="panel-heading">Description</div>
+                    <div class="panel-body">@Html.Raw(webNovel.Description)</div>
+                </div>
+                <div class="panel panel-c-accent panel-filled">
+                    <div class="panel-heading">Chapters</div>
+                    <div class="panel-body">
+                        TBD
+                    </div>
+                </div>
             </div>
         </div>
     </div>

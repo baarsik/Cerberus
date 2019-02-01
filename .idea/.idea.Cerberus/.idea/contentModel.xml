@@ -143,10 +143,6 @@
           </e>
           <e p="images" t="Include">
             <e p="avatars" t="Include" />
-            <e p="banner1.svg" t="Include" />
-            <e p="banner2.svg" t="Include" />
-            <e p="banner3.svg" t="Include" />
-            <e p="banner4.svg" t="Include" />
             <e p="webnovel" t="Include" />
           </e>
           <e p="js" t="Include">

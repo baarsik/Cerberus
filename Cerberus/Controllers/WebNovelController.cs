@@ -21,7 +21,7 @@ namespace Cerberus.Controllers
             _userManager = userManager;
         }
 
-        [Route("{page?}", Order = -1)]
+        [Route("{page:int=1}", Order = -1)]
         public async Task<IActionResult> Index(int? page)
         {
             var model = await _webNovelService.GetWebNovelIndexViewModelAsync(page ?? 1);
@@ -41,7 +41,7 @@ namespace Cerberus.Controllers
             var model = await _webNovelService.GetChapterAsync(webNovelUrl, chapterNumber);
             
             if (model == null)
-                return new NotFoundResult();
+                return RedirectToNotFound();
             
             return View(model);
         }

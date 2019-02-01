@@ -10,5 +10,11 @@ namespace Cerberus.Controllers
                 ? (IActionResult)Redirect(returnUrl)
                 : RedirectToAction(nameof(HomeController.Index), "Home");
         }
+
+        protected IActionResult RedirectToNotFound()
+        {
+            Response.StatusCode = 404;
+            return RedirectToLocal("/error/404.html");
+        }
     }
 }
