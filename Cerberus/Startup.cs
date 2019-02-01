@@ -206,7 +206,7 @@ namespace Cerberus
         {
             var languages = new List<Language>
             {
-                new Language {Code = "en", GlobalName = "English", LocalName = "English"},
+                new Language {Code = "us", GlobalName = "English (US)", LocalName = "English (US)"},
                 new Language {Code = "ru", GlobalName = "Russian", LocalName = "Русский"}
             };
 

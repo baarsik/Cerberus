@@ -102,7 +102,7 @@ namespace Cerberus.Models.TagHelpers
         private string GetHtmlLinkTag(int? page, string text)
         {
             if (!page.HasValue)
-                return $"<a class=\"btn btn-default\">{text}</a>";
+                return $"<a class=\"btn btn-default disabled\">{text}</a>";
             
             return page == Model.Page
                 ? $"<a class=\"btn btn-default text-accent font-bold\">{text}</a>"

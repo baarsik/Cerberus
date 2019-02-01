@@ -53,6 +53,7 @@ namespace Cerberus.Controllers.Services
         {
             var webNovel = await _db.WebNovels
                 .Include(c => c.Chapters)
+                .ThenInclude(c => c.Language)
                 .SingleOrDefaultAsync(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture));
 
             var model = new WebNovelDetailsViewModel
