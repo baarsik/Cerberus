@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Cerberus.Models;
+using Cerberus.Models.Helpers;
 using Cerberus.Models.ViewModels;
 using DataContext;
 using DataContext.Models;
@@ -118,7 +119,7 @@ namespace Cerberus.Controllers.Services
                 Number = model.Number,
                 Title = model.Title,
                 PreviousChapter = previousChapter,
-                Text = model.Text, // ToDo: sanitize HTML
+                Text = model.Text.SanitizeHTML(),
                 Uploader = uploader,
                 WebNovel = webNovel,
                 Language = languageId
@@ -134,6 +135,26 @@ namespace Cerberus.Controllers.Services
 
             await _db.SaveChangesAsync();
             return WebNovelAddChapterResult.Success;
+        }
+        
+        public async Task<WebNovelChapter> GetChapterAsync(string webNovelUrl, string chapterNumber)
+        {
+            var webNovel = await _db.WebNovels
+                .SingleOrDefaultAsync(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture));
+
+            if (webNovel == null || !int.TryParse(chapterNumber, out var number))
+                return null;
+
+            var chapter = _db.WebNovelChapters
+                .Include(c => c.PreviousChapter)
+                .Include(c => c.NextChapter)
+                .SingleOrDefault(c => c.WebNovel == webNovel && c.Number == number);
+            
+            if (chapter == null)
+                return null;
+            
+            chapter.WebNovel = webNovel;
+            return chapter;
         }
 
         private WebNovelInfo GetWebNovelInfo(WebNovel webNovel)

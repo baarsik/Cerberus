@@ -36,9 +36,14 @@ namespace Cerberus.Controllers
         }
         
         [Route("[action]/{webNovelUrl}/{chapterNumber}")]
-        public IActionResult Read(string webNovelUrl, string chapterNumber)
+        public async Task<IActionResult> Read(string webNovelUrl, string chapterNumber)
         {
-            throw new NotImplementedException();
+            var model = await _webNovelService.GetChapterAsync(webNovelUrl, chapterNumber);
+            
+            if (model == null)
+                return new NotFoundResult();
+            
+            return View(model);
         }
         
         [Authorize(Roles = Constants.Permissions.WebNovelEdit)]
