@@ -3541,6 +3541,45 @@ ol.counter > li:before {
     position: relative;
 }
 
+.datepicker {
+    background-color: #33333a;
+    padding: 5px;
+}
+
+.datepicker .datepicker-switch:hover,
+.datepicker .next:hover,
+.datepicker .prev:hover,
+.datepicker tfoot tr th:hover {
+    background-color: #494b54;
+}
+
+.datepicker table tr td,
+.datepicker table tr th {
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+}
+
+.datepicker .datepicker-switch,
+.datepicker .next,
+.datepicker .prev,
+.datepicker tfoot tr th {
+    cursor: pointer;
+}
+
+.datepicker table tr td.day:hover,
+.datepicker table tr td.focused {
+    background-color: #494b54;
+    cursor: pointer;
+}
+
+.datepicker table tr td.new,
+.datepicker table tr td.old {
+    color: #676c71;
+}
+
 @font-face {
     font-family: 'Furore';
     font-style: normal;

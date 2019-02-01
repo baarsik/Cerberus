@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Cerberus.ValidationAttributes;
+using Cerberus.Models.ValidationAttributes;
 
 namespace Cerberus.Models.ViewModels
 {

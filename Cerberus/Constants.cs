@@ -9,9 +9,14 @@ namespace Cerberus
         public static class Roles
         {
             public const string Admin = "admin";
-            public const string Moderator = "moderator";
+            public const string GlobalModerator = "moderator";
             public const string WebNovelEditor = "webNovelEditor";
             public const string User = "user";
+        }
+
+        public static class Permissions
+        {
+            public const string WebNovelEdit = Roles.Admin + "," + Roles.GlobalModerator + "," + Roles.WebNovelEditor;
         }
 
         public static class WebNovel
@@ -21,13 +26,18 @@ namespace Cerberus
 
         public static class Misc
         {
-            public const string DateTimeFormat = "dd.MM.yyyy";
+            public const string DateFormat = "dd.MM.yyyy";
+            public const string DateTimeFormat = "dd.MM.yyyy HH:mm";
+            public const string DateFormatJs = "dd.mm.yyyy";
             public const string RandomStringSymbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         }
 
         public static class Libraries
         {
+            public const string Datepicker = "bootstrap-datepicker";
+            public const string MomentJs = "moment";
             public const string NestableJs = "nestable";
+            public const string Select2 = "select2";
             public const string Summernote = "summernote";
         }
     }

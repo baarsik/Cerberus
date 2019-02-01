@@ -27,7 +27,7 @@ namespace Cerberus.Controllers
 
         [ValidateRecaptcha]
         [HttpPost]
-        public async Task<IActionResult> Login(LoginModel model, string returnUrl)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
                 return View(model);

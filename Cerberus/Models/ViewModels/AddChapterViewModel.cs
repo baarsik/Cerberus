@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using DataContext.Models;
 
@@ -7,7 +8,7 @@ namespace Cerberus.Models.ViewModels
     public class AddChapterViewModel
     {
         [Required]
-        public Guid Id { get; set; }
+        public Guid WebNovelId { get; set; }
 
         [Required]
         public int Volume { get; set; }
@@ -22,6 +23,15 @@ namespace Cerberus.Models.ViewModels
         [Required]
         public string Text { get; set; }
 
+        [Required]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:" + Constants.Misc.DateFormat + "}")]
+        public DateTime FreeToAccessDate { get; set; } = DateTime.Today;
+
+        [Required]
+        public Guid LanguageId { get; set; }
+
+        public IEnumerable<Language> Languages { get; set; }
+        
         public WebNovel WebNovel { get; set; }
     }
 }

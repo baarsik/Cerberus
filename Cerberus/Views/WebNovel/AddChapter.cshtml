@@ -3,7 +3,9 @@
 @{
     ViewBag.Title = "Add Chapter";
     var settings = new LayoutSettings();
-    settings.LibraryManager.Library(Constants.Libraries.Summernote).Activate();
+    settings.ActivateLibrary(Constants.Libraries.Datepicker);
+    settings.ActivateLibrary(Constants.Libraries.Select2);
+    settings.ActivateLibrary(Constants.Libraries.Summernote);
     ViewBag.Settings = settings;
 }
 
@@ -29,19 +31,60 @@
         <div class="panel">
             <div class="panel-body">
                 <form method="post">
+                    <input type="hidden" asp-for="WebNovelId"/>
+                    @if (Model.WebNovel.UsesVolumes)
+                    {
+                        <div class="form-group">
+                            <label>Volume</label>
+                            <input type="number" asp-for="Volume" class="form-control" placeholder="Volume">
+                            <span class="help-block small">
+                                <span asp-validation-for="Volume" class="text-danger"></span>
+                            </span>
+                        </div>
+                    }
+                    <div class="form-group">
+                        <label>Chapter Number</label>
+                        @if (Model.WebNovel.UsesVolumes)
+                        {
+                            <input type="number" asp-for="Number" class="form-control" placeholder="Chapter Number" value="@(Model.WebNovel.Chapters.Count + 1)">
+                        }
+                        else
+                        {
+                            <input type="text" asp-for="Number" class="form-control" placeholder="Chapter Number" value="@(Model.WebNovel.Chapters.Count + 1)" readonly>
+                        }
+                        <span class="help-block small">
+                            <span asp-validation-for="Number" class="text-danger"></span>
+                        </span>
+                    </div>
                     <div class="form-group">
                         <label>Title</label>
-                        <input type="" asp-for="Title" class="form-control" placeholder="Chapter Title">
+                        <input type="text" asp-for="Title" class="form-control" placeholder="Chapter Title">
                         <span class="help-block small">
                             <div>Chapter title (3-64 chars)</div>
                             <span asp-validation-for="Title" class="text-danger"></span>
                         </span>
                     </div>
                     <div class="form-group">
+                        <label>Language</label>
+                        <select class="select2 form-control" asp-for="LanguageId" asp-items="@(new SelectList(Model.Languages, "Id", "LocalName"))"></select>
+                        <span class="help-block small">
+                            <div>Text language</div>
+                            <span asp-validation-for="LanguageId" class="text-danger"></span>
+                        </span>
+                    </div>
+                    <div class="form-group">
                         <label>Body</label>
-                        <input type="text" asp-for="Text" class="form-control summernote">
+                        <textarea type="text" asp-for="Text" class="form-control summernote"></textarea>
                         <span class="help-block small">
                             <span asp-validation-for="Text" class="text-danger"></span>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label>Free To Access Date</label>
+                        <input type="text" id="freeToAccessDateInput" asp-for="FreeToAccessDate" class="form-control" placeholder="Free To Access Date">
+                        <span class="help-block small">
+                            <div>Date when this chapter becomes free</div>
+                            <span asp-validation-for="FreeToAccessDate" class="text-danger"></span>
                         </span>
                     </div>
                     <button type="submit" class="btn btn-accent">
@@ -59,7 +102,6 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('.summernote').summernote({
-                placeholder: 'Chapter Text',
                 callbacks: {
                     onPaste: function(e) {
                         // Paste plain text with no duplicated line breaks
@@ -69,6 +111,13 @@
                     }
                 }
             });
+
+            $('#freeToAccessDateInput').datepicker({
+                format: '@Constants.Misc.DateFormatJs',
+                autoclose: true
+            });
+            
+            $(".select2").select2();
         })
     </script>
 }

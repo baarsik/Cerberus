@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cerberus.ValidationAttributes
+namespace Cerberus.Models.ValidationAttributes
 {
     public class TrueAttribute : ValidationAttribute
     {    

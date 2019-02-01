@@ -7,6 +7,6 @@ namespace Cerberus.Models.Extensions
         public static string ToFormattedString(this DateTime dateTime)
             => dateTime.Date == DateTime.Now.Date
                 ? "Today"
-                : dateTime.ToString(Constants.Misc.DateTimeFormat);
+                : dateTime.ToString(Constants.Misc.DateFormat);
     }
 }
