@@ -56,7 +56,7 @@
                             
                             <div class="flex-row justify-between align-center m-b-xs">
                                 <div>
-                                    <img src="/images/flags/@(chapter.Language.Code).png" width="20"/>
+                                    <img src="/images/flags/@(chapter.Language.Code).png" width="20" alt="@chapter.Language.GlobalName"/>
                                     <a class="c-white" asp-action="Read" asp-route-chapterNumber="@chapter.Number" asp-route-webNovelUrl="@webNovel.UrlName">
                                         @Html.Raw(chapterTitle)
                                     </a>

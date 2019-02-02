@@ -65,6 +65,7 @@
           </e>
           <e p="ViewModels" t="Include">
             <e p="AddChapterViewModel.cs" t="Include" />
+            <e p="AddWebNovelViewModel.cs" t="Include" />
             <e p="ChangePasswordViewModel.cs" t="Include" />
             <e p="CreateForumViewModel.cs" t="Include" />
             <e p="ErrorViewModel.cs" t="Include" />
@@ -127,6 +128,7 @@
           </e>
           <e p="webnovel" t="Include">
             <e p="AddChapter.cshtml" t="Include" />
+            <e p="AddWebNovel.cshtml" t="Include" />
             <e p="Details.cshtml" t="Include" />
             <e p="Index.cshtml" t="Include" />
             <e p="Read.cshtml" t="Include" />
@@ -510,11 +512,37 @@
               </e>
             </e>
             <e p="font-awesome-pro" t="Include">
+              <e p="css" t="Include">
+                <e p="all.css" t="Include" />
+                <e p="all.min.css" t="Include" />
+              </e>
               <e p="js" t="Include">
                 <e p="all.js" t="Include" />
                 <e p="all.min.js" t="Include" />
               </e>
               <e p="LICENSE.txt" t="Include" />
+              <e p="webfonts" t="Include">
+                <e p="fa-brands-400.eot" t="Include" />
+                <e p="fa-brands-400.svg" t="Include" />
+                <e p="fa-brands-400.ttf" t="Include" />
+                <e p="fa-brands-400.woff" t="Include" />
+                <e p="fa-brands-400.woff2" t="Include" />
+                <e p="fa-light-300.eot" t="Include" />
+                <e p="fa-light-300.svg" t="Include" />
+                <e p="fa-light-300.ttf" t="Include" />
+                <e p="fa-light-300.woff" t="Include" />
+                <e p="fa-light-300.woff2" t="Include" />
+                <e p="fa-regular-400.eot" t="Include" />
+                <e p="fa-regular-400.svg" t="Include" />
+                <e p="fa-regular-400.ttf" t="Include" />
+                <e p="fa-regular-400.woff" t="Include" />
+                <e p="fa-regular-400.woff2" t="Include" />
+                <e p="fa-solid-900.eot" t="Include" />
+                <e p="fa-solid-900.svg" t="Include" />
+                <e p="fa-solid-900.ttf" t="Include" />
+                <e p="fa-solid-900.woff" t="Include" />
+                <e p="fa-solid-900.woff2" t="Include" />
+              </e>
             </e>
             <e p="jquery" t="Include">
               <e p=".bower.json" t="Include" />

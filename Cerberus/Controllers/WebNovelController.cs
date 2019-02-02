@@ -50,7 +50,7 @@ namespace Cerberus.Controllers
         [Route("[action]")]
         public IActionResult AddWebNovel()
         {
-            throw new NotImplementedException();
+            return View();
         }
         
         [Authorize(Roles = Constants.Permissions.WebNovelEdit)]
