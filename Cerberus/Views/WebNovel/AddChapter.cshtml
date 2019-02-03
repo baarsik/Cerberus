@@ -31,6 +31,7 @@
         <div class="panel">
             <div class="panel-body">
                 <form method="post">
+                    @Html.ValidationSummary(true, null, new {@class="alert alert-danger"})
                     <input type="hidden" asp-for="WebNovelId"/>
                     @if (Model.WebNovel.UsesVolumes)
                     {
@@ -46,11 +47,11 @@
                         <label>Chapter Number</label>
                         @if (Model.WebNovel.UsesVolumes)
                         {
-                            <input type="number" asp-for="Number" class="form-control" placeholder="Chapter Number" value="@(Model.WebNovel.Chapters.Count + 1)">
+                            <input type="number" asp-for="Number" class="form-control" placeholder="Chapter Number">
                         }
                         else
                         {
-                            <input type="text" asp-for="Number" class="form-control" placeholder="Chapter Number" value="@(Model.WebNovel.Chapters.Count + 1)" readonly>
+                            <input type="text" asp-for="Number" class="form-control" placeholder="Chapter Number" readonly>
                         }
                         <span class="help-block small">
                             <span asp-validation-for="Number" class="text-danger"></span>

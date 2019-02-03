@@ -3582,6 +3582,11 @@ ol.counter > li:before {
     color: #676c71;
 }
 
+.validation-summary-errors > ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
 @font-face {
     font-family: 'Furore';
     font-style: normal;

@@ -53,6 +53,30 @@ namespace Cerberus.Controllers
             return View();
         }
         
+        [HttpPost]
+        [Authorize(Roles = Constants.Permissions.WebNovelEdit)]
+        [Route("[action]")]
+        public async Task<IActionResult> AddWebNovel(AddWebNovelViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+            
+            var user = await _userManager.GetUserAsync(User);
+            var result = await _webNovelService.AddWebNovelAsync(user, model);
+            switch (result)
+            {
+                case WebNovelAddWebNovelResult.Success:
+                    return RedirectToAction(nameof(Details), new { webNovelUrl = model.UrlName });
+                case WebNovelAddWebNovelResult.WebNovelUrlExists:
+                    ModelState.AddModelError(string.Empty, "Parent web novel was not found");
+                    return View(model);
+                case WebNovelAddWebNovelResult.UnknownFailure:
+                default:
+                    ModelState.AddModelError(string.Empty, $"Unknown error (Result code {result.ToString()})");
+                    return View(model);
+            }
+        }
+        
         [Authorize(Roles = Constants.Permissions.WebNovelEdit)]
         [Route("[action]/{webNovelId}")]
         public async Task<IActionResult> AddChapter(Guid webNovelId)

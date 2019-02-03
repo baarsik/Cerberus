@@ -43,39 +43,50 @@
                     <div class="panel-heading">Description</div>
                     <div class="panel-body">@Html.Raw(webNovel.Description)</div>
                 </div>
-                <div class="panel panel-c-accent panel-filled">
-                    <div class="panel-heading">Chapters</div>
-                    <div class="panel-body">
-                        @foreach (var chapter in webNovel.Chapters.OrderByDescending(c => c.CreationDate))
+                @if (webNovel.Chapters.Any())
+                {
+                    if (webNovel.UsesVolumes)
+                    {
+                        var volumes = webNovel.Chapters.Select(c => c.Volume).Distinct().OrderByDescending(c => c);
+                        foreach (var volume in volumes)
                         {
-                            var chapterTitle = $"<b>Chapter {chapter.Number}</b>";
-                            if (!string.IsNullOrEmpty(chapter.Title))
-                            {
-                                chapterTitle += $" - {chapter.Title}";
-                            }
-                            
-                            <div class="flex-row justify-between align-center m-b-xs">
-                                <div>
-                                    <img src="/images/flags/@(chapter.Language.Code).png" width="20" alt="@chapter.Language.GlobalName"/>
-                                    <a class="c-white" asp-action="Read" asp-route-chapterNumber="@chapter.Number" asp-route-webNovelUrl="@webNovel.UrlName">
-                                        @Html.Raw(chapterTitle)
-                                    </a>
-                                </div>
-                                <div class="flex-row align-center">
-                                    <div style="padding-right: 1em">
-                                        <i class="far fa-calendar-alt"></i>
-                                        @chapter.CreationDate.ToFormattedString()
-                                    </div>
-                                    <div>
-                                        <a class="btn btn-accent text-uppercase font-bold c-white" asp-action="Read" asp-route-chapterNumber="@chapter.Number" asp-route-webNovelUrl="@webNovel.UrlName">
-                                            Read <i class="fas fa-chevron-right"></i>
-                                        </a>
-                                    </div>
+                            <div class="panel panel-c-accent panel-filled">
+                                <div class="panel-heading">Volume @volume</div>
+                                <div class="panel-body">
+                                    <partial name="_ChapterLinkInDetails"
+                                             model="@(new ChapterLinkInDetailsViewModel
+                                                      {
+                                                          Chapters = webNovel.Chapters
+                                                              .Where(c => c.Volume == volume)
+                                                              .OrderByDescending(c => c.CreationDate),
+                                                          WebNovel = webNovel
+                                                      })"/>
                                 </div>
                             </div>
                         }
+                    }
+                    else
+                    {
+                        <div class="panel panel-c-accent panel-filled">
+                            <div class="panel-heading">Chapters</div>
+                            <div class="panel-body">
+                                <partial name="_ChapterLinkInDetails"
+                                         model="@(new ChapterLinkInDetailsViewModel
+                                                  {
+                                                      Chapters = webNovel.Chapters.OrderByDescending(c => c.CreationDate),
+                                                      WebNovel = webNovel
+                                                  })"/>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="panel panel-c-accent panel-filled">
+                        <div class="panel-heading">Chapters</div>
+                        <div class="panel-body">Sorry, there are currently no chapters available</div>
                     </div>
-                </div>
+                }
             </div>
         </div>
     </div>

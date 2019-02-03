@@ -77,6 +77,18 @@ namespace Cerberus.Controllers.Services
 
             model.WebNovel = await GetWebNovelByIdAsync(model.WebNovelId);
             model.Languages = await GetLanguagesAsync();
+
+            var lastChapter = model.WebNovel.Chapters.OrderByDescending(c => c.CreationDate).FirstOrDefault();
+            if (lastChapter == null)
+            {
+                model.Volume = model.Volume == 0 ? 1 : model.Volume;
+                model.Number = 1;
+            }
+            else
+            {
+                model.Volume = model.Volume == 0 ? lastChapter.Volume : model.Volume;
+                model.Number = lastChapter.Number + 1;
+            }
             
             return model;
         }
@@ -93,16 +105,43 @@ namespace Cerberus.Controllers.Services
             return await _db.Languages.ToListAsync();
         }
 
+        public async Task<WebNovelAddWebNovelResult> AddWebNovelAsync(ApplicationUser user, AddWebNovelViewModel model)
+        {
+            var url = model.UrlName.ToLower();
+            if (await _db.WebNovels.AnyAsync(c => c.UrlName.ToLower() == url))
+                return WebNovelAddWebNovelResult.WebNovelUrlExists;
+            
+            var webNovel = new WebNovel
+            {
+                Id = Guid.NewGuid(),
+                Name = model.Name,
+                OriginalName = model.OriginalName,
+                UrlName = url,
+                Description = model.Description,
+                UsesVolumes = model.UsesVolumes,
+                Author = model.Author,
+                CreationDate = DateTime.Now
+            };
+            _db.WebNovels.Add(webNovel);
+            await _db.SaveChangesAsync();
+            return WebNovelAddWebNovelResult.Success;
+        }
+        
         public async Task<WebNovelAddChapterResult> AddChapterAsync(ApplicationUser uploader, AddChapterViewModel model)
         {
             var webNovel = await _db.WebNovels
                 .Include(c => c.Chapters)
                 .FirstOrDefaultAsync(c => c.Id == model.WebNovelId);
-
+            
             if (webNovel == null)
                 return WebNovelAddChapterResult.WebNovelNotExists;
-            
-            if (webNovel.Chapters.Any(c => c.Number == model.Number))
+
+            if (!webNovel.UsesVolumes)
+            {
+                model.Volume = 1;
+            }
+
+            if (webNovel.Chapters.Any(c => c.Volume == model.Volume && c.Number == model.Number))
                 return WebNovelAddChapterResult.NumberExists;
 
             var languageId = await _db.Languages.FirstOrDefaultAsync(c => c.Id == model.LanguageId);
@@ -180,6 +219,13 @@ namespace Cerberus.Controllers.Services
         }
     }
 
+    public enum WebNovelAddWebNovelResult
+    {
+        UnknownFailure,
+        WebNovelUrlExists,
+        Success
+    }
+    
     public enum WebNovelAddChapterResult
     {
         UnknownFailure,

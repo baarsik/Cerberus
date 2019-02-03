@@ -31,6 +31,7 @@
         <div class="panel">
             <div class="panel-body">
                 <form method="post">
+                    @Html.ValidationSummary(true, null, new {@class="alert alert-danger"})
                     <div class="form-group">
                         <label>Name</label>
                         <input asp-for="Name" class="form-control" placeholder="Name">
@@ -82,7 +83,7 @@
                         </span>
                     </div>
                     <button type="submit" class="btn btn-accent">
-                        Add Chapter
+                        Add Web Novel
                     </button>
                     <a class="btn btn-default" asp-action="Index">Cancel</a>
                 </form>

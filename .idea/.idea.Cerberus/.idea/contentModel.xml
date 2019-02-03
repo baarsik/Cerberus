@@ -67,6 +67,7 @@
             <e p="AddChapterViewModel.cs" t="Include" />
             <e p="AddWebNovelViewModel.cs" t="Include" />
             <e p="ChangePasswordViewModel.cs" t="Include" />
+            <e p="ChapterLinkInDetailsViewModel.cs" t="Include" />
             <e p="CreateForumViewModel.cs" t="Include" />
             <e p="ErrorViewModel.cs" t="Include" />
             <e p="ForumSettingsViewModel.cs" t="Include" />
@@ -127,6 +128,7 @@
             </e>
           </e>
           <e p="webnovel" t="Include">
+            <e p="_ChapterLinkInDetails.cshtml" t="Include" />
             <e p="AddChapter.cshtml" t="Include" />
             <e p="AddWebNovel.cshtml" t="Include" />
             <e p="Details.cshtml" t="Include" />
