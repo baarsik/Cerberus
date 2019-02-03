@@ -44,6 +44,7 @@
             <e p="DateTimeExtensions.cs" t="Include" />
             <e p="StringExtensions.cs" t="Include" />
             <e p="ViewContextExtensions.cs" t="Include" />
+            <e p="WebNovelExtensions.cs" t="Include" />
           </e>
           <e p="ForumHierarchyJson.cs" t="Include" />
           <e p="GenerateJwtResult.cs" t="Include" />

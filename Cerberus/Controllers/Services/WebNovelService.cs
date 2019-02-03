@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Cerberus.Models;
+using Cerberus.Models.Extensions;
 using Cerberus.Models.Helpers;
 using Cerberus.Models.ViewModels;
 using DataContext;
@@ -78,7 +79,7 @@ namespace Cerberus.Controllers.Services
             model.WebNovel = await GetWebNovelByIdAsync(model.WebNovelId);
             model.Languages = await GetLanguagesAsync();
 
-            var lastChapter = model.WebNovel.Chapters.OrderByDescending(c => c.CreationDate).FirstOrDefault();
+            var lastChapter = model.WebNovel.GetLastChapter();
             if (lastChapter == null)
             {
                 model.Volume = model.Volume == 0 ? 1 : model.Volume;
@@ -88,6 +89,7 @@ namespace Cerberus.Controllers.Services
             {
                 model.Volume = model.Volume == 0 ? lastChapter.Volume : model.Volume;
                 model.Number = lastChapter.Number + 1;
+                model.LanguageId = model.LanguageId == Guid.Empty ? lastChapter.Language.Id : model.LanguageId;
             }
             
             return model;
@@ -97,6 +99,7 @@ namespace Cerberus.Controllers.Services
         {
             return await _db.WebNovels
                 .Include(c => c.Chapters)
+                .Include(c => c.Chapters).ThenInclude(c => c.Language)
                 .SingleOrDefaultAsync(c => c.Id == id);
         }
 
@@ -117,7 +120,7 @@ namespace Cerberus.Controllers.Services
                 Name = model.Name,
                 OriginalName = model.OriginalName,
                 UrlName = url,
-                Description = model.Description,
+                Description = model.Description.SanitizeHTML(),
                 UsesVolumes = model.UsesVolumes,
                 Author = model.Author,
                 CreationDate = DateTime.Now
@@ -149,29 +152,56 @@ namespace Cerberus.Controllers.Services
             if (languageId == null)
                 return WebNovelAddChapterResult.LanguageNotExists;
 
-            var previousChapter = webNovel.Chapters.OrderBy(c => c.CreationDate).LastOrDefault();
+            var previousChapter = webNovel.Chapters
+                                      .Where(c => c.Volume == model.Volume && c.Number < model.Number)
+                                      .OrderByDescending(c => c.Number)
+                                      .FirstOrDefault()
+                                  ?? webNovel.Chapters // In case there is no previous chapter in this volume
+                                      .Where(c => c.Volume < model.Volume)
+                                      .OrderByDescending(c => c.Volume)
+                                      .ThenByDescending(c => c.Number)
+                                      .FirstOrDefault();
+
+            var nextChapter = previousChapter == null
+                ? webNovel.Chapters // This is now the first chapter, select previous first one as NextChapter
+                    .Where(c => c.Volume >= model.Volume)
+                    .OrderBy(c => c.Volume)
+                    .ThenBy(c => c.Number)
+                    .FirstOrDefault()
+                : previousChapter.NextChapter;
+            
             var chapter = new WebNovelChapter
             {
                 Id = Guid.NewGuid(),
-                CreationDate = DateTime.Now,
-                FreeToAccessDate = model.FreeToAccessDate,
                 Volume = model.Volume,
                 Number = model.Number,
                 Title = model.Title,
-                PreviousChapter = previousChapter,
                 Text = model.Text.SanitizeHTML(),
+                CreationDate = DateTime.Now,
+                FreeToAccessDate = model.FreeToAccessDate,
                 Uploader = uploader,
                 WebNovel = webNovel,
                 Language = languageId
             };
 
             _db.WebNovelChapters.Add(chapter);
+            await _db.SaveChangesAsync();
             
             if (previousChapter != null)
             {
                 previousChapter.NextChapter = chapter;
                 _db.Update(previousChapter);
             }
+
+            if (nextChapter != null)
+            {
+                nextChapter.PreviousChapter = chapter;
+                _db.Update(nextChapter);
+            }
+
+            chapter.PreviousChapter = previousChapter;
+            chapter.NextChapter = nextChapter;
+            _db.Update(chapter);
 
             await _db.SaveChangesAsync();
             return WebNovelAddChapterResult.Success;
@@ -210,9 +240,7 @@ namespace Cerberus.Controllers.Services
             {
                 WebNovel = webNovel,
                 TotalChapters = webNovel.Chapters.Count,
-                LastChapter = webNovel.Chapters
-                    .OrderBy(c => c.CreationDate)
-                    .LastOrDefault(),
+                LastChapter = webNovel.GetLastChapter(),
                 TotalVolumes = webNovel.Chapters
                     .Select(c => c.Volume)
                     .OrderByDescending(c => c)
