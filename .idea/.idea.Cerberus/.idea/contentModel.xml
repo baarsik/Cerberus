@@ -134,6 +134,7 @@
             <e p="AddWebNovel.cshtml" t="Include" />
             <e p="Details.cshtml" t="Include" />
             <e p="Index.cshtml" t="Include" />
+            <e p="IsCompleteError.cshtml" t="Include" />
             <e p="Read.cshtml" t="Include" />
           </e>
         </e>

@@ -52,6 +52,10 @@
                                  {
                                      <div class="badge">Last update: @item.LastChapter.CreationDate.ToFormattedString()</div>
                                  }
+                                 @if (item.WebNovel.IsComplete)
+                                 {
+                                     <div class="badge badge-accent">Complete</div>
+                                 }
                              </div>
                              <div class="panel-body overflow-100">
                                  @Html.Raw(item.WebNovel.Description)

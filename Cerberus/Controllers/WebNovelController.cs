@@ -88,6 +88,10 @@ namespace Cerberus.Controllers
         public async Task<IActionResult> AddChapter(Guid webNovelId)
         {
             var model = await _webNovelService.GetWebNovelAddChapterViewModelAsync(webNovelId);
+
+            if (model.WebNovel.IsComplete)
+                return View("IsCompleteError", model.WebNovel);
+            
             return View(model);
         }
         
@@ -98,6 +102,9 @@ namespace Cerberus.Controllers
         {
             model.WebNovel = await _webNovelService.GetWebNovelByIdAsync(model.WebNovelId);
             model.Languages = await _webNovelService.GetLanguagesAsync();
+            
+            if (model.WebNovel.IsComplete)
+                return View("IsCompleteError", model.WebNovel);
             
             if (!ModelState.IsValid)
                 return View(model);

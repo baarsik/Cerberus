@@ -963,10 +963,6 @@
     margin: 30px 0
 }
 
-.label-accent {
-    background-color: #f6a821
-}
-
 body {
     background: #2f323b;
     font-family: 'Roboto', sans-serif;
@@ -2294,11 +2290,43 @@ h6 .small,
     background-color: #db524b
 }
 
+.label-accent {
+    background-color: #f6a821
+}
+
 .badge {
     background-color: transparent;
     border: 1px solid #44464f;
     font-weight: 300;
     color: #aaacb5
+}
+
+.badge-default {
+    border: 1px solid #44464f
+}
+
+.badge-primary {
+    border: 1px solid #0f83c9
+}
+
+.badge-success {
+    border: 1px solid #1bbf89;
+}
+
+.badge-info {
+    border: 1px solid #56c0e0
+}
+
+.badge-warning {
+    border: 1px solid #f7af3e
+}
+
+.badge-danger {
+    border: 1px solid #db524b
+}
+
+.badge-accent {
+    border: 1px solid #f6a821
 }
 
 .vertical-container {

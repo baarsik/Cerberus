@@ -15,10 +15,13 @@
             <div class="pull-right text-right">
                 @if (User.HasWebNovelEditorAccess())
                 {
-                    <a class="btn btn-lg btn-default" asp-action="AddChapter" asp-route-webNovelId="@webNovel.Id">
-                        <i class="far fa-plus"></i>
-                        Add chapter
-                    </a>
+                    if (!webNovel.IsComplete)
+                    {
+                        <a class="btn btn-lg btn-default" asp-action="AddChapter" asp-route-webNovelId="@webNovel.Id">
+                            <i class="far fa-plus"></i>
+                            Add chapter
+                        </a>
+                    }
                     @*<a class="btn btn-lg btn-default">
                         <i class="far fa-pen"></i>
                     </a>*@

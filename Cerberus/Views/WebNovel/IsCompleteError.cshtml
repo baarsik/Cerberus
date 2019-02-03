@@ -1,0 +1,23 @@
+﻿@model DataContext.Models.WebNovel
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="view-header">
+    <div class="header-icon">
+        <i class="fal fa-times-circle fa-sm"></i>
+    </div>
+    <div class="header-title">
+        <h3>Error</h3>
+        <small>
+            Access Denied
+        </small>
+    </div>
+</div>
+
+<div class="panel panel-filled">
+    <div class="panel-body">
+        <p class="m-t-xs">Sorry, this action is not permitted as web novel is marked as 'Complete'</p>
+        <p class="m-b-none"><a asp-controller="WebNovel" asp-action="Details" asp-route-webNovelUrl="@Model.UrlName">Go to web novel</a></p>
+    </div>
+</div>
