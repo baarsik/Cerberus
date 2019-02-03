@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cerberus.Models;
+using Cerberus.Models.Extensions;
 using Cerberus.Models.ViewModels;
 using DataContext;
 using DataContext.Models;
@@ -42,7 +43,7 @@ namespace Cerberus.Controllers.Services
                 Id = Guid.NewGuid(),
                 DisplayOrderId = await _db.Forums.MaxAsync(c => c.DisplayOrderId) + 1,
                 IsEnabled = false,
-                Title = model.Title
+                Title = model.Title.RemoveHTML()
             };
             _db.Add(forum);
             

@@ -113,7 +113,7 @@ namespace Cerberus.Controllers.Services
         
         public async Task<RegisterResult> RegisterAsync(string email, string displayName, string password)
         {
-            displayName = displayName.FixSpacing();
+            displayName = displayName.RemoveHTML().FixSpacing();
             
             var user = new ApplicationUser
             {

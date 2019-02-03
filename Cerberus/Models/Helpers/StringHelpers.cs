@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Ganss.XSS;
 
 namespace Cerberus.Models.Helpers
 {
@@ -22,12 +21,6 @@ namespace Cerberus.Models.Helpers
                 .Aggregate(string.Empty, (current, arg) => current.Length > 0
                     ? $"{current}, {arg}"
                     : $"{arg}");
-        }
-
-        public static string SanitizeHTML(this string sourceString)
-        {
-            var htmlSanitizer = new HtmlSanitizer();
-            return htmlSanitizer.Sanitize(sourceString);
         }
     }
 }

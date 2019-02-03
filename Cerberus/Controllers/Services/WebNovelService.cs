@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cerberus.Models;
 using Cerberus.Models.Extensions;
-using Cerberus.Models.Helpers;
 using Cerberus.Models.ViewModels;
 using DataContext;
 using DataContext.Models;
@@ -117,9 +116,9 @@ namespace Cerberus.Controllers.Services
             var webNovel = new WebNovel
             {
                 Id = Guid.NewGuid(),
-                Name = model.Name,
-                OriginalName = model.OriginalName,
-                UrlName = url,
+                Name = model.Name.RemoveHTML(),
+                OriginalName = model.OriginalName.RemoveHTML(),
+                UrlName = url.RemoveHTML(),
                 Description = model.Description.SanitizeHTML(),
                 UsesVolumes = model.UsesVolumes,
                 Author = model.Author,
@@ -175,7 +174,7 @@ namespace Cerberus.Controllers.Services
                 Id = Guid.NewGuid(),
                 Volume = model.Volume,
                 Number = model.Number,
-                Title = model.Title,
+                Title = model.Title.RemoveHTML(),
                 Text = model.Text.SanitizeHTML(),
                 CreationDate = DateTime.Now,
                 FreeToAccessDate = model.FreeToAccessDate,
