@@ -40,10 +40,11 @@ namespace Cerberus.Controllers.Services
             };
 
             model.Items = _db.WebNovels
-                .Take(Constants.WebNovel.ItemsPerIndexPage)
-                .Skip(Constants.WebNovel.ItemsPerIndexPage * (model.Page - 1))
                 .Include(c => c.Chapters)
                 .Select(GetWebNovelInfo)
+                .OrderByDescending(c => c.LastUpdateDate)
+                .Take(Constants.WebNovel.ItemsPerIndexPage)
+                .Skip(Constants.WebNovel.ItemsPerIndexPage * (model.Page - 1))
                 .ToList();
             
             return model;
@@ -240,6 +241,10 @@ namespace Cerberus.Controllers.Services
                 WebNovel = webNovel,
                 TotalChapters = webNovel.Chapters.Count,
                 LastChapter = webNovel.GetLastChapter(),
+                LastUpdateDate = webNovel.Chapters
+                    .Select(c => c.CreationDate)
+                    .OrderByDescending(c => c)
+                    .FirstOrDefault(),
                 TotalVolumes = webNovel.Chapters
                     .Select(c => c.Volume)
                     .OrderByDescending(c => c)

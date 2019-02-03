@@ -48,9 +48,9 @@
                                      <div class="badge">Volumes: @item.TotalVolumes</div>
                                  }
                                  <div class="badge">Chapters: @item.TotalChapters</div>
-                                 @if (item.TotalChapters > 0)
+                                 @if (item.LastUpdateDate.HasValue)
                                  {
-                                     <div class="badge">Last update: @item.LastChapter.CreationDate.ToFormattedString()</div>
+                                     <div class="badge">Last update: @item.LastUpdateDate.Value.ToFormattedString()</div>
                                  }
                                  @if (item.WebNovel.IsComplete)
                                  {
