@@ -177,18 +177,20 @@ namespace Cerberus.Controllers.Services
             return WebNovelAddChapterResult.Success;
         }
         
-        public async Task<WebNovelChapter> GetChapterAsync(string webNovelUrl, string chapterNumber)
+        public async Task<WebNovelChapter> GetChapterAsync(string webNovelUrl, int volume, int chapterNumber)
         {
             var webNovel = await _db.WebNovels
                 .SingleOrDefaultAsync(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture));
 
-            if (webNovel == null || !int.TryParse(chapterNumber, out var number))
+            if (webNovel == null)
                 return null;
 
             var chapter = _db.WebNovelChapters
                 .Include(c => c.PreviousChapter)
                 .Include(c => c.NextChapter)
-                .SingleOrDefault(c => c.WebNovel == webNovel && c.Number == number);
+                .SingleOrDefault(c => c.WebNovel == webNovel &&
+                                      (!webNovel.UsesVolumes || c.Volume == volume) &&
+                                      c.Number == chapterNumber);
             
             if (chapter == null)
                 return null;

@@ -60,11 +60,23 @@
                                  <a class="btn btn-sm btn-default" asp-action="Details" asp-route-webNovelUrl="@item.WebNovel.UrlName">Details</a>
                                  @if (item.TotalChapters > 0)
                                  {
-                                     <a class="btn btn-sm btn-default" asp-action="Read"
-                                        asp-route-webNovelUrl="@item.WebNovel.UrlName"
-                                        asp-route-chapterNumber="@item.LastChapter.Number">
-                                         Read chapter @item.LastChapter.Number
-                                     </a>
+                                     if (item.WebNovel.UsesVolumes)
+                                     {
+                                         <a class="btn btn-sm btn-default" asp-action="Read"
+                                            asp-route-volume="@item.LastChapter.Volume"
+                                            asp-route-webNovelUrl="@item.WebNovel.UrlName"
+                                            asp-route-chapterNumber="@item.LastChapter.Number">
+                                             Read chapter @item.LastChapter.Number (Volume @item.LastChapter.Volume)
+                                         </a>
+                                     }
+                                     else
+                                     {
+                                         <a class="btn btn-sm btn-default" asp-action="Read"
+                                            asp-route-webNovelUrl="@item.WebNovel.UrlName"
+                                            asp-route-chapterNumber="@item.LastChapter.Number">
+                                             Read chapter @item.LastChapter.Number
+                                         </a>
+                                     }
                                  }
                              </div>
                          </div>

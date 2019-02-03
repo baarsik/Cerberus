@@ -11,9 +11,18 @@
     <div class="flex-row justify-between align-center m-b-xs">
         <div>
             <img src="/images/flags/@(chapter.Language.Code).png" width="20" alt="@chapter.Language.GlobalName"/>
-            <a class="c-white" asp-action="Read" asp-route-chapterNumber="@chapter.Number" asp-route-webNovelUrl="@Model.WebNovel.UrlName">
-                @Html.Raw(chapterTitle)
-            </a>
+            @if (Model.WebNovel.UsesVolumes)
+            {
+                <a class="c-white" asp-action="Read" asp-route-volume="@chapter.Volume" asp-route-chapterNumber="@chapter.Number" asp-route-webNovelUrl="@Model.WebNovel.UrlName">
+                    @Html.Raw(chapterTitle)
+                </a>
+            }
+            else
+            {
+                <a class="c-white" asp-action="Read" asp-route-chapterNumber="@chapter.Number" asp-route-webNovelUrl="@Model.WebNovel.UrlName">
+                    @Html.Raw(chapterTitle)
+                </a>
+            }
         </div>
         <div class="flex-row align-center">
             <div style="padding-right: 1em">
@@ -21,9 +30,18 @@
                 @chapter.CreationDate.ToFormattedString()
             </div>
             <div>
-                <a class="btn btn-accent text-uppercase font-bold c-white" asp-action="Read" asp-route-chapterNumber="@chapter.Number" asp-route-webNovelUrl="@Model.WebNovel.UrlName">
-                    Read <i class="fas fa-chevron-right"></i>
-                </a>
+                @if (Model.WebNovel.UsesVolumes)
+                {
+                    <a class="btn btn-accent text-uppercase font-bold c-white" asp-action="Read" asp-route-volume="@chapter.Volume" asp-route-chapterNumber="@chapter.Number" asp-route-webNovelUrl="@Model.WebNovel.UrlName">
+                        Read <i class="fas fa-chevron-right"></i>
+                    </a>
+                }
+                else
+                {
+                    <a class="btn btn-accent text-uppercase font-bold c-white" asp-action="Read" asp-route-chapterNumber="@chapter.Number" asp-route-webNovelUrl="@Model.WebNovel.UrlName">
+                        Read <i class="fas fa-chevron-right"></i>
+                    </a>
+                }
             </div>
         </div>
     </div>

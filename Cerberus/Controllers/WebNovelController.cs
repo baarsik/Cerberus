@@ -35,10 +35,16 @@ namespace Cerberus.Controllers
             return View(model);
         }
         
-        [Route("[action]/{webNovelUrl}/{chapterNumber}")]
-        public async Task<IActionResult> Read(string webNovelUrl, string chapterNumber)
+        [Route("[action]/{webNovelUrl}/{chapterNumber:int}")]
+        public async Task<IActionResult> Read(string webNovelUrl, int chapterNumber)
         {
-            var model = await _webNovelService.GetChapterAsync(webNovelUrl, chapterNumber);
+            return await Read(webNovelUrl, 1, chapterNumber);
+        }
+        
+        [Route("[action]/{webNovelUrl}/{volume:int}/{chapterNumber:int}")]
+        public async Task<IActionResult> Read(string webNovelUrl, int volume, int chapterNumber)
+        {
+            var model = await _webNovelService.GetChapterAsync(webNovelUrl, volume, chapterNumber);
             
             if (model == null)
                 return RedirectToNotFound();
