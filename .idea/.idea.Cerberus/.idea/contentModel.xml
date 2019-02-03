@@ -130,6 +130,7 @@
           </e>
           <e p="webnovel" t="Include">
             <e p="_ChapterLinkInDetails.cshtml" t="Include" />
+            <e p="_ChapterMiniPaginator.cshtml" t="Include" />
             <e p="AddChapter.cshtml" t="Include" />
             <e p="AddWebNovel.cshtml" t="Include" />
             <e p="Details.cshtml" t="Include" />

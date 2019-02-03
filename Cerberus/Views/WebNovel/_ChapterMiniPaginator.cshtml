@@ -1,0 +1,46 @@
+@model DataContext.Models.WebNovelChapter
+
+<div class="btn-group flex-row justify-center">
+    @if (Model.PreviousChapter != null)
+    {
+        if (Model.WebNovel.UsesVolumes)
+        {
+            <a id="readPrev" class="btn btn-default" asp-action="Read"
+               asp-route-volume="@Model.PreviousChapter.Volume"
+               asp-route-chapterNumber="@Model.PreviousChapter.Number"
+               asp-route-webNovelUrl="@Model.WebNovel.UrlName"><i class="fas fa-chevron-left"></i> Previous chapter</a>
+        }
+        else
+        {
+            <a id="readPrev" class="btn btn-default" asp-action="Read"
+               asp-route-chapterNumber="@Model.PreviousChapter.Number"
+               asp-route-webNovelUrl="@Model.WebNovel.UrlName"><i class="fas fa-chevron-left"></i> Previous chapter</a>
+        }
+    }
+    else
+    {
+        <a class="btn btn-default disabled"><i class="fas fa-chevron-left"></i> Previous chapter</a>
+    }
+    <a class="btn btn-default" asp-action="Details"
+       asp-route-webNovelUrl="@Model.WebNovel.UrlName">Back to web novel</a>
+    @if (Model.NextChapter != null)
+    {
+        if (Model.WebNovel.UsesVolumes)
+        {
+            <a id="readNext" class="btn btn-default" asp-action="Read"
+               asp-route-volume="@Model.NextChapter.Volume"
+               asp-route-chapterNumber="@Model.NextChapter.Number"
+               asp-route-webNovelUrl="@Model.WebNovel.UrlName">Next chapter <i class="fas fa-chevron-right"></i></a>
+        }
+        else
+        {
+            <a id="readNext" class="btn btn-default" asp-action="Read"
+               asp-route-chapterNumber="@Model.NextChapter.Number"
+               asp-route-webNovelUrl="@Model.WebNovel.UrlName">Next chapter <i class="fas fa-chevron-right"></i></a>
+        }
+    }
+    else
+    {
+        <a class="btn btn-default disabled">Next chapter <i class="fas fa-chevron-right"></i></a>
+    }
+</div>

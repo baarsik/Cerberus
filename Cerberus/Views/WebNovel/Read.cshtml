@@ -2,14 +2,13 @@
 @model DataContext.Models.WebNovelChapter
 
 @{
-    var webNovel = Model.WebNovel;
     var title = $"Chapter {Model.Number}";
     if (!string.IsNullOrEmpty(Model.Title))
     {
         title += $" - {Model.Title}";
     }
 
-    ViewBag.Title = $"{webNovel.Name} - {title}";
+    ViewBag.Title = $"{Model.WebNovel.Name} - {title}";
 }
 
 <div class="row">
@@ -29,7 +28,7 @@
             <div class="header-title">
                 <h3>@title</h3>
                 <small>
-                    @StringHelpers.GetCommaSpaceSeparatedString(webNovel.Name, webNovel.Author)
+                    @StringHelpers.GetCommaSpaceSeparatedString(Model.WebNovel.Name, Model.WebNovel.Author)
                 </small>
             </div>
         </div>
@@ -41,53 +40,13 @@
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-body">
+                <div class="m-b">
+                    <partial name="_ChapterMiniPaginator" model="@Model"/>
+                </div>
                 @Html.Raw(Model.Text)
             </div>
             <div class="panel-footer">
-                <div class="btn-group m-t flex-row justify-center">
-                    @if (Model.PreviousChapter != null)
-                    {
-                        if (Model.WebNovel.UsesVolumes)
-                        {
-                            <a id="readPrev" class="btn btn-default" asp-action="Read"
-                               asp-route-volume="@Model.PreviousChapter.Volume"
-                               asp-route-chapterNumber="@Model.PreviousChapter.Number"
-                               asp-route-webNovelUrl="@webNovel.UrlName"><i class="fas fa-chevron-left"></i> Previous chapter</a>
-                        }
-                        else
-                        {
-                            <a id="readPrev" class="btn btn-default" asp-action="Read"
-                               asp-route-chapterNumber="@Model.PreviousChapter.Number"
-                               asp-route-webNovelUrl="@webNovel.UrlName"><i class="fas fa-chevron-left"></i> Previous chapter</a>
-                        }
-                    }
-                    else
-                    {
-                        <a class="btn btn-default disabled"><i class="fas fa-chevron-left"></i> Previous chapter</a>
-                    }
-                    <a class="btn btn-default" asp-action="Details"
-                       asp-route-webNovelUrl="@webNovel.UrlName">Back to web novel</a>
-                    @if (Model.NextChapter != null)
-                    {
-                        if (Model.WebNovel.UsesVolumes)
-                        {
-                            <a id="readNext" class="btn btn-default" asp-action="Read"
-                               asp-route-volume="@Model.NextChapter.Volume"
-                               asp-route-chapterNumber="@Model.NextChapter.Number"
-                               asp-route-webNovelUrl="@webNovel.UrlName">Next chapter <i class="fas fa-chevron-right"></i></a>
-                        }
-                        else
-                        {
-                            <a id="readNext" class="btn btn-default" asp-action="Read"
-                               asp-route-chapterNumber="@Model.NextChapter.Number"
-                               asp-route-webNovelUrl="@webNovel.UrlName">Next chapter <i class="fas fa-chevron-right"></i></a>
-                        }
-                    }
-                    else
-                    {
-                        <a class="btn btn-default disabled">Next chapter <i class="fas fa-chevron-right"></i></a>
-                    }
-                </div>
+                <partial name="_ChapterMiniPaginator" model="@Model"/>
             </div>
         </div>
     </div>
