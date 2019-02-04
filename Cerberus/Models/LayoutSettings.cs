@@ -25,6 +25,8 @@
             LibraryManager.Library(Constants.Libraries.Summernote)
                 .AddJs("/lib/summernote/dist/summernote.js")
                 .AddJsMin("/lib/summernote/dist/summernote.min.js")
+                .AddJs("/js/summernote.js")
+                .AddJsMin("/js/summernote.js")
                 .AddCss("/lib/summernote/dist/summernote.css")
                 .AddCssMin("/lib/summernote/dist/summernote.min.css");
         }

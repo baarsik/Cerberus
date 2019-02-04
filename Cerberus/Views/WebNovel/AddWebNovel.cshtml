@@ -96,17 +96,6 @@
 {
     <script type="text/javascript">
         $(document).ready(function() {
-            $('.summernote').summernote({
-                callbacks: {
-                    onPaste: function(e) {
-                        // Paste plain text with no duplicated line breaks
-                        var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text').replace(/\n\s*\n/g, '\n');
-                        e.preventDefault();
-                        document.execCommand('insertText', false, bufferText);
-                    }
-                }
-            });
-
             $('#freeToAccessDateInput').datepicker({
                 format: '@Constants.Misc.DateFormatJs',
                 autoclose: true
