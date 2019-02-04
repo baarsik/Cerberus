@@ -8,7 +8,7 @@ var PanelAccentFilled = function (context) {
             if (selectedText.trim().length === 0) {
                 selectedText = "Insert your text here";
             }
-            context.invoke('editor.pasteHTML', '<div class="panel panel-filled panel-c-accent"><div class="panel-heading">Information</div><div class="panel-body">' + selectedText + '</div></div>');
+            context.invoke('editor.pasteHTML', '<div class="panel panel-filled panel-c-accent"><div class="panel-heading">Information</div><div class="panel-body"><div>' + selectedText + '</div></div></div>');
         }
     });
     return button.render();
@@ -24,7 +24,7 @@ var PanelInfoFilled = function (context) {
             if (selectedText.trim().length === 0) {
                 selectedText = "Insert your text here";
             }
-            context.invoke('editor.pasteHTML', '<div class="panel panel-filled panel-c-info"><div class="panel-heading">Information</div><div class="panel-body">' + selectedText + '</div></div>');
+            context.invoke('editor.pasteHTML', '<div class="panel panel-filled panel-c-info"><div class="panel-heading">Information</div><div class="panel-body"><div>' + selectedText + '</div></div></div>');
         }
     });
     return button.render();
