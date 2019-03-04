@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -86,7 +85,6 @@ namespace Cerberus
                     };
                 });
 
-
             services.Configure<MvcOptions>(options =>
             {
                 #if !DEBUG
@@ -143,12 +141,6 @@ namespace Cerberus
                 app.UseExceptionHandler("/Home/Error");
             }
 
-#if !DEBUG
-            var rewriterOptions = new RewriteOptions()
-                .AddRedirectToHttps();
-            app.UseRewriter(rewriterOptions);
-#endif
-
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvc(routes =>
@@ -183,7 +175,7 @@ namespace Cerberus
             }
             
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            if (!await userManager.Users.AnyAsync())
+            if (!await userManager.Users.AnyAsync(c => c.Email == Configuration["DefaultUser:Email"]))
             {
                 var defaultUser = new ApplicationUser
                 {
