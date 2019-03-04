@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -98,14 +99,14 @@ namespace Cerberus.Controllers.Services
         
         public async Task<LoginResult> LoginAsync(string email, string password, bool isPersistent = false)
         {
-            var user = await _userManager.Users.FirstOrDefaultAsync(c => string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0);
+            var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
                 return new LoginResult(LoginStatus.InvalidCredentials);
 
             if (user.LockoutEnd?.DateTime >= DateTime.Now)
                 return new LoginResult(LoginStatus.AccountLocked);
-
-            var result = await _signInManager.PasswordSignInAsync(email, password, isPersistent, true);
+            
+            var result = await _signInManager.PasswordSignInAsync(user, password, isPersistent, true);
             return new LoginResult(result.Succeeded
                 ? LoginStatus.Success
                 : LoginStatus.InvalidCredentials);
