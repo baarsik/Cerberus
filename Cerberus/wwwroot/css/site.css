@@ -1611,7 +1611,16 @@ img.image-xl {
         .panel-tools a:hover {
             color: #ffffff
         }
+        
+        
+.panel.panel-speech {
+    border: 1px solid #555;
+}
 
+    .panel.panel-speech > .panel-body {
+        padding: 5px 10px 10px 10px;
+    }
+        
 .panel.panel-c-white {
     border-left: 3px solid #949ba2
 }

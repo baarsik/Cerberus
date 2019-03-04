@@ -30,6 +30,22 @@ var PanelInfoFilled = function (context) {
     return button.render();
 };
 
+var PanelSpeech = function (context) {
+    var ui = $.summernote.ui;
+    var button = ui.button({
+        contents: '<i class="fas fa-quote-left"/>',
+        tooltip: 'Insert speech panel',
+        click: function () {
+            var selectedText = context.invoke('editor.createRange').toString();
+            if (selectedText.trim().length === 0) {
+                selectedText = "Insert your text here";
+            }
+            context.invoke('editor.pasteHTML', '<div class="panel panel-speech"><div class="panel-top-label">Speaker</div><div class="panel-body"><div>' + selectedText + '</div></div></div>');
+        }
+    });
+    return button.render();
+};
+
 $(document).ready(function() {
     $('.summernote').summernote({
         callbacks: {
@@ -45,11 +61,12 @@ $(document).ready(function() {
             ['font', ['superscript', 'subscript']],
             ['color', ['color']],
             ['insert', ['picture', 'table']],
-            ['panels', ['panelAccent', 'panelInfo']]
+            ['panels', ['panelAccent', 'panelInfo', 'panelSpeech']]
         ],
         buttons: {
             panelAccent: PanelAccentFilled,
-            panelInfo: PanelInfoFilled
+            panelInfo: PanelInfoFilled,
+            panelSpeech: PanelSpeech
         }
     });
 });
