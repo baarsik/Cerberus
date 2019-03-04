@@ -43,7 +43,8 @@ namespace Cerberus
             {
                 options.UseSqlServer(Configuration.GetConnectionString("AppDatabase"));
             });
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddDefaultIdentity<ApplicationUser>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationContext>()
                 .AddDefaultTokenProviders();
 
