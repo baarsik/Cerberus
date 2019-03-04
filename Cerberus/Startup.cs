@@ -66,11 +66,6 @@ namespace Cerberus
                 .AddAuthentication()
                 .AddJwtBearer(cfg =>
                 {
-#if DEBUG
-                    cfg.RequireHttpsMetadata = false;
-#else
-                    cfg.RequireHttpsMetadata = true;
-#endif
                     cfg.SaveToken = true;
                     cfg.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -84,13 +79,6 @@ namespace Cerberus
                         ClockSkew = TimeSpan.Zero // remove delay of token when expire
                     };
                 });
-
-            services.Configure<MvcOptions>(options =>
-            {
-                #if !DEBUG
-                options.Filters.Add(new RequireHttpsAttribute());
-                #endif
-            });
             
             services.Configure<RouteOptions>(options =>
             {
