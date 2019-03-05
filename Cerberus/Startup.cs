@@ -149,8 +149,8 @@ namespace Cerberus
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             
             var roleNames = typeof(Constants.Roles)
-                .GetMembers(BindingFlags.Public | BindingFlags.Static)
-                .Select(c => c.Name)
+                .GetFields(BindingFlags.Public | BindingFlags.Static)
+                .Select(c => c.GetValue(null) as string)
                 .ToList();
             
             foreach (var roleName in roleNames)
