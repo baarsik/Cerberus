@@ -1,4 +1,5 @@
-﻿@model ProfileViewModel
+﻿@using Microsoft.EntityFrameworkCore.Internal
+@model ProfileViewModel
 
 @{
     ViewBag.Title = Model.User.DisplayName;
@@ -79,7 +80,7 @@
             </div>
         </div>
     }
-    <div class="row m-t">
+    <div class="row">
         <div class="col-lg-6">
             <div class="panel panel-filled panel-c-warning">
                 <div class="panel-heading">
@@ -103,4 +104,34 @@
             </div>
         </div>
     </div>
+    @if (this.IsInDebugMode())
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-filled panel-c-warning">
+                    <div class="panel-heading">
+                        Debug info
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <div class="font-bold text-accent">
+                                Claims:
+                            </div>
+                            <div>
+                                @Html.Raw(User.Claims.Select(c => $"<span class=\"text-success\">{c.Type}:</span> {c.Value}").Join("<br/>"))
+                            </div>
+                        </div>
+                        <div class="m-t">
+                            <div class="font-bold text-accent">
+                                Additional info:
+                            </div>
+                            <div>
+                                <span class="text-success">Is Admin:</span> @User.IsAdmin()
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
