@@ -81,14 +81,14 @@
         </div>
     }
     <div class="row">
-        <div class="col-lg-6">
+        @*<div class="col-lg-6">
             <div class="panel panel-filled panel-c-warning">
                 <div class="panel-heading">
                     News statistics
                 </div>
                 <div class="panel-body">
-                    <div>Total news: @Model.Statistics.TotalNews</div>
-                    <div>Total comments: @Model.Statistics.TotalNewsComments</div>
+                    <div>Total news: @Model.Statistics.News.TotalNews</div>
+                    <div>Total comments: @Model.Statistics.News.TotalComments</div>
                 </div>
             </div>
         </div>
@@ -98,8 +98,19 @@
                     Forum statistics
                 </div>
                 <div class="panel-body">
-                    <div>Total threads: @Model.Statistics.TotalForumThreads</div>
-                    <div>Total posts: @Model.Statistics.TotalForumPosts</div>
+                    <div>Total threads: @Model.Statistics.Forum.TotalStartedThreads</div>
+                    <div>Total replies: @Model.Statistics.Forum.TotalReplies</div>
+                </div>
+            </div>
+        </div>*@
+        <div class="col-lg-12">
+            <div class="panel panel-filled panel-c-warning">
+                <div class="panel-heading">
+                    Web novel statistics
+                </div>
+                <div class="panel-body">
+                    <div><b>Total web novels:</b> @Model.Statistics.WebNovel.TotalWebNovels</div>
+                    <div><b>Total chapters:</b> @Model.Statistics.WebNovel.TotalChapters</div>
                 </div>
             </div>
         </div>

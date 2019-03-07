@@ -16,12 +16,26 @@ namespace Cerberus.Models.ViewModels
 
     public class ProfileStatistics
     {
+        public ProfileNewsStatistics News { get; set; }
+        public ProfileForumStatistics Forum { get; set; }
+        public ProfileWebNovelStatistics WebNovel { get; set; }
+    }
+
+    public class ProfileNewsStatistics
+    {
         public int TotalNews { get; set; }
+        public int TotalComments { get; set; }
+    }
 
-        public int TotalNewsComments { get; set; }
+    public class ProfileForumStatistics
+    {
+        public int TotalStartedThreads { get; set; }
+        public int TotalReplies { get; set; }
+    }
 
-        public int TotalForumThreads { get; set; }
-        
-        public int TotalForumPosts { get; set; }
+    public class ProfileWebNovelStatistics
+    {
+        public int TotalWebNovels { get; set; }
+        public int TotalChapters { get; set; }
     }
 }

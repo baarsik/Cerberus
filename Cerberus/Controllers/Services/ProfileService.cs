@@ -21,10 +21,23 @@ namespace Cerberus.Controllers.Services
         {
             var statistics = new ProfileStatistics
             {
-                TotalNews = await _db.News.CountAsync(c => c.Author == user),
-                TotalNewsComments = await _db.NewsComments.CountAsync(c => c.Author == user),
-                TotalForumThreads = await _db.ForumThreads.CountAsync(c => c.Author == user),
-                TotalForumPosts = await _db.ForumThreadReplies.CountAsync(c => c.Author == user)
+                News = new ProfileNewsStatistics
+                {
+                    TotalNews = await _db.News.CountAsync(c => c.Author == user),
+                    TotalComments = await _db.NewsComments.CountAsync(c => c.Author == user)
+                },
+                Forum = new ProfileForumStatistics
+                {
+                    TotalStartedThreads = await _db.ForumThreads.CountAsync(c => c.Author == user),
+                    TotalReplies = await _db.ForumThreadReplies.CountAsync(c => c.Author == user)
+                },
+                WebNovel = new ProfileWebNovelStatistics
+                {
+                    TotalWebNovels = await _db.WebNovels
+                        .Include(c => c.Chapters)
+                        .CountAsync(c => c.Chapters.Any(x => x.Uploader == user)),
+                    TotalChapters = await _db.WebNovelChapters.CountAsync(c => c.Uploader == user)
+                }
             };
             return statistics;
         }
