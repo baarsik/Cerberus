@@ -26,8 +26,10 @@ namespace DataContext
         public DbSet<WebNovel> WebNovels { get; set; }
         public DbSet<WebNovelChapter> WebNovelChapters { get; set; }
         public DbSet<WebNovelChapterAccess> WebNovelChapterAccess { get; set; }
+        public DbSet<WebNovelChapterContent> WebNovelChapterContent { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<Language> Languages { get; set; }
+        public DbSet<ApplicationUserLanguage> UserLanguages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -109,15 +111,25 @@ namespace DataContext
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<WebNovelChapter>()
+            builder.Entity<WebNovelChapterContent>()
                 .HasOne(c => c.Uploader)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<WebNovelChapter>()
+            builder.Entity<WebNovelChapterContent>()
                 .HasOne(c => c.Language)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
+            
+            builder.Entity<WebNovelChapterContent>()
+                .HasOne(c => c.Chapter)
+                .WithMany(c => c.Translations)
+                .OnDelete(DeleteBehavior.Restrict);
+            
+            builder.Entity<ApplicationUserLanguage>()
+                .HasOne(c => c.User)
+                .WithMany(c => c.UserLanguages)
+                .OnDelete(DeleteBehavior.Cascade);
             
             base.OnModelCreating(builder);
         }

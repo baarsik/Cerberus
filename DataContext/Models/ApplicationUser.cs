@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
@@ -31,6 +32,8 @@ namespace DataContext.Models
 
         [MaxLength(8)]
         public string Culture { get; set; }
+
+        public virtual ICollection<ApplicationUserLanguage> UserLanguages { get; set; }
 
         public override string ToString()
         {

@@ -45,14 +45,7 @@
                     }
                     <div class="form-group">
                         <label>Chapter Number</label>
-                        @if (Model.WebNovel.UsesVolumes)
-                        {
-                            <input type="number" asp-for="Number" class="form-control" placeholder="Chapter Number">
-                        }
-                        else
-                        {
-                            <input type="text" asp-for="Number" class="form-control" placeholder="Chapter Number" readonly>
-                        }
+                        <input type="number" asp-for="Number" class="form-control" placeholder="Chapter Number">
                         <span class="help-block small">
                             <span asp-validation-for="Number" class="text-danger"></span>
                         </span>

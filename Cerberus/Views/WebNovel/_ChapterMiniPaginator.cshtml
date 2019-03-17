@@ -1,20 +1,22 @@
-@model DataContext.Models.WebNovelChapter
+@model DataContext.Models.WebNovelChapterContent
 
 <div class="btn-group flex-row justify-center">
-    @if (Model.PreviousChapter != null)
+    @if (Model.Chapter.PreviousChapter != null)
     {
-        if (Model.WebNovel.UsesVolumes)
+        if (Model.Chapter.WebNovel.UsesVolumes)
         {
             <a id="readPrev" class="btn btn-default" asp-action="Read"
-               asp-route-volume="@Model.PreviousChapter.Volume"
-               asp-route-chapterNumber="@Model.PreviousChapter.Number"
-               asp-route-webNovelUrl="@Model.WebNovel.UrlName"><i class="fas fa-chevron-left"></i> Previous chapter</a>
+               asp-route-languageCode="@Model.Language.Code"
+               asp-route-volume="@Model.Chapter.PreviousChapter.Volume"
+               asp-route-chapterNumber="@Model.Chapter.PreviousChapter.Number"
+               asp-route-webNovelUrl="@Model.Chapter.WebNovel.UrlName"><i class="fas fa-chevron-left"></i> Previous chapter</a>
         }
         else
         {
             <a id="readPrev" class="btn btn-default" asp-action="Read"
-               asp-route-chapterNumber="@Model.PreviousChapter.Number"
-               asp-route-webNovelUrl="@Model.WebNovel.UrlName"><i class="fas fa-chevron-left"></i> Previous chapter</a>
+               asp-route-languageCode="@Model.Language.Code"
+               asp-route-chapterNumber="@Model.Chapter.PreviousChapter.Number"
+               asp-route-webNovelUrl="@Model.Chapter.WebNovel.UrlName"><i class="fas fa-chevron-left"></i> Previous chapter</a>
         }
     }
     else
@@ -22,21 +24,23 @@
         <a class="btn btn-default disabled"><i class="fas fa-chevron-left"></i> Previous chapter</a>
     }
     <a class="btn btn-default" asp-action="Details"
-       asp-route-webNovelUrl="@Model.WebNovel.UrlName">Back to web novel</a>
-    @if (Model.NextChapter != null)
+       asp-route-webNovelUrl="@Model.Chapter.WebNovel.UrlName">Back to web novel</a>
+    @if (Model.Chapter.NextChapter != null)
     {
-        if (Model.WebNovel.UsesVolumes)
+        if (Model.Chapter.WebNovel.UsesVolumes)
         {
             <a id="readNext" class="btn btn-default" asp-action="Read"
-               asp-route-volume="@Model.NextChapter.Volume"
-               asp-route-chapterNumber="@Model.NextChapter.Number"
-               asp-route-webNovelUrl="@Model.WebNovel.UrlName">Next chapter <i class="fas fa-chevron-right"></i></a>
+               asp-route-languageCode="@Model.Language.Code"
+               asp-route-volume="@Model.Chapter.NextChapter.Volume"
+               asp-route-chapterNumber="@Model.Chapter.NextChapter.Number"
+               asp-route-webNovelUrl="@Model.Chapter.WebNovel.UrlName">Next chapter <i class="fas fa-chevron-right"></i></a>
         }
         else
         {
             <a id="readNext" class="btn btn-default" asp-action="Read"
-               asp-route-chapterNumber="@Model.NextChapter.Number"
-               asp-route-webNovelUrl="@Model.WebNovel.UrlName">Next chapter <i class="fas fa-chevron-right"></i></a>
+               asp-route-languageCode="@Model.Language.Code"
+               asp-route-chapterNumber="@Model.Chapter.NextChapter.Number"
+               asp-route-webNovelUrl="@Model.Chapter.WebNovel.UrlName">Next chapter <i class="fas fa-chevron-right"></i></a>
         }
     }
     else

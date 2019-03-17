@@ -1,14 +1,14 @@
 @using Cerberus.Models.Helpers
-@model DataContext.Models.WebNovelChapter
+@model DataContext.Models.WebNovelChapterContent
 
 @{
-    var title = $"Chapter {Model.Number}";
+    var title = $"Chapter {Model.Chapter.Number}";
     if (!string.IsNullOrEmpty(Model.Title))
     {
         title += $" - {Model.Title}";
     }
 
-    ViewBag.Title = $"{Model.WebNovel.Name} - {title}";
+    ViewBag.Title = $"{Model.Chapter.WebNovel.Name} - {title}";
 }
 
 <div class="row">
@@ -28,7 +28,7 @@
             <div class="header-title">
                 <h3>@title</h3>
                 <small>
-                    @StringHelpers.GetCommaSpaceSeparatedString(Model.WebNovel.Name, Model.WebNovel.Author)
+                    @StringHelpers.GetCommaSpaceSeparatedString(Model.Chapter.WebNovel.Name, Model.Chapter.WebNovel.Author)
                 </small>
             </div>
         </div>

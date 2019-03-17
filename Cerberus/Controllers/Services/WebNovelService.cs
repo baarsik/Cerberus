@@ -41,6 +41,8 @@ namespace Cerberus.Controllers.Services
 
             model.Items = _db.WebNovels
                 .Include(c => c.Chapters)
+                    .ThenInclude(c => c.Translations)
+                    .ThenInclude(c => c.Language)
                 .Select(GetWebNovelInfo)
                 .OrderByDescending(c => c.LastUpdateDate)
                 .Take(Constants.WebNovel.ItemsPerIndexPage)
@@ -54,7 +56,8 @@ namespace Cerberus.Controllers.Services
         {
             var webNovel = await _db.WebNovels
                 .Include(c => c.Chapters)
-                .ThenInclude(c => c.Language)
+                    .ThenInclude(c => c.Translations)
+                    .ThenInclude(c => c.Language)
                 .SingleOrDefaultAsync(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture));
 
             var model = new WebNovelDetailsViewModel
@@ -89,7 +92,6 @@ namespace Cerberus.Controllers.Services
             {
                 model.Volume = model.Volume == 0 ? lastChapter.Volume : model.Volume;
                 model.Number = lastChapter.Number + 1;
-                model.LanguageId = model.LanguageId == Guid.Empty ? lastChapter.Language.Id : model.LanguageId;
             }
             
             return model;
@@ -99,7 +101,8 @@ namespace Cerberus.Controllers.Services
         {
             return await _db.WebNovels
                 .Include(c => c.Chapters)
-                .Include(c => c.Chapters).ThenInclude(c => c.Language)
+                    .ThenInclude(c => c.Translations)
+                    .ThenInclude(c => c.Language)
                 .SingleOrDefaultAsync(c => c.Id == id);
         }
 
@@ -134,6 +137,7 @@ namespace Cerberus.Controllers.Services
         {
             var webNovel = await _db.WebNovels
                 .Include(c => c.Chapters)
+                    .ThenInclude(c => c.Translations)
                 .FirstOrDefaultAsync(c => c.Id == model.WebNovelId);
             
             if (webNovel == null)
@@ -144,66 +148,81 @@ namespace Cerberus.Controllers.Services
                 model.Volume = 1;
             }
 
-            if (webNovel.Chapters.Any(c => c.Volume == model.Volume && c.Number == model.Number))
-                return WebNovelAddChapterResult.NumberExists;
-
-            var languageId = await _db.Languages.FirstOrDefaultAsync(c => c.Id == model.LanguageId);
+            var language = await _db.Languages.FirstOrDefaultAsync(c => c.Id == model.LanguageId);
             
-            if (languageId == null)
+            if (language == null)
                 return WebNovelAddChapterResult.LanguageNotExists;
 
-            var previousChapter = webNovel.Chapters
-                                      .Where(c => c.Volume == model.Volume && c.Number < model.Number)
-                                      .OrderByDescending(c => c.Number)
-                                      .FirstOrDefault()
-                                  ?? webNovel.Chapters // In case there is no previous chapter in this volume
-                                      .Where(c => c.Volume < model.Volume)
-                                      .OrderByDescending(c => c.Volume)
-                                      .ThenByDescending(c => c.Number)
-                                      .FirstOrDefault();
-
-            var nextChapter = previousChapter == null
-                ? webNovel.Chapters // This is now the first chapter, select previous first one as NextChapter
-                    .Where(c => c.Volume >= model.Volume)
-                    .OrderBy(c => c.Volume)
-                    .ThenBy(c => c.Number)
-                    .FirstOrDefault()
-                : previousChapter.NextChapter;
+            var chapter = webNovel.Chapters.FirstOrDefault(c => c.Volume == model.Volume && c.Number == model.Number);
             
-            var chapter = new WebNovelChapter
+            if (chapter != null && webNovel.Chapters.Any(c => c.Translations.Any(x => x.Language == language)))
+            {
+                return WebNovelAddChapterResult.TranslatedChapterNumberExists;
+            }
+
+            if (chapter == null)
+            {
+                var previousChapter =
+                    webNovel.Chapters
+                        .Where(c => c.Volume == model.Volume && c.Number < model.Number)
+                        .OrderByDescending(c => c.Number)
+                        .FirstOrDefault()
+                    ?? webNovel.Chapters // In case there is no previous chapter in this volume
+                        .Where(c => c.Volume < model.Volume)
+                        .OrderByDescending(c => c.Volume)
+                        .ThenByDescending(c => c.Number)
+                        .FirstOrDefault();
+
+                var nextChapter = previousChapter == null
+                    ? webNovel.Chapters // This is now the first chapter, select previous first one as NextChapter
+                        .Where(c => c.Volume >= model.Volume)
+                        .OrderBy(c => c.Volume)
+                        .ThenBy(c => c.Number)
+                        .FirstOrDefault()
+                    : previousChapter.NextChapter;
+
+                chapter = new WebNovelChapter
+                {
+                    Id = Guid.NewGuid(),
+                    Volume = model.Volume,
+                    Number = model.Number,
+                    WebNovel = webNovel
+                };
+                _db.WebNovelChapters.Add(chapter);
+                await _db.SaveChangesAsync();
+
+                if (previousChapter != null)
+                {
+                    previousChapter.NextChapter = chapter;
+                    _db.Update(previousChapter);
+                }
+
+                if (nextChapter != null)
+                {
+                    nextChapter.PreviousChapter = chapter;
+                    _db.Update(nextChapter);
+                }
+
+                chapter.PreviousChapter = previousChapter;
+                chapter.NextChapter = nextChapter;
+                _db.Update(chapter);
+                await _db.SaveChangesAsync();
+            }
+
+            var chapterContent = new WebNovelChapterContent
             {
                 Id = Guid.NewGuid(),
-                Volume = model.Volume,
-                Number = model.Number,
                 Title = model.Title.RemoveHTML(),
                 Text = model.Text.SanitizeHTML(),
                 CreationDate = DateTime.Now,
                 FreeToAccessDate = model.FreeToAccessDate,
                 Uploader = uploader,
-                WebNovel = webNovel,
-                Language = languageId
+                Language = language,
+                Chapter = chapter
             };
-
-            _db.WebNovelChapters.Add(chapter);
+            _db.WebNovelChapterContent.Add(chapterContent);
             await _db.SaveChangesAsync();
             
-            if (previousChapter != null)
-            {
-                previousChapter.NextChapter = chapter;
-                _db.Update(previousChapter);
-            }
-
-            if (nextChapter != null)
-            {
-                nextChapter.PreviousChapter = chapter;
-                _db.Update(nextChapter);
-            }
-
-            chapter.PreviousChapter = previousChapter;
-            chapter.NextChapter = nextChapter;
-            _db.Update(chapter);
-
-            await _db.SaveChangesAsync();
             return WebNovelAddChapterResult.Success;
         }
         
@@ -218,6 +237,8 @@ namespace Cerberus.Controllers.Services
             var chapter = _db.WebNovelChapters
                 .Include(c => c.PreviousChapter)
                 .Include(c => c.NextChapter)
+                .Include(c => c.Translations)
+                    .ThenInclude(c => c.Language)
                 .SingleOrDefault(c => c.WebNovel == webNovel &&
                                       (!webNovel.UsesVolumes || c.Volume == volume) &&
                                       c.Number == chapterNumber);
@@ -228,6 +249,18 @@ namespace Cerberus.Controllers.Services
             chapter.WebNovel = webNovel;
             return chapter;
         }
+        
+        public async Task<WebNovelChapterContent> GetChapterTranslationAsync(string webNovelUrl, string languageCode, int volume, int chapterNumber)
+        {
+            var chapter = await GetChapterAsync(webNovelUrl, volume, chapterNumber);
+            var chapterContent = chapter?.Translations.SingleOrDefault(c => c.Language.Code == languageCode);
+            
+            if (chapterContent == null)
+                return null;
+            
+            chapterContent.Chapter = chapter;
+            return chapterContent;
+        }
 
         private WebNovelInfo GetWebNovelInfo(WebNovel webNovel)
         {
@@ -235,15 +268,16 @@ namespace Cerberus.Controllers.Services
             {
                 return null;
             }
-
+            
             return new WebNovelInfo
             {
                 WebNovel = webNovel,
                 TotalChapters = webNovel.Chapters.Count,
                 LastChapter = webNovel.GetLastChapter(),
                 LastUpdateDate = webNovel.Chapters
+                    .SelectMany(c => c.Translations)
+                    .OrderByDescending(c => c.CreationDate)
                     .Select(c => c.CreationDate)
-                    .OrderByDescending(c => c)
                     .FirstOrDefault(),
                 TotalVolumes = webNovel.Chapters
                     .Select(c => c.Volume)
@@ -264,7 +298,7 @@ namespace Cerberus.Controllers.Services
     {
         UnknownFailure,
         WebNovelNotExists,
-        NumberExists,
+        TranslatedChapterNumberExists,
         LanguageNotExists,
         Success
     }

@@ -35,8 +35,12 @@ namespace Cerberus.Controllers.Services
                 {
                     TotalWebNovels = await _db.WebNovels
                         .Include(c => c.Chapters)
-                        .CountAsync(c => c.Chapters.Any(x => x.Uploader == user)),
-                    TotalChapters = await _db.WebNovelChapters.CountAsync(c => c.Uploader == user)
+                            .ThenInclude(c => c.Translations)
+                            .ThenInclude(c => c.Uploader)
+                        .CountAsync(c => c.Chapters.Any(x => x.Translations.Any(z => z.Uploader == user))),
+                    TotalChapters = await _db.WebNovelChapters
+                        .Include(c => c.Translations)
+                        .CountAsync(c => c.Translations.Any(x => x.Uploader == user))
                 }
             };
             return statistics;

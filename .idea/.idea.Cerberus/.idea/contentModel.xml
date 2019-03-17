@@ -880,10 +880,13 @@
           <e p="20181210115715_WebNovel3.Designer.cs" t="Include" />
           <e p="20190104082133_WebNovel4.cs" t="Include" />
           <e p="20190104082133_WebNovel4.Designer.cs" t="Include" />
+          <e p="20190317111758_WebNovelMultilanguageSupport.cs" t="Include" />
+          <e p="20190317111758_WebNovelMultilanguageSupport.Designer.cs" t="Include" />
           <e p="ApplicationContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="Models" t="Include">
           <e p="ApplicationUser.cs" t="Include" />
+          <e p="ApplicationUserLanguage.cs" t="Include" />
           <e p="Attachment.cs" t="Include" />
           <e p="AttachmentDownloads.cs" t="Include" />
           <e p="BaseEntity.cs" t="Include" />
@@ -904,6 +907,7 @@
           <e p="WebNovel.cs" t="Include" />
           <e p="WebNovelChapter.cs" t="Include" />
           <e p="WebNovelChapterAccess.cs" t="Include" />
+          <e p="WebNovelChapterContent.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
