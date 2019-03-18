@@ -64,6 +64,7 @@
             <e p="PaginatorTagHelper.cs" t="Include" />
           </e>
           <e p="ValidationAttributes" t="Include">
+            <e p="FutureOrCurrentDateAttribute.cs" t="Include" />
             <e p="TrueAttribute.cs" t="Include" />
           </e>
           <e p="ViewModels" t="Include">

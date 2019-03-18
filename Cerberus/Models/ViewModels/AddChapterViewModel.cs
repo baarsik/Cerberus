@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Cerberus.Models.ValidationAttributes;
 using DataContext.Models;
 
 namespace Cerberus.Models.ViewModels
@@ -24,8 +25,8 @@ namespace Cerberus.Models.ViewModels
         public string Text { get; set; }
 
         [Required]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:" + Constants.Misc.DateFormat + "}")]
-        public DateTime FreeToAccessDate { get; set; } = DateTime.Today;
+        [FutureOrCurrentDate]
+        public string FreeToAccessDate { get; set; } = DateTime.Today.ToString(Constants.Misc.DateFormat);
 
         [Required]
         public Guid LanguageId { get; set; }

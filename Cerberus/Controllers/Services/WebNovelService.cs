@@ -229,7 +229,7 @@ namespace Cerberus.Controllers.Services
                 Title = model.Title.RemoveHTML(),
                 Text = model.Text.SanitizeHTML(),
                 CreationDate = DateTime.Now,
-                FreeToAccessDate = model.FreeToAccessDate,
+                FreeToAccessDate = DateTime.ParseExact(model.FreeToAccessDate, Constants.Misc.DateFormat, CultureInfo.InvariantCulture),
                 Uploader = uploader,
                 Language = language,
                 Chapter = chapter
