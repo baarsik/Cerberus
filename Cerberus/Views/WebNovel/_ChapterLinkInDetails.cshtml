@@ -1,8 +1,12 @@
+@using Microsoft.EntityFrameworkCore.Internal
 @model ChapterLinkInDetailsViewModel
 
 @foreach (var chapter in Model.Chapters)
-{
-    foreach (var translation in chapter.Translations.Where(c => Model.DisplayedLanguages.Contains(c.Language)))
+{   
+    foreach (var translation in chapter.Translations
+        .Where(c => !User.Identity.IsAuthenticated || Model.DisplayedLanguages.Contains(c.Language))
+        .OrderBy(c => Model.DisplayedLanguages.IndexOf(c.Language))
+    )
     {
         var chapterTitle = $"<b>Chapter {chapter.Number}</b>";
         if (!string.IsNullOrEmpty(translation.Title))
@@ -47,5 +51,11 @@
                 </div>
             </div>
         </div>
+
+        // Only one best translation match per chapter for authorized users
+        if (User.Identity.IsAuthenticated)
+        {
+            break;
+        }
     }
 }

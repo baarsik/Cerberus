@@ -1,14 +1,14 @@
 @using Cerberus.Models.Helpers
-@model DataContext.Models.WebNovelChapterContent
+@model WebNovelReadViewModel
 
 @{
-    var title = $"Chapter {Model.Chapter.Number}";
-    if (!string.IsNullOrEmpty(Model.Title))
+    var title = $"Chapter {Model.Translation.Chapter.Number}";
+    if (!string.IsNullOrEmpty(Model.Translation.Title))
     {
-        title += $" - {Model.Title}";
+        title += $" - {Model.Translation.Title}";
     }
 
-    ViewBag.Title = $"{Model.Chapter.WebNovel.Name} - {title}";
+    ViewBag.Title = $"{Model.Translation.Chapter.WebNovel.Name} - {title}";
 }
 
 <div class="row">
@@ -20,21 +20,38 @@
             <div class="pull-right text-right">
                 @if (User.HasWebNovelEditorAccess())
                 {
-                    <a class="btn btn-lg btn-default">
+                    @*<a class="btn btn-lg btn-default">
                         <i class="far fa-pen"></i>
-                    </a>
+                    </a>*@
                 }
             </div>
             <div class="header-title">
                 <h3>@title</h3>
                 <small>
-                    @StringHelpers.GetCommaSpaceSeparatedString(Model.Chapter.WebNovel.Name, Model.Chapter.WebNovel.Author)
+                    @StringHelpers.GetCommaSpaceSeparatedString(Model.Translation.Chapter.WebNovel.Name, Model.Translation.Chapter.WebNovel.Author)
                 </small>
             </div>
         </div>
         <hr>
     </div>
 </div>
+
+@if (!User.Identity.IsAuthenticated)
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-c-danger panel-filled">
+                <div class="panel-heading">
+                    Information
+                </div>
+                <div class="panel-body">
+                    <p>Please, <a asp-area="" asp-controller="Account" asp-action="Login">Sign In</a> or <a asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a></p>
+                    <p>As an unauthorized user you may experience some language issues as language prioritizing is available only to authorized members</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 <div class="row">
     <div class="col-md-12">
@@ -43,7 +60,7 @@
                 <div class="m-b">
                     <partial name="_ChapterMiniPaginator" model="@Model"/>
                 </div>
-                @Html.Raw(Model.Text)
+                @Html.Raw(Model.Translation.Text)
             </div>
             <div class="panel-footer">
                 <partial name="_ChapterMiniPaginator" model="@Model"/>

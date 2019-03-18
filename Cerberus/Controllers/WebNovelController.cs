@@ -46,7 +46,8 @@ namespace Cerberus.Controllers
         [Route("[action]/{languageCode}/{webNovelUrl}/{volume:int}/{chapterNumber:int}")]
         public async Task<IActionResult> Read(string webNovelUrl, string languageCode, int volume, int chapterNumber)
         {
-            var model = await _webNovelService.GetChapterTranslationAsync(webNovelUrl, languageCode, volume, chapterNumber);
+            var user = await _userManager.GetUserAsync(User);
+            var model = await _webNovelService.GetChapterTranslationAsync(user, webNovelUrl, languageCode, volume, chapterNumber);
             
             if (model == null)
                 return RedirectToNotFound();

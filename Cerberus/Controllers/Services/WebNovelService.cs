@@ -9,6 +9,7 @@ using Cerberus.Models.ViewModels;
 using DataContext;
 using DataContext.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 
 namespace Cerberus.Controllers.Services
@@ -249,7 +250,11 @@ namespace Cerberus.Controllers.Services
 
             var chapter = _db.WebNovelChapters
                 .Include(c => c.PreviousChapter)
+                    .ThenInclude(c => c.Translations)
+                    .ThenInclude(c => c.Language)
                 .Include(c => c.NextChapter)
+                    .ThenInclude(c => c.Translations)
+                    .ThenInclude(c => c.Language)
                 .Include(c => c.Translations)
                     .ThenInclude(c => c.Language)
                 .SingleOrDefault(c => c.WebNovel == webNovel &&
@@ -263,7 +268,7 @@ namespace Cerberus.Controllers.Services
             return chapter;
         }
         
-        public async Task<WebNovelChapterContent> GetChapterTranslationAsync(string webNovelUrl, string languageCode, int volume, int chapterNumber)
+        public async Task<WebNovelReadViewModel> GetChapterTranslationAsync(ApplicationUser user, string webNovelUrl, string languageCode, int volume, int chapterNumber)
         {
             var chapter = await GetChapterAsync(webNovelUrl, volume, chapterNumber);
             var chapterContent = chapter?.Translations.SingleOrDefault(c => c.Language.Code == languageCode);
@@ -272,7 +277,16 @@ namespace Cerberus.Controllers.Services
                 return null;
             
             chapterContent.Chapter = chapter;
-            return chapterContent;
+
+            var languages = user.GetUserOrDefaultLanguages(_db, _configuration);
+            var model = new WebNovelReadViewModel
+            {
+                Translation = chapterContent,
+                NextChapterContent = GetChapterTranslation(chapter.NextChapter, languages),
+                PrevChapterContent = GetChapterTranslation(chapter.PreviousChapter, languages)
+            };
+            
+            return model;
         }
 
         private WebNovelInfo GetWebNovelInfo(WebNovel webNovel, ICollection<Language> languages)
@@ -298,6 +312,14 @@ namespace Cerberus.Controllers.Services
                     .FirstOrDefault(),
                 UserLanguages = languages
             };
+        }
+        
+        private static WebNovelChapterContent GetChapterTranslation(WebNovelChapter chapter, ICollection<Language> languages)
+        {
+            return chapter?.Translations
+                .Where(c => languages.Contains(c.Language))
+                .OrderBy(c => languages.IndexOf(c.Language))
+                .FirstOrDefault();
         }
     }
 

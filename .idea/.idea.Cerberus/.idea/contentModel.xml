@@ -79,6 +79,7 @@
             <e p="RegisterViewModel.cs" t="Include" />
             <e p="WebNovelDetailsViewModel.cs" t="Include" />
             <e p="WebNovelIndexViewModel.cs" t="Include" />
+            <e p="WebNovelReadViewModel.cs" t="Include" />
           </e>
           <e p="WebNovelInfo.cs" t="Include" />
         </e>
