@@ -2,7 +2,7 @@
 
 @foreach (var chapter in Model.Chapters)
 {
-    foreach (var translation in chapter.Translations)
+    foreach (var translation in chapter.Translations.Where(c => Model.DisplayedLanguages.Contains(c.Language)))
     {
         var chapterTitle = $"<b>Chapter {chapter.Number}</b>";
         if (!string.IsNullOrEmpty(translation.Title))
@@ -12,7 +12,7 @@
 
         <div class="flex-row justify-between align-center m-b-xs">
             <div>
-                <img src="/images/flags/@(translation.Language.Code).png" width="20" alt="@translation.Language.GlobalName"/>
+                <img src="/images/flags/@(translation.Language.CountryFlagIconName).png" width="20" alt="@translation.Language.GlobalName"/>
                 @if (Model.WebNovel.UsesVolumes)
                 {
                     <a class="c-white" asp-action="Read" asp-route-languageCode="@translation.Language.Code" asp-route-volume="@chapter.Volume" asp-route-chapterNumber="@chapter.Number" asp-route-webNovelUrl="@Model.WebNovel.UrlName">

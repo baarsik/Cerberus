@@ -108,6 +108,7 @@ namespace Cerberus
                 SecretKey = Configuration["ReCaptcha:SecretKey"]
             });
 
+            services.AddSingleton(Configuration);
             services.AddScoped<AuthService>();
             services.AddScoped<ProfileService>();
             services.AddScoped<SettingsService>();
@@ -186,8 +187,8 @@ namespace Cerberus
         {
             var languages = new List<Language>
             {
-                new Language {Code = "us", GlobalName = "English (US)", LocalName = "English (US)"},
-                new Language {Code = "ru", GlobalName = "Russian", LocalName = "Русский"}
+                new Language {Code = "en", GlobalName = "English", LocalName = "English", CountryFlagIconName = "us"},
+                new Language {Code = "ru", GlobalName = "Russian", LocalName = "Русский", CountryFlagIconName = "ru"}
             };
 
             var db = serviceProvider.GetRequiredService<ApplicationContext>();

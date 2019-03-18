@@ -12,5 +12,8 @@ namespace DataContext.Models
         
         [Required]
         public string LocalName { get; set; }
+
+        [Required]
+        public string CountryFlagIconName { get; set; }
     }
 }

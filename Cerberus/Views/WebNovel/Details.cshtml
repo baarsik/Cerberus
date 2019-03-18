@@ -46,7 +46,7 @@
                     <div class="panel-heading">Description</div>
                     <div class="panel-body">@Html.Raw(webNovel.Description)</div>
                 </div>
-                @if (webNovel.Chapters.Any())
+                @if (webNovel.Chapters.Any(c => c.Translations.Any(d => Model.WebNovelInfo.UserLanguages.Contains(d.Language))))
                 {
                     if (webNovel.UsesVolumes)
                     {
@@ -62,7 +62,8 @@
                                                           Chapters = webNovel.Chapters
                                                               .Where(c => c.Volume == volume)
                                                               .OrderByDescending(c => c.Translations.Select(d => d.CreationDate).OrderByDescending(d => d).FirstOrDefault()),
-                                                          WebNovel = webNovel
+                                                          WebNovel = webNovel,
+                                                          DisplayedLanguages = Model.WebNovelInfo.UserLanguages
                                                       })"/>
                                 </div>
                             </div>
@@ -76,8 +77,10 @@
                                 <partial name="_ChapterLinkInDetails"
                                          model="@(new ChapterLinkInDetailsViewModel
                                                   {
-                                                      Chapters = webNovel.Chapters.OrderByDescending(c => c.Translations.Select(d => d.CreationDate).OrderByDescending(d => d).FirstOrDefault()),
-                                                      WebNovel = webNovel
+                                                      Chapters = webNovel.Chapters
+                                                          .OrderByDescending(c => c.Translations.Select(d => d.CreationDate).OrderByDescending(d => d).FirstOrDefault()),
+                                                      WebNovel = webNovel,
+                                                      DisplayedLanguages = Model.WebNovelInfo.UserLanguages
                                                   })"/>
                             </div>
                         </div>

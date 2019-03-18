@@ -67,20 +67,20 @@
                                      if (item.WebNovel.UsesVolumes)
                                      {
                                          <a class="btn btn-sm btn-default" asp-action="Read"
-                                            asp-route-languageCode="@item.LastChapter.Translations.Select(c => c.Language.Code).FirstOrDefault()" @* ToDo: add valid language code logic *@
-                                            asp-route-volume="@item.LastChapter.Volume"
+                                            asp-route-languageCode="@item.LastChapterTranslation.Language.Code"
+                                            asp-route-volume="@item.LastChapterTranslation.Chapter.Volume"
                                             asp-route-webNovelUrl="@item.WebNovel.UrlName"
-                                            asp-route-chapterNumber="@item.LastChapter.Number">
-                                             Read chapter @item.LastChapter.Number (Volume @item.LastChapter.Volume)
+                                            asp-route-chapterNumber="@item.LastChapterTranslation.Chapter.Number">
+                                             Read chapter @item.LastChapterTranslation.Chapter.Number (Volume @item.LastChapterTranslation.Chapter.Volume)
                                          </a>
                                      }
                                      else
                                      {
                                          <a class="btn btn-sm btn-default" asp-action="Read"
-                                            asp-route-languageCode="@item.LastChapter.Translations.Select(c => c.Language.Code).FirstOrDefault()"  @* ToDo: add valid language code logic *@
+                                            asp-route-languageCode="@item.LastChapterTranslation.Language.Code"
                                             asp-route-webNovelUrl="@item.WebNovel.UrlName"
-                                            asp-route-chapterNumber="@item.LastChapter.Number">
-                                             Read chapter @item.LastChapter.Number
+                                            asp-route-chapterNumber="@item.LastChapterTranslation.Chapter.Number">
+                                             Read chapter @item.LastChapterTranslation.Chapter.Number
                                          </a>
                                      }
                                  }

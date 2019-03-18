@@ -3,8 +3,6 @@
 @{
     ViewBag.Title = "Add Web Novel";
     var settings = new LayoutSettings();
-    settings.ActivateLibrary(Constants.Libraries.Datepicker);
-    settings.ActivateLibrary(Constants.Libraries.Select2);
     settings.ActivateLibrary(Constants.Libraries.Summernote);
     ViewBag.Settings = settings;
 }
@@ -91,12 +89,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts
-{
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $(".select2").select2();
-        })
-    </script>
-}

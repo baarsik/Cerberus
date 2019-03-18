@@ -9,19 +9,22 @@ using Cerberus.Models.ViewModels;
 using DataContext;
 using DataContext.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Cerberus.Controllers.Services
 {
     public sealed class WebNovelService
     {
         private readonly ApplicationContext _db;
+        private readonly IConfiguration _configuration;
 
-        public WebNovelService(ApplicationContext context)
+        public WebNovelService(ApplicationContext context, IConfiguration configuration)
         {
             _db = context;
+            _configuration = configuration;
         }
 
-        public async Task<WebNovelIndexViewModel> GetWebNovelIndexViewModelAsync(int page)
+        public async Task<WebNovelIndexViewModel> GetWebNovelIndexViewModelAsync(ApplicationUser user, int page)
         {
             var totalPages = (int) Math.Ceiling(await _db.WebNovels.CountAsync() / (double) Constants.WebNovel.ItemsPerIndexPage);
             if (totalPages == 0)
@@ -39,20 +42,29 @@ namespace Cerberus.Controllers.Services
                 TotalPages = totalPages,
             };
 
-            model.Items = _db.WebNovels
+            var languages = user.GetUserOrDefaultLanguages(_db, _configuration);
+            
+            var webNovels = _db.WebNovels
                 .Include(c => c.Chapters)
                     .ThenInclude(c => c.Translations)
                     .ThenInclude(c => c.Language)
-                .Select(GetWebNovelInfo)
-                .OrderByDescending(c => c.LastUpdateDate)
+                .OrderByDescending(c => c.Chapters
+                    .SelectMany(d => d.Translations)
+                    .Where(d => languages.Contains(d.Language))
+                    .Select(d => d.CreationDate))
                 .Take(Constants.WebNovel.ItemsPerIndexPage)
                 .Skip(Constants.WebNovel.ItemsPerIndexPage * (model.Page - 1))
+                .ToList();
+            
+            model.Items = webNovels
+                .Select(webNovel => GetWebNovelInfo(webNovel, languages))
+                .OrderByDescending(c => c.LastUpdateDate)
                 .ToList();
             
             return model;
         }
         
-        public async Task<WebNovelDetailsViewModel> GetWebNovelDetailsViewModelAsync(string webNovelUrl)
+        public async Task<WebNovelDetailsViewModel> GetWebNovelDetailsViewModelAsync(ApplicationUser user, string webNovelUrl)
         {
             var webNovel = await _db.WebNovels
                 .Include(c => c.Chapters)
@@ -60,9 +72,10 @@ namespace Cerberus.Controllers.Services
                     .ThenInclude(c => c.Language)
                 .SingleOrDefaultAsync(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture));
 
+            var languages = user.GetUserOrDefaultLanguages(_db, _configuration);
             var model = new WebNovelDetailsViewModel
             {
-                WebNovelInfo = GetWebNovelInfo(webNovel),
+                WebNovelInfo = GetWebNovelInfo(webNovel, languages),
                 IsValid = webNovel != null
             };
             
@@ -262,7 +275,7 @@ namespace Cerberus.Controllers.Services
             return chapterContent;
         }
 
-        private WebNovelInfo GetWebNovelInfo(WebNovel webNovel)
+        private WebNovelInfo GetWebNovelInfo(WebNovel webNovel, ICollection<Language> languages)
         {
             if (webNovel?.Chapters == null)
             {
@@ -273,7 +286,7 @@ namespace Cerberus.Controllers.Services
             {
                 WebNovel = webNovel,
                 TotalChapters = webNovel.Chapters.Count,
-                LastChapter = webNovel.GetLastChapter(),
+                LastChapterTranslation = webNovel.GetLastChapterTranslation(languages),
                 LastUpdateDate = webNovel.Chapters
                     .SelectMany(c => c.Translations)
                     .OrderByDescending(c => c.CreationDate)
@@ -282,7 +295,8 @@ namespace Cerberus.Controllers.Services
                 TotalVolumes = webNovel.Chapters
                     .Select(c => c.Volume)
                     .OrderByDescending(c => c)
-                    .FirstOrDefault()
+                    .FirstOrDefault(),
+                UserLanguages = languages
             };
         }
     }

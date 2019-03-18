@@ -24,14 +24,16 @@ namespace Cerberus.Controllers
         [Route("{page:int=1}", Order = -1)]
         public async Task<IActionResult> Index(int? page)
         {
-            var model = await _webNovelService.GetWebNovelIndexViewModelAsync(page ?? 1);
+            var user = await _userManager.GetUserAsync(User);
+            var model = await _webNovelService.GetWebNovelIndexViewModelAsync(user, page ?? 1);
             return View(model);
         }
 
         [Route("[action]/{webNovelUrl}")]
         public async Task<IActionResult> Details(string webNovelUrl)
         {
-            var model = await _webNovelService.GetWebNovelDetailsViewModelAsync(webNovelUrl);
+            var user = await _userManager.GetUserAsync(User);
+            var model = await _webNovelService.GetWebNovelDetailsViewModelAsync(user, webNovelUrl);
             return View(model);
         }
         
