@@ -41,7 +41,7 @@
                          <div class="panel panel-filled panel-c-warning">
                              <div class="panel-heading">
                                  <a class="no-text-decoration" asp-action="Details" asp-route-webNovelUrl="@item.WebNovel.UrlName">
-                                     <h3>@item.WebNovel.Name</h3>
+                                     <h3>@item.WebNovelContent.Name</h3>
                                  </a>
                                  @if (item.WebNovel.UsesVolumes)
                                  {
@@ -58,7 +58,7 @@
                                  }
                              </div>
                              <div class="panel-body overflow-100">
-                                 @Html.Raw(item.WebNovel.Description)
+                                 @Html.Raw(item.WebNovelContent.Description)
                              </div>
                              <div class="panel-footer">
                                  <a class="btn btn-sm btn-default" asp-action="Details" asp-route-webNovelUrl="@item.WebNovel.UrlName">Details</a>

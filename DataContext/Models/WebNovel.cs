@@ -8,12 +8,6 @@ namespace DataContext.Models
     {
         [Required]
         public string UrlName { get; set; }
-        
-        [Required]
-        public string Name { get; set; }
-
-        [Required]
-        public string Description { get; set; }
 
         public string CoverUrl { get; set; }
         
@@ -33,5 +27,7 @@ namespace DataContext.Models
         public virtual Country Country { get; set; }
 
         public virtual ICollection<WebNovelChapter> Chapters { get; set; }
+
+        public virtual ICollection<WebNovelContent> Translations { get; set; }
     }
 }

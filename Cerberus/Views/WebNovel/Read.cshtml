@@ -8,7 +8,7 @@
         title += $" - {Model.Translation.Title}";
     }
 
-    ViewBag.Title = $"{Model.Translation.Chapter.WebNovel.Name} - {title}";
+    ViewBag.Title = $"{Model.WebNovelContent.Name} - {title}";
 }
 
 <div class="row">
@@ -28,7 +28,7 @@
             <div class="header-title">
                 <h3>@title</h3>
                 <small>
-                    @StringHelpers.GetCommaSpaceSeparatedString(Model.Translation.Chapter.WebNovel.Name, Model.Translation.Chapter.WebNovel.Author)
+                    @StringHelpers.GetCommaSpaceSeparatedString(Model.WebNovelContent.Name, Model.Translation.Chapter.WebNovel.Author)
                 </small>
             </div>
         </div>

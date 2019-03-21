@@ -8,12 +8,15 @@ namespace Cerberus.Models.ViewModels
     public class AddWebNovelViewModel
     {
         [Required]
-        public string Name { get; set; }
+        public string UrlName { get; set; }
         
         public string OriginalName { get; set; }
         
         [Required]
-        public string UrlName { get; set; }
+        public Guid LanguageId { get; set; }
+     
+        [Required]
+        public string Name { get; set; }
         
         [Required]
         public string Description { get; set; }
@@ -22,5 +25,7 @@ namespace Cerberus.Models.ViewModels
         
         [Required]
         public bool UsesVolumes { get; set; }
+        
+        public IEnumerable<Language> Languages { get; set; }
     }
 }

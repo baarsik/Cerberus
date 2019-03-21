@@ -4,6 +4,7 @@
 @{
     ViewBag.Title = "Web Novels";
     var webNovel = Model.WebNovelInfo.WebNovel;
+    var webNovelContent = Model.WebNovelInfo.WebNovelContent;
 }
 
 <div class="row">
@@ -28,7 +29,7 @@
                 }
             </div>
             <div class="header-title">
-                <h3>@webNovel.Name</h3>
+                <h3>@webNovelContent.Name</h3>
                 <small>
                     @StringHelpers.GetCommaSpaceSeparatedString(webNovel.OriginalName, webNovel.Author)
                 </small>
@@ -44,7 +45,7 @@
             <div class="panel-body">
                 <div class="panel panel-filled">
                     <div class="panel-heading">Description</div>
-                    <div class="panel-body">@Html.Raw(webNovel.Description)</div>
+                    <div class="panel-body">@Html.Raw(webNovelContent.Description)</div>
                 </div>
                 @if (webNovel.Chapters.Any(c => c.Translations.Any(d => Model.WebNovelInfo.UserLanguages.Contains(d.Language))))
                 {

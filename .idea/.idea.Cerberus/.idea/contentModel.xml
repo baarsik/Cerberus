@@ -887,6 +887,8 @@
           <e p="20190317111758_WebNovelMultilanguageSupport.Designer.cs" t="Include" />
           <e p="20190318075649_LanguageCountryCodeSeparation.cs" t="Include" />
           <e p="20190318075649_LanguageCountryCodeSeparation.Designer.cs" t="Include" />
+          <e p="20190321114544_WebNovelMultilanguageSupport-Part2.cs" t="Include" />
+          <e p="20190321114544_WebNovelMultilanguageSupport-Part2.Designer.cs" t="Include" />
           <e p="ApplicationContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="Models" t="Include">
@@ -913,6 +915,7 @@
           <e p="WebNovelChapter.cs" t="Include" />
           <e p="WebNovelChapterAccess.cs" t="Include" />
           <e p="WebNovelChapterContent.cs" t="Include" />
+          <e p="WebNovelContent.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">

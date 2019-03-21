@@ -24,6 +24,7 @@ namespace DataContext
         public DbSet<ProductLicense> ProductLicenses { get; set; }
         public DbSet<Settings> Settings { get; set; }
         public DbSet<WebNovel> WebNovels { get; set; }
+        public DbSet<WebNovelContent> WebNovelContent { get; set; }
         public DbSet<WebNovelChapter> WebNovelChapters { get; set; }
         public DbSet<WebNovelChapterAccess> WebNovelChapterAccess { get; set; }
         public DbSet<WebNovelChapterContent> WebNovelChapterContent { get; set; }
@@ -109,6 +110,16 @@ namespace DataContext
             builder.Entity<WebNovel>()
                 .HasOne(c => c.Country)
                 .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+            
+            builder.Entity<WebNovelContent>()
+                .HasOne(c => c.Language)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+            
+            builder.Entity<WebNovelContent>()
+                .HasOne(c => c.WebNovel)
+                .WithMany(c => c.Translations)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<WebNovelChapterContent>()

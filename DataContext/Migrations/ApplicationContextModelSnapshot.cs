@@ -533,13 +533,7 @@ namespace DataContext.Migrations
 
                     b.Property<DateTime>("CreationDate");
 
-                    b.Property<string>("Description")
-                        .IsRequired();
-
                     b.Property<bool>("IsComplete");
-
-                    b.Property<string>("Name")
-                        .IsRequired();
 
                     b.Property<string>("OriginalName");
 
@@ -633,6 +627,30 @@ namespace DataContext.Migrations
                     b.HasIndex("UploaderId");
 
                     b.ToTable("WebNovelChapterContent");
+                });
+
+            modelBuilder.Entity("DataContext.Models.WebNovelContent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description")
+                        .IsRequired();
+
+                    b.Property<Guid>("LanguageId");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<Guid>("WebNovelId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("WebNovelId");
+
+                    b.ToTable("WebNovelContent");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -960,6 +978,19 @@ namespace DataContext.Migrations
                     b.HasOne("DataContext.Models.ApplicationUser", "Uploader")
                         .WithMany()
                         .HasForeignKey("UploaderId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("DataContext.Models.WebNovelContent", b =>
+                {
+                    b.HasOne("DataContext.Models.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("DataContext.Models.WebNovel", "WebNovel")
+                        .WithMany("Translations")
+                        .HasForeignKey("WebNovelId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

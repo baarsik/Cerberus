@@ -34,5 +34,7 @@ namespace Cerberus.Models.ViewModels
         public IEnumerable<Language> Languages { get; set; }
         
         public WebNovel WebNovel { get; set; }
+
+        public WebNovelContent WebNovelContent { get; set; }
     }
 }

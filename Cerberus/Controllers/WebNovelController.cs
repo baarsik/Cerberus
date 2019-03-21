@@ -57,9 +57,13 @@ namespace Cerberus.Controllers
         
         [Authorize(Roles = Constants.Permissions.WebNovelEdit)]
         [Route("[action]")]
-        public IActionResult AddWebNovel()
+        public async Task<IActionResult> AddWebNovel()
         {
-            return View();
+            var model = new AddWebNovelViewModel
+            {
+                Languages = await _webNovelService.GetLanguagesAsync()
+            };
+            return View(model);
         }
         
         [HttpPost]
@@ -68,8 +72,11 @@ namespace Cerberus.Controllers
         public async Task<IActionResult> AddWebNovel(AddWebNovelViewModel model)
         {
             if (!ModelState.IsValid)
+            {
+                model.Languages = await _webNovelService.GetLanguagesAsync();
                 return View(model);
-            
+            }
+
             var user = await _userManager.GetUserAsync(User);
             var result = await _webNovelService.AddWebNovelAsync(user, model);
             switch (result)
@@ -78,6 +85,9 @@ namespace Cerberus.Controllers
                     return RedirectToAction(nameof(Details), new { webNovelUrl = model.UrlName });
                 case WebNovelAddWebNovelResult.WebNovelUrlExists:
                     ModelState.AddModelError(string.Empty, "Parent web novel was not found");
+                    return View(model);
+                case WebNovelAddWebNovelResult.LanguageNotExists:
+                    ModelState.AddModelError(string.Empty, $"Language not found ({model.LanguageId})");
                     return View(model);
                 case WebNovelAddWebNovelResult.UnknownFailure:
                 default:
@@ -90,7 +100,8 @@ namespace Cerberus.Controllers
         [Route("[action]/{webNovelId}")]
         public async Task<IActionResult> AddChapter(Guid webNovelId)
         {
-            var model = await _webNovelService.GetWebNovelAddChapterViewModelAsync(webNovelId);
+            var user = await _userManager.GetUserAsync(User);
+            var model = await _webNovelService.GetWebNovelAddChapterViewModelAsync(user, webNovelId);
 
             if (model.WebNovel.IsComplete)
                 return View("IsCompleteError", model.WebNovel);
