@@ -14,18 +14,15 @@
                 <i class="fal fa-book fa-sm"></i>
             </div>
             <div class="pull-right text-right">
-                @if (User.HasWebNovelEditorAccess())
+                @if (User.HasWebNovelEditorAccess() && !webNovel.IsComplete)
                 {
-                    if (!webNovel.IsComplete)
-                    {
-                        <a class="btn btn-lg btn-default" asp-action="AddChapter" asp-route-webNovelId="@webNovel.Id">
-                            <i class="far fa-plus"></i>
-                            Add chapter
-                        </a>
-                    }
-                    @*<a class="btn btn-lg btn-default">
-                        <i class="far fa-pen"></i>
-                    </a>*@
+                    <a class="btn btn-lg btn-default" asp-action="AddWebNovelTranslation" asp-route-webNovelUrl="@webNovel.UrlName">
+                        Add language
+                    </a>
+                    <a class="btn btn-lg btn-default" asp-action="AddChapter" asp-route-webNovelId="@webNovel.Id">
+                        <i class="far fa-plus"></i>
+                        Add chapter
+                    </a>
                 }
             </div>
             <div class="header-title">

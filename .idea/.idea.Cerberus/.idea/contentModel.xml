@@ -46,6 +46,7 @@
             <e p="RazorPageExtensions.cs" t="Include" />
             <e p="StringExtensions.cs" t="Include" />
             <e p="ViewContextExtensions.cs" t="Include" />
+            <e p="WebNovelChapterExtensions.cs" t="Include" />
             <e p="WebNovelExtensions.cs" t="Include" />
           </e>
           <e p="ForumHierarchyJson.cs" t="Include" />
@@ -137,6 +138,7 @@
             <e p="_ChapterMiniPaginator.cshtml" t="Include" />
             <e p="AddChapter.cshtml" t="Include" />
             <e p="AddWebNovel.cshtml" t="Include" />
+            <e p="AddWebNovelTranslation.cshtml" t="Include" />
             <e p="Details.cshtml" t="Include" />
             <e p="Index.cshtml" t="Include" />
             <e p="IsCompleteError.cshtml" t="Include" />

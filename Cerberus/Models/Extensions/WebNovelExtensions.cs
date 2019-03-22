@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DataContext.Models;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Cerberus.Models.Extensions
 {
@@ -11,6 +12,14 @@ namespace Cerberus.Models.Extensions
             return webNovel.Chapters
                 .OrderByDescending(c => c.Volume)
                 .ThenByDescending(c => c.Number)
+                .FirstOrDefault();
+        }
+        
+        public static WebNovelContent GetTranslation(this WebNovel webNovel, ICollection<Language> languages)
+        {
+            return webNovel?.Translations
+                .Where(c => languages.Contains(c.Language))
+                .OrderBy(c => languages.IndexOf(c.Language))
                 .FirstOrDefault();
         }
         
