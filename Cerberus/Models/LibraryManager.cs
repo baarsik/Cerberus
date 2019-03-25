@@ -24,22 +24,38 @@ namespace Cerberus.Models
 
         public IEnumerable<string> GetCssFiles()
         {
-            return Libraries.Where(c => c.IsActive).SelectMany(c => c.CssFiles);
+            return GetOrderedLibraries().SelectMany(c => c.CssFiles);
         }
          
         public IEnumerable<string> GetCssFilesMinimized()
         {
-            return Libraries.Where(c => c.IsActive).SelectMany(c => c.CssFilesMinimized);
+            return GetOrderedLibraries().SelectMany(c => c.CssFilesMinimized);
         }
          
         public IEnumerable<string> GetJsFiles()
         {
-            return Libraries.Where(c => c.IsActive).SelectMany(c => c.JsFiles);
+            return GetOrderedLibraries().SelectMany(c => c.JsFiles);
         }
          
         public IEnumerable<string> GetJsFilesMinimized()
         {
-            return Libraries.Where(c => c.IsActive).SelectMany(c => c.JsFilesMinimized);
+            return GetOrderedLibraries().SelectMany(c => c.JsFilesMinimized);
+        }
+
+        private IEnumerable<Library> GetOrderedLibraries()
+        {
+            var libs = Libraries.Where(c => c.IsActive).ToList();
+
+            while (libs.Any())
+            {
+                foreach (var lib in libs.Where(c =>
+                    !c.Dependencies.Any(libName => libs.Any(library => library.Name == libName))))
+                {
+                    yield return lib;
+                    libs.Remove(lib);
+                    break;
+                }
+            }
         }
     }
 }

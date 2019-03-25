@@ -33,7 +33,7 @@
 
         public void ActivateLibrary(string name)
         {
-            LibraryManager.Library(name).Activate();
+            LibraryManager.Library(name).Activate(LibraryManager);
         }
         
         public bool IsContainerCentered { get; set; }

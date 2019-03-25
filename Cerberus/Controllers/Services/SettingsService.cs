@@ -7,24 +7,26 @@ using Cerberus.Models.Extensions;
 using Cerberus.Models.ViewModels;
 using DataContext;
 using DataContext.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Cerberus.Controllers.Services
 {
-    public sealed class SettingsService
+    public sealed class SettingsService : BaseService
     {
-        private readonly ApplicationContext _db;
-
-        public SettingsService(ApplicationContext context)
+        public SettingsService(ApplicationContext context,
+            UserManager<ApplicationUser> userManager,
+            IConfiguration configuration)
+            : base(context, userManager, configuration)
         {
-            _db = context;
         }
         
         public ForumSettingsViewModel GetForumSettingsViewModel()
         {
             var model = new ForumSettingsViewModel
             {
-                ForumTree = _db.Forums
+                ForumTree = Db.Forums
                     .IgnoreQueryFilters()
                     .Include(c => c.Children)
                     .Include(c => c.Threads)
@@ -41,13 +43,13 @@ namespace Cerberus.Controllers.Services
             var forum = new Forum
             {
                 Id = Guid.NewGuid(),
-                DisplayOrderId = await _db.Forums.MaxAsync(c => c.DisplayOrderId) + 1,
+                DisplayOrderId = await Db.Forums.MaxAsync(c => c.DisplayOrderId) + 1,
                 IsEnabled = false,
                 Title = model.Title.RemoveHTML()
             };
-            _db.Add(forum);
+            Db.Add(forum);
             
-            await _db.SaveChangesAsync();
+            await Db.SaveChangesAsync();
         }
         
         public async Task UpdateForums(IEnumerable<ForumHierarchyJson> forumHierarchy)
@@ -58,12 +60,12 @@ namespace Cerberus.Controllers.Services
                 displayOrderId = await UpdateForum(item, ++displayOrderId, null);
             }
 
-            await _db.SaveChangesAsync();
+            await Db.SaveChangesAsync();
         }
 
         private async Task<int> UpdateForum(ForumHierarchyJson item, int displayOrderId, Guid? parentId)
         {
-            var forum = await _db.Forums.IgnoreQueryFilters().SingleOrDefaultAsync(c => c.Id == item.Id);
+            var forum = await Db.Forums.IgnoreQueryFilters().SingleOrDefaultAsync(c => c.Id == item.Id);
             
             if (forum == null)
             {
@@ -73,7 +75,7 @@ namespace Cerberus.Controllers.Services
             forum.IsEnabled = item.Enabled;
             forum.ParentId = parentId;
             forum.DisplayOrderId = displayOrderId;
-            _db.Update(forum);
+            Db.Update(forum);
 
             foreach (var child in item.Children)
             {
@@ -90,7 +92,7 @@ namespace Cerberus.Controllers.Services
                 Forum = forum,
                 IsEnabled = forum.IsEnabled,
                 ThreadCount = forum.Threads.Count,
-                Children = _db.Forums
+                Children = Db.Forums
                     .IgnoreQueryFilters()
                     .Include(c => c.Children)
                     .Include(c => c.Threads)

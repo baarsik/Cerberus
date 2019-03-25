@@ -8,27 +8,26 @@ using Cerberus.Models.Extensions;
 using Cerberus.Models.ViewModels;
 using DataContext;
 using DataContext.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 
 namespace Cerberus.Controllers.Services
 {
-    public sealed class WebNovelService
+    public sealed class WebNovelService : BaseService
     {
-        private readonly ApplicationContext _db;
-        private readonly IConfiguration _configuration;
-
-        public WebNovelService(ApplicationContext context, IConfiguration configuration)
+        public WebNovelService(ApplicationContext context,
+            UserManager<ApplicationUser> userManager,
+            IConfiguration configuration)
+            : base(context, userManager, configuration)
         {
-            _db = context;
-            _configuration = configuration;
         }
 
         public async Task<WebNovelIndexViewModel> GetWebNovelIndexViewModelAsync(ApplicationUser user, int page)
         {
-            var languages = user.GetUserOrDefaultLanguages(_db, _configuration);
-            var webNovelsToDisplayCount = await _db.WebNovels.CountAsync(c => c.Translations.Any(d => languages.Contains(d.Language)));
+            var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
+            var webNovelsToDisplayCount = await Db.WebNovels.CountAsync(c => c.Translations.Any(d => languages.Contains(d.Language)));
             var totalPages = (int) Math.Ceiling(webNovelsToDisplayCount / (double) Constants.WebNovel.ItemsPerIndexPage);
             if (totalPages == 0)
             {
@@ -45,7 +44,7 @@ namespace Cerberus.Controllers.Services
                 TotalPages = totalPages,
             };
             
-            var webNovels = _db.WebNovels
+            var webNovels = Db.WebNovels
                 .Include(c => c.Chapters)
                     .ThenInclude(c => c.Translations)
                     .ThenInclude(c => c.Language)
@@ -66,7 +65,7 @@ namespace Cerberus.Controllers.Services
 
         public async Task<AddWebNovelViewModel> GetAddWebNovelViewModelAsync(ApplicationUser user, string webNovelUrl)
         {
-            var webNovel = await _db.WebNovels
+            var webNovel = await Db.WebNovels
                 .Include(c => c.Translations)
                     .ThenInclude(c => c.Language)
                 .SingleOrDefaultAsync(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture));
@@ -74,7 +73,7 @@ namespace Cerberus.Controllers.Services
             if (webNovel == null)
                 return null;
             
-            var languages = user.GetUserOrDefaultLanguages(_db, _configuration);
+            var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
             var translation = webNovel.GetTranslation(languages);
 
             if (translation == null)
@@ -94,7 +93,7 @@ namespace Cerberus.Controllers.Services
         
         public async Task<WebNovelDetailsViewModel> GetWebNovelDetailsViewModelAsync(ApplicationUser user, string webNovelUrl)
         {
-            var webNovel = await _db.WebNovels
+            var webNovel = await Db.WebNovels
                 .Include(c => c.Chapters)
                     .ThenInclude(c => c.Translations)
                     .ThenInclude(c => c.Language)
@@ -102,7 +101,7 @@ namespace Cerberus.Controllers.Services
                     .ThenInclude(c => c.Language)
                 .SingleOrDefaultAsync(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture));
 
-            var languages = user.GetUserOrDefaultLanguages(_db, _configuration);
+            var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
             var model = new WebNovelDetailsViewModel
             {
                 WebNovelInfo = GetWebNovelInfo(webNovel, languages),
@@ -122,7 +121,7 @@ namespace Cerberus.Controllers.Services
                 };
             }
 
-            var languages = user.GetUserOrDefaultLanguages(_db, _configuration);
+            var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
             model.WebNovel = await GetWebNovelByIdAsync(model.WebNovelId);
             model.WebNovelContent = model.WebNovel.GetTranslation(languages);
             model.Languages = model.WebNovel.Translations.Select(c => c.Language).Distinct().ToList();
@@ -144,7 +143,7 @@ namespace Cerberus.Controllers.Services
 
         public async Task<WebNovel> GetWebNovelByIdAsync(Guid id)
         {
-            return await _db.WebNovels
+            return await Db.WebNovels
                 .Include(c => c.Chapters)
                     .ThenInclude(c => c.Translations)
                     .ThenInclude(c => c.Language)
@@ -153,23 +152,13 @@ namespace Cerberus.Controllers.Services
                 .SingleOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<IEnumerable<Language>> GetLanguagesAsync()
-        {
-            return await _db.Languages.ToListAsync();
-        }
-        
-        public async Task<IEnumerable<Language>> GetLanguagesAsync(IEnumerable<Language> excludedLanguages)
-        {
-            return await _db.Languages.Where(c => !excludedLanguages.Contains(c)).ToListAsync();
-        }
-
         public async Task<WebNovelAddWebNovelResult> AddWebNovelAsync(ApplicationUser user, AddWebNovelViewModel model)
         {
             var url = model.UrlName.ToLower();
-            if (await _db.WebNovels.AnyAsync(c => c.UrlName.ToLower() == url))
+            if (await Db.WebNovels.AnyAsync(c => c.UrlName.ToLower() == url))
                 return WebNovelAddWebNovelResult.WebNovelUrlExists;
             
-            var language = await _db.Languages.FirstOrDefaultAsync(c => c.Id == model.LanguageId);
+            var language = await Db.Languages.FirstOrDefaultAsync(c => c.Id == model.LanguageId);
             if (language == null)
                 return WebNovelAddWebNovelResult.LanguageNotExists;
             
@@ -182,8 +171,8 @@ namespace Cerberus.Controllers.Services
                 Author = model.Author,
                 CreationDate = DateTime.Now
             };
-            _db.WebNovels.Add(webNovel);
-            await _db.SaveChangesAsync();
+            Db.WebNovels.Add(webNovel);
+            await Db.SaveChangesAsync();
 
             var webNovelContent = new WebNovelContent
             {
@@ -193,8 +182,8 @@ namespace Cerberus.Controllers.Services
                 Language = language,
                 WebNovel = webNovel
             };
-            _db.WebNovelContent.Add(webNovelContent);
-            await _db.SaveChangesAsync();
+            Db.WebNovelContent.Add(webNovelContent);
+            await Db.SaveChangesAsync();
             
             return WebNovelAddWebNovelResult.Success;
         }
@@ -202,7 +191,7 @@ namespace Cerberus.Controllers.Services
         public async Task<WebNovelAddWebNovelTranslationResult> AddWebNovelTranslationAsync(AddWebNovelViewModel model)
         {
             var url = model.UrlName.ToLower();
-            var webNovel = await _db.WebNovels
+            var webNovel = await Db.WebNovels
                 .Include(c => c.Translations)
                     .ThenInclude(c => c.Language)
                 .SingleOrDefaultAsync(c => c.UrlName.ToLower() == url);
@@ -210,7 +199,7 @@ namespace Cerberus.Controllers.Services
             if (webNovel == null)
                 return WebNovelAddWebNovelTranslationResult.WebNovelNotExists;
             
-            var language = await _db.Languages.FirstOrDefaultAsync(c => c.Id == model.LanguageId);
+            var language = await Db.Languages.FirstOrDefaultAsync(c => c.Id == model.LanguageId);
             if (language == null)
                 return WebNovelAddWebNovelTranslationResult.LanguageNotExists;
 
@@ -225,15 +214,15 @@ namespace Cerberus.Controllers.Services
                 Language = language,
                 WebNovel = webNovel
             };
-            _db.WebNovelContent.Add(webNovelContent);
-            await _db.SaveChangesAsync();
+            Db.WebNovelContent.Add(webNovelContent);
+            await Db.SaveChangesAsync();
             
             return WebNovelAddWebNovelTranslationResult.Success;
         }
         
         public async Task<WebNovelAddChapterResult> AddChapterAsync(ApplicationUser uploader, AddChapterViewModel model)
         {
-            var webNovel = await _db.WebNovels
+            var webNovel = await Db.WebNovels
                 .Include(c => c.Chapters)
                     .ThenInclude(c => c.Translations)
                 .FirstOrDefaultAsync(c => c.Id == model.WebNovelId);
@@ -246,7 +235,7 @@ namespace Cerberus.Controllers.Services
                 model.Volume = 1;
             }
 
-            var language = await _db.Languages.FirstOrDefaultAsync(c => c.Id == model.LanguageId);
+            var language = await Db.Languages.FirstOrDefaultAsync(c => c.Id == model.LanguageId);
             
             if (language == null)
                 return WebNovelAddChapterResult.LanguageNotExists;
@@ -286,25 +275,25 @@ namespace Cerberus.Controllers.Services
                     Number = model.Number,
                     WebNovel = webNovel
                 };
-                _db.WebNovelChapters.Add(chapter);
-                await _db.SaveChangesAsync();
+                Db.WebNovelChapters.Add(chapter);
+                await Db.SaveChangesAsync();
 
                 if (previousChapter != null)
                 {
                     previousChapter.NextChapter = chapter;
-                    _db.Update(previousChapter);
+                    Db.Update(previousChapter);
                 }
 
                 if (nextChapter != null)
                 {
                     nextChapter.PreviousChapter = chapter;
-                    _db.Update(nextChapter);
+                    Db.Update(nextChapter);
                 }
 
                 chapter.PreviousChapter = previousChapter;
                 chapter.NextChapter = nextChapter;
-                _db.Update(chapter);
-                await _db.SaveChangesAsync();
+                Db.Update(chapter);
+                await Db.SaveChangesAsync();
             }
 
             var chapterContent = new WebNovelChapterContent
@@ -318,15 +307,15 @@ namespace Cerberus.Controllers.Services
                 Language = language,
                 Chapter = chapter
             };
-            _db.WebNovelChapterContent.Add(chapterContent);
-            await _db.SaveChangesAsync();
+            Db.WebNovelChapterContent.Add(chapterContent);
+            await Db.SaveChangesAsync();
             
             return WebNovelAddChapterResult.Success;
         }
         
         public async Task<WebNovelChapter> GetChapterAsync(string webNovelUrl, int volume, int chapterNumber)
         {
-            var webNovel = await _db.WebNovels
+            var webNovel = await Db.WebNovels
                 .Include(c => c.Translations)
                     .ThenInclude(c => c.Language)
                 .SingleOrDefaultAsync(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture));
@@ -334,7 +323,7 @@ namespace Cerberus.Controllers.Services
             if (webNovel == null)
                 return null;
 
-            var chapter = _db.WebNovelChapters
+            var chapter = Db.WebNovelChapters
                 .Include(c => c.PreviousChapter)
                     .ThenInclude(c => c.Translations)
                     .ThenInclude(c => c.Language)
@@ -367,7 +356,7 @@ namespace Cerberus.Controllers.Services
             
             chapterContent.Chapter = chapter;
 
-            var languages = user.GetUserOrDefaultLanguages(_db, _configuration);
+            var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
             var model = new WebNovelReadViewModel
             {
                 WebNovelContent = chapter.WebNovel.Translations.SingleOrDefault(c => c.Language.Code == languageCode),

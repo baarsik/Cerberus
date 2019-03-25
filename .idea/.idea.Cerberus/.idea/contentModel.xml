@@ -28,6 +28,7 @@
           <e p="ProfileController.cs" t="Include" />
           <e p="Services" t="Include">
             <e p="AuthService.cs" t="Include" />
+            <e p="BaseService.cs" t="Include" />
             <e p="ProfileService.cs" t="Include" />
             <e p="SettingsService.cs" t="Include" />
             <e p="WebNovelService.cs" t="Include" />

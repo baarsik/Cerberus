@@ -14,6 +14,7 @@
     {
         EmailInUse,
         DisplayNameInUse,
+        LanguageNotExists,
         Failure,
         Success
     }

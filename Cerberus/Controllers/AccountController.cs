@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Cerberus.Controllers.Services;
 using Cerberus.Models;
@@ -51,19 +52,25 @@ namespace Cerberus.Controllers
             return View(model);
         }
 
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
-            return View();
+            var model = new RegisterViewModel
+            {
+                Languages = await _authService.GetLanguagesAsync()
+            };
+            return View(model);
         }
 
         [ValidateRecaptcha]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
+            model.Languages = await _authService.GetLanguagesAsync();
+            
             if (!ModelState.IsValid)
                 return View(model);
             
-            var result = await _authService.RegisterAsync(model.Email, model.DisplayName, model.Password);
+            var result = await _authService.RegisterAsync(model.Email, model.DisplayName, model.Password, model.SelectedLanguages.ToList());
             
             switch (result.Status)
             {
@@ -75,8 +82,11 @@ namespace Cerberus.Controllers
                 case RegisterStatus.EmailInUse:
                     ModelState.AddModelError("", "User with this E-Mail already exists");
                     break;
+                case RegisterStatus.LanguageNotExists:
+                    ModelState.AddModelError("", "One of selected language does not exist in the database");
+                    break;
                 case RegisterStatus.Failure:
-                    ModelState.AddModelError("", "Unknown failure");
+                    ModelState.AddModelError("", "Please verify that your password meets following criteria: it has to be 8+ length, contain digit(s), lowercase letter(s) and uppercase letter(s) and have 4+ unique chars");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

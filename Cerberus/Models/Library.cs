@@ -19,7 +19,9 @@ namespace Cerberus.Models
 
         public ICollection<string> JsFiles { get; } = new List<string>();
         public ICollection<string> JsFilesMinimized { get; } = new List<string>();
-         
+        
+        public ICollection<string> Dependencies { get; set; } = new List<string>();
+        
         public Library AddCss(string path)
         {
             CssFiles.Add(path);
@@ -43,10 +45,24 @@ namespace Cerberus.Models
             JsFilesMinimized.Add(path);
             return this;
         }
+
+        public Library AddDependency(string libraryName)
+        {
+            Dependencies.Add(libraryName);
+            return this;
+        }
          
-        public void Activate()
+        public void Activate(LibraryManager libraryManager)
         {
             IsActive = true;
+
+            foreach (var dependency in Dependencies)
+            {
+                if (libraryManager.Library(dependency).IsActive)
+                    continue;
+                
+                libraryManager.Library(dependency).Activate(libraryManager);
+            }
         }
     }
 }

@@ -30,3 +30,55 @@ function updateQuotationPanelStyle() {
         });
     });
 }
+
+function select2SelectOrderingDataAdapter() {
+
+    // Build dependencies
+    var ArrayAdapter = jQuery.fn.select2.amd.require('select2/data/array');
+    var Utils = jQuery.fn.select2.amd.require('select2/utils');
+
+    function CustomArrayAdapter($element, options) {
+        CustomArrayAdapter.__super__.constructor.call(this, $element, options);
+    };
+
+    Utils.Extend(CustomArrayAdapter, ArrayAdapter);
+
+    // Add sorting
+    CustomArrayAdapter.prototype.current = function (callback) {
+
+        var data = [];
+
+        this.$element.find(':selected').each(jQuery.proxy(function(i, element) {
+
+            var $option = jQuery(element);
+            var option = this.item($option);
+
+            data.push(option);
+        }, this));
+
+        // Sort by addedOn timestamp
+        data = data.sort(function(a, b) {
+            return a._addedOn - b._addedOn;
+        });
+
+        callback(data);
+    };
+
+    // Add timestamp
+    CustomArrayAdapter.prototype.select = function(data) {
+
+        data._addedOn = new Date;
+
+        return CustomArrayAdapter.__super__.select.call(this, data);
+    };
+
+    // Remove timestamp
+    CustomArrayAdapter.prototype.unselect = function(data) {
+
+        data._addedOn = undefined;
+
+        return CustomArrayAdapter.__super__.unselect.call(this, data);
+    };
+
+    return CustomArrayAdapter;
+}
