@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Cerberus.Controllers.Services;
-using Cerberus.Models;
 using Cerberus.Models.Extensions;
 using Cerberus.Models.Services;
 using Cerberus.Models.ViewModels;
@@ -105,7 +104,7 @@ namespace Cerberus.Controllers
         [Authorize]
         public async Task<IActionResult> ChangePassword()
         {
-            var user = await _authService.GetUserByClaimsPrincipalAsync(User);
+            var user = await _authService.GetUserAsync(User);
             if (user == null)
                 return new UnauthorizedResult();
 
@@ -120,6 +119,8 @@ namespace Cerberus.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
+            model.User = await _authService.GetUserAsync(User);
+            
             if (!ModelState.IsValid)
                 return View(model);
 
@@ -131,7 +132,32 @@ namespace Cerberus.Controllers
             }
 
             await _authService.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-            return RedirectToAction(nameof(ProfileController.Profile), "Profile", new {name = User.GetDisplayName()});
+            return RedirectToAction(nameof(ProfileController.Profile), "Profile", new {name = user.DisplayName});
+        }
+        
+        [Authorize]
+        public async Task<IActionResult> EditProfile()
+        {
+            var user = await _authService.GetUserAsync(User);
+            if (user == null)
+                return new UnauthorizedResult();
+
+            var model = await _authService.GetEditProfileViewModel(user);
+            return View(model);
+        }
+        
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(EditProfileViewModel model)
+        {
+            model.User = await _authService.GetUserAsync(User);
+            model.Languages = await _authService.GetLanguagesForEditProfileViewModel(model.User);
+            
+            if (!ModelState.IsValid)
+                return View(model);
+
+            await _authService.UpdateProfile(model);
+            return RedirectToAction(nameof(ProfileController.Profile), "Profile", new {name = model.User.DisplayName});
         }
     }
 }

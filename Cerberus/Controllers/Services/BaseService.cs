@@ -38,7 +38,7 @@ namespace Cerberus.Controllers.Services
         /// Returns ApplicationUser record based on ClaimsIdentity
         /// </summary>
         /// <returns>ApplicationUser on success, null on failure</returns>
-        public async Task<ApplicationUser> GetUserByClaimsPrincipalAsync(ClaimsPrincipal user)
+        public async Task<ApplicationUser> GetUserAsync(ClaimsPrincipal user)
         {
             return await UserManager.GetUserAsync(user);
         }

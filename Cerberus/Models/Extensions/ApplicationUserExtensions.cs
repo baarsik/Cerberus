@@ -8,17 +8,25 @@ namespace Cerberus.Models.Extensions
 {
     public static class ApplicationUserExtensions
     {
+        public static ICollection<Language> GetUserLanguages(this ApplicationUser user, ApplicationContext dbContext)
+        {
+            if (user == null)
+                return new List<Language>();
+            
+            return user.UserLanguages?.OrderBy(c => c.Priority).Select(c => c.Language).ToList() ??
+                   dbContext.UserLanguages
+                       .Where(c => c.User == user)
+                       .OrderBy(c => c.Priority)
+                       .Select(c => c.Language)
+                       .ToList();
+
+        }
+        
         public static ICollection<Language> GetUserOrDefaultLanguages(this ApplicationUser user, ApplicationContext dbContext, IConfiguration configuration)
         {
-            if (user != null)
-            {
-                return user.UserLanguages?.OrderBy(c => c.Priority).Select(c => c.Language).ToList() ??
-                                    dbContext.UserLanguages
-                                        .Where(c => c.User == user)
-                                        .OrderBy(c => c.Priority)
-                                        .Select(c => c.Language)
-                                        .ToList();
-            }
+            var userLanguages = user.GetUserLanguages(dbContext);
+            if (userLanguages.Any())
+                return userLanguages;
 
             var defaultLanguageCodes = configuration["DefaultLanguages"].Split(",").ToList();
             return dbContext.Languages

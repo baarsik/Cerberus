@@ -9,6 +9,7 @@ using Cerberus.Models;
 using Cerberus.Models.Extensions;
 using Cerberus.Models.Helpers;
 using Cerberus.Models.Services;
+using Cerberus.Models.ViewModels;
 using DataContext;
 using DataContext.Models;
 using Microsoft.AspNetCore.Http;
@@ -118,6 +119,7 @@ namespace Cerberus.Controllers.Services
                 return new RegisterResult(RegisterStatus.EmailInUse);
 
             var languages = (await GetLanguagesAsync())
+                .Where(c => languageIds.Contains(c.Id))
                 .OrderBy(c => languageIds.IndexOf(c.Id))
                 .ToList();
             if (!languages.Any(c => languageIds.Contains(c.Id)))
@@ -144,6 +146,50 @@ namespace Cerberus.Controllers.Services
             await Db.SaveChangesAsync();
             
             return new RegisterResult(RegisterStatus.Success);
+        }
+
+        public async Task<EditProfileViewModel> GetEditProfileViewModel(ApplicationUser user)
+        {
+            var model = new EditProfileViewModel
+            {
+                User = user,
+                Languages = await GetLanguagesForEditProfileViewModel(user),
+                SelectedLanguages = await Db.UserLanguages
+                    .Where(c => c.User == user)
+                    .Select(c => c.Language.Id)
+                    .ToListAsync()
+            };
+
+            return model;
+        }
+        
+        public async Task UpdateProfile(EditProfileViewModel model)
+        {
+            var currentLanguages = await Db.UserLanguages
+                .Where(c => c.User == model.User)
+                .ToListAsync();
+            Db.UserLanguages.RemoveRange(currentLanguages);
+
+            if (model.SelectedLanguages != null)
+            {
+                var languages = (await GetLanguagesAsync())
+                    .Where(c => model.SelectedLanguages.Contains(c.Id))
+                    .OrderBy(c => model.SelectedLanguages.IndexOf(c.Id))
+                    .ToList();
+                
+                var priority = 0;
+                var userLanguages = languages.Select(c => new ApplicationUserLanguage
+                {
+                    Id = Guid.NewGuid(),
+                    Language = c,
+                    Priority = priority++,
+                    User = model.User
+                });
+            
+                Db.UserLanguages.AddRange(userLanguages);
+            }
+            
+            await Db.SaveChangesAsync();
         }
 
         public async Task SignOutAsync()
@@ -242,6 +288,20 @@ namespace Cerberus.Controllers.Services
             user.ApiKey = StringHelpers.GenerateRandomString(64);
             Db.Entry(user).State = EntityState.Modified;
             await Db.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Language>> GetLanguagesForEditProfileViewModel(ApplicationUser user)
+        {
+            if (user == null)
+                return await GetLanguagesAsync();
+
+            var languages = user.GetUserLanguages(Db);
+            foreach (var language in await Db.Languages.Where(c => !languages.Contains(c)).ToListAsync())
+            {
+                languages.Add(language);
+            }
+
+            return languages;
         }
     }
 }

@@ -1,0 +1,58 @@
+﻿@model EditProfileViewModel
+
+@{
+    ViewBag.Title = $"{Model.User.DisplayName} - Edit Profile";
+    
+    var settings = new LayoutSettings();
+    settings.ActivateLibrary(Constants.Libraries.Select2);
+    ViewBag.Settings = settings;
+    
+    var profileRouteData = new Dictionary<string, string>
+    {
+        {"name", Model.User.DisplayName}
+    };
+}
+
+<div class="view-header">
+    <div class="header-icon">
+        <i class="fal fa-user" data-fa-transform="shrink-4"></i>
+    </div>
+    <div class="header-title">
+        <h3>@Model.User.DisplayName - Edit Profile</h3>
+        <small>
+            Please fill these fields to update your profile
+        </small>
+    </div>
+</div>
+
+<div class="panel panel-filled">
+    <div class="panel-body">
+        <form asp-action="EditProfile" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <div class="form-group">
+                <label>Languages</label>
+                <select asp-for="SelectedLanguages" class="form-control select2" placeholder="Selected Languages" multiple="multiple" asp-items="@(new SelectList(Model.Languages, "Id", "LocalName"))"></select>
+                <span class="help-block small">
+                    <div>Languages that will be displayed to you <i>(please pay attention to their ordering)</i></div>
+                    <span asp-validation-for="SelectedLanguages" class="text-danger"></span>
+                </span>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-accent">Save</button>
+                <a class="btn btn-unimportant" asp-action="Profile" asp-controller="Profile" asp-all-route-data="profileRouteData">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+    <recaptcha-script validation-message-element-id="recaptchaErrorMessage" />
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".select2").select2({
+                dataAdapter: select2SelectOrderingDataAdapter()
+            });
+        });
+    </script>
+}

@@ -38,7 +38,7 @@ namespace Cerberus.Controllers
         [Route("[controller]/[action]")]
         public async Task<IActionResult> RegenerateApiKey()
         {
-            var user = await _authService.GetUserByClaimsPrincipalAsync(User);
+            var user = await _authService.GetUserAsync(User);
             if (user == null)
                 return new UnauthorizedResult();
 

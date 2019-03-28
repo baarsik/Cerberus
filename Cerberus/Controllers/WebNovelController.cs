@@ -13,18 +13,16 @@ namespace Cerberus.Controllers
     public class WebNovelController : BaseController
     {
         private readonly WebNovelService _webNovelService;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public WebNovelController(WebNovelService webNovelService, UserManager<ApplicationUser> userManager)
+        public WebNovelController(WebNovelService webNovelService)
         {
             _webNovelService = webNovelService;
-            _userManager = userManager;
         }
 
         [Route("{page:int=1}", Order = -1)]
         public async Task<IActionResult> Index(int? page)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _webNovelService.GetUserAsync(User);
             var model = await _webNovelService.GetWebNovelIndexViewModelAsync(user, page ?? 1);
             return View(model);
         }
@@ -32,7 +30,7 @@ namespace Cerberus.Controllers
         [Route("[action]/{webNovelUrl}")]
         public async Task<IActionResult> Details(string webNovelUrl)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _webNovelService.GetUserAsync(User);
             var model = await _webNovelService.GetWebNovelDetailsViewModelAsync(user, webNovelUrl);
             return View(model);
         }
@@ -46,7 +44,7 @@ namespace Cerberus.Controllers
         [Route("[action]/{languageCode}/{webNovelUrl}/{volume:int}/{chapterNumber:int}")]
         public async Task<IActionResult> Read(string webNovelUrl, string languageCode, int volume, int chapterNumber)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _webNovelService.GetUserAsync(User);
             var model = await _webNovelService.GetChapterTranslationAsync(user, webNovelUrl, languageCode, volume, chapterNumber);
             
             if (model == null)
@@ -78,7 +76,7 @@ namespace Cerberus.Controllers
                 return View(model);
             }
 
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _webNovelService.GetUserAsync(User);
             var result = await _webNovelService.AddWebNovelAsync(user, model);
             switch (result)
             {
@@ -102,7 +100,7 @@ namespace Cerberus.Controllers
         [Route("[action]/{webNovelUrl}")]
         public async Task<IActionResult> AddWebNovelTranslation(string webNovelUrl)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _webNovelService.GetUserAsync(User);
             var model = await _webNovelService.GetAddWebNovelViewModelAsync(user, webNovelUrl);
             
             if (model == null)
@@ -116,7 +114,7 @@ namespace Cerberus.Controllers
         [Route("[action]/{webNovelUrl}")]
         public async Task<IActionResult> AddWebNovelTranslation(AddWebNovelViewModel model)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _webNovelService.GetUserAsync(User);
             var baseModel = await _webNovelService.GetAddWebNovelViewModelAsync(user, model.UrlName);
             model.Languages = baseModel.Languages;
             
@@ -150,7 +148,7 @@ namespace Cerberus.Controllers
         [Route("[action]/{webNovelId}")]
         public async Task<IActionResult> AddChapter(Guid webNovelId)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _webNovelService.GetUserAsync(User);
             var model = await _webNovelService.GetWebNovelAddChapterViewModelAsync(user, webNovelId);
 
             if (model.WebNovel.IsComplete)
@@ -173,7 +171,7 @@ namespace Cerberus.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _webNovelService.GetUserAsync(User);
             var result = await _webNovelService.AddChapterAsync(user, model);
             switch (result)
             {

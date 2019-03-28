@@ -10,7 +10,7 @@
 }
 
 <div class="flex-column">
-    <div class="flex-row">
+    <div class="flex-row m-b">
         <div class="avatar m-r">
             @if (Model.User.Avatar == "noavatar")
             {
@@ -28,17 +28,18 @@
             <div>
                 Registered on @Model.User.RegisterDate.ToLongDateString()
             </div>
-            <div>
-                @if (Model.IsOwnProfile)
-                {
+            @if (Model.IsOwnProfile)
+            {
+                <div class="m-t-xs">
                     <a class="btn btn-default btn-xs" asp-action="ChangePassword" asp-controller="Account">Change password</a>
-                }
-            </div>
+                    <a class="btn btn-default btn-xs" asp-action="EditProfile" asp-controller="Account">Edit profile</a>
+                </div>
+            }
         </div>
     </div>
     @if (Model.IsOwnProfile)
     {
-        <div class="row m-t">
+        <div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-filled panel-c-warning">
                     <div class="panel-heading">
@@ -115,7 +116,7 @@
             </div>
         </div>
     </div>
-    @if (this.IsInDebugMode())
+    @if (this.IsInDebugMode() && Model.IsOwnProfile)
     {
         <div class="row">
             <div class="col-lg-12">

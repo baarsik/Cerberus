@@ -75,6 +75,7 @@
             <e p="ChangePasswordViewModel.cs" t="Include" />
             <e p="ChapterLinkInDetailsViewModel.cs" t="Include" />
             <e p="CreateForumViewModel.cs" t="Include" />
+            <e p="EditProfileViewModel.cs" t="Include" />
             <e p="ErrorViewModel.cs" t="Include" />
             <e p="ForumSettingsViewModel.cs" t="Include" />
             <e p="LoginViewModel.cs" t="Include" />
@@ -104,6 +105,7 @@
           <e p="_ViewStart.cshtml" t="Include" />
           <e p="Account" t="Include">
             <e p="ChangePassword.cshtml" t="Include" />
+            <e p="EditProfile.cshtml" t="Include" />
             <e p="Login.cshtml" t="Include" />
             <e p="Register.cshtml" t="Include" />
           </e>
