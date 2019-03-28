@@ -242,7 +242,7 @@ namespace Cerberus.Controllers.Services
 
             var chapter = webNovel.Chapters.FirstOrDefault(c => c.Volume == model.Volume && c.Number == model.Number);
             
-            if (chapter != null && webNovel.Chapters.Any(c => c.Translations.Any(x => x.Language == language)))
+            if (chapter != null && chapter.Translations.Any(c => c.Language == language))
             {
                 return WebNovelAddChapterResult.TranslatedChapterNumberExists;
             }

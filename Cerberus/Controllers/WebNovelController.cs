@@ -162,8 +162,11 @@ namespace Cerberus.Controllers
         [Route("[action]/{webNovelId}")]
         public async Task<IActionResult> AddChapter(AddChapterViewModel model)
         {
-            model.WebNovel = await _webNovelService.GetWebNovelByIdAsync(model.WebNovelId);
-            model.Languages = await _webNovelService.GetLanguagesAsync();
+            var user = await _webNovelService.GetUserAsync(User);
+            var spoofModel = await _webNovelService.GetWebNovelAddChapterViewModelAsync(user, model.WebNovelId);
+            model.WebNovel = spoofModel.WebNovel;
+            model.WebNovelContent = spoofModel.WebNovelContent;
+            model.Languages = spoofModel.Languages;
             
             if (model.WebNovel.IsComplete)
                 return View("IsCompleteError", model.WebNovel);
@@ -171,14 +174,13 @@ namespace Cerberus.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var user = await _webNovelService.GetUserAsync(User);
             var result = await _webNovelService.AddChapterAsync(user, model);
             switch (result)
             {
                 case WebNovelAddChapterResult.Success:
                     return RedirectToAction(nameof(Details), new { webNovelUrl = model.WebNovel.UrlName });
                 case WebNovelAddChapterResult.TranslatedChapterNumberExists:
-                    ModelState.AddModelError(string.Empty, $"Chapter number {model.Number} already exists");
+                    ModelState.AddModelError(string.Empty, $"Translation for chapter number {model.Number} already exists");
                     return View(model);
                 case WebNovelAddChapterResult.WebNovelNotExists:
                     ModelState.AddModelError(string.Empty, "Parent web novel was not found");
