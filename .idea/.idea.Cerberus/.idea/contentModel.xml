@@ -66,6 +66,7 @@
             <e p="PaginatorTagHelper.cs" t="Include" />
           </e>
           <e p="ValidationAttributes" t="Include">
+            <e p="DateAttribute.cs" t="Include" />
             <e p="FutureOrCurrentDateAttribute.cs" t="Include" />
             <e p="TrueAttribute.cs" t="Include" />
           </e>
@@ -75,6 +76,7 @@
             <e p="ChangePasswordViewModel.cs" t="Include" />
             <e p="ChapterLinkInDetailsViewModel.cs" t="Include" />
             <e p="CreateForumViewModel.cs" t="Include" />
+            <e p="EditChapterTranslationViewModel.cs" t="Include" />
             <e p="EditProfileViewModel.cs" t="Include" />
             <e p="ErrorViewModel.cs" t="Include" />
             <e p="ForumSettingsViewModel.cs" t="Include" />
@@ -143,6 +145,7 @@
             <e p="AddWebNovel.cshtml" t="Include" />
             <e p="AddWebNovelTranslation.cshtml" t="Include" />
             <e p="Details.cshtml" t="Include" />
+            <e p="EditChapterTranslation.cshtml" t="Include" />
             <e p="Index.cshtml" t="Include" />
             <e p="IsCompleteError.cshtml" t="Include" />
             <e p="Read.cshtml" t="Include" />

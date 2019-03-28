@@ -20,9 +20,9 @@
             <div class="pull-right text-right">
                 @if (User.HasWebNovelEditorAccess())
                 {
-                    @*<a class="btn btn-lg btn-default">
-                        <i class="far fa-pen"></i>
-                    </a>*@
+                    <a class="btn btn-lg btn-default" asp-action="EditChapterTranslation" asp-route-webNovelChapterContentId="@Model.Translation.Id">
+                        <i class="far fa-pen"></i> Edit
+                    </a>
                 }
             </div>
             <div class="header-title">

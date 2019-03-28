@@ -10,7 +10,6 @@ using DataContext;
 using DataContext.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 
 namespace Cerberus.Controllers.Services
@@ -368,6 +367,56 @@ namespace Cerberus.Controllers.Services
             return model;
         }
 
+        public async Task<EditChapterTranslationViewModel> GetEditChapterTranslationViewModelAsync(ApplicationUser user, Guid id)
+        {
+            var content = await Db.WebNovelChapterContent
+                .Include(c => c.Language)
+                .Include(c => c.Chapter)
+                    .ThenInclude(c => c.WebNovel)
+                    .ThenInclude(c => c.Translations)
+                    .ThenInclude(c => c.Language)
+                .Include(c => c.Chapter)
+                    .ThenInclude(c => c.Translations)
+                    .ThenInclude(c => c.Language)
+                .Where(c => c.Id == id)
+                .SingleOrDefaultAsync();
+            
+            if (content == null)
+                return null;
+            
+            var model = new EditChapterTranslationViewModel
+            {
+                WebNovelChapterContentId = content.Id,
+                Volume = content.Chapter.Volume,
+                Number = content.Chapter.Number,
+                Title = content.Title,
+                Text = content.Text,
+                FreeToAccessDate = content.FreeToAccessDate.ToString(Constants.Misc.DateFormat),
+                LanguageId = content.Language.Id,
+                WebNovel = content.Chapter.WebNovel,
+                WebNovelContent = content.Chapter.WebNovel.Translations.FirstOrDefault(c => c.Language == content.Language),
+                Languages = user.GetUserOrDefaultLanguages(Db, Configuration)
+                    .Where(c => c == content.Language || content.Chapter.Translations.All(t => t.Language != c))
+                    .ToList()
+            };
+            return model;
+        }
+        
+        public async Task UpdateChapterAsync(ApplicationUser uploader, EditChapterTranslationViewModel model)
+        {
+            var chapterContent = await Db.WebNovelChapterContent.FindAsync(model.WebNovelChapterContentId);
+            if (chapterContent == null)
+                return;
+            
+            chapterContent.Title = model.Title;
+            chapterContent.Text = model.Text;
+            chapterContent.FreeToAccessDate = DateTime.ParseExact(model.FreeToAccessDate, Constants.Misc.DateFormat, CultureInfo.InvariantCulture);
+            chapterContent.Language = await Db.Languages.FindAsync(model.LanguageId);
+            
+            Db.WebNovelChapterContent.Update(chapterContent);
+            await Db.SaveChangesAsync();
+        }
+
         private WebNovelInfo GetWebNovelInfo(WebNovel webNovel, ICollection<Language> languages)
         {
             if (webNovel?.Chapters == null)
@@ -381,12 +430,14 @@ namespace Cerberus.Controllers.Services
             {
                 WebNovel = webNovel,
                 WebNovelContent = webNovel.GetTranslation(languages),
-                TotalChapters = webNovel.Chapters.Count,
+                TotalChapters = webNovel.Chapters
+                    .Count(c => c.Translations.Any(t => languages.Contains(t.Language))),
                 LastChapterTranslation = lastChapterTranslation,
                 LastUpdateDate = lastChapterTranslation == null ?
                     (DateTime?)null
                     : webNovel.Chapters
                         .SelectMany(c => c.Translations)
+                        .Where(c => languages.Contains(c.Language))
                         .OrderByDescending(c => c.CreationDate)
                         .Select(c => c.CreationDate)
                         .FirstOrDefault(),

@@ -194,5 +194,37 @@ namespace Cerberus.Controllers
                     return View(model);
             }
         }
+        
+        [HttpGet]
+        [Authorize(Roles = Constants.Permissions.WebNovelEdit)]
+        [Route("[action]/{webNovelChapterContentId}")]
+        public async Task<IActionResult> EditChapterTranslation(Guid webNovelChapterContentId)
+        {
+            var user = await _webNovelService.GetUserAsync(User);
+            var model = await _webNovelService.GetEditChapterTranslationViewModelAsync(user, webNovelChapterContentId);
+            
+            if (model == null)
+                return RedirectToNotFound();
+            
+            return View(model);
+        }
+        
+        [HttpPost]
+        [Authorize(Roles = Constants.Permissions.WebNovelEdit)]
+        [Route("[action]/{id}")]
+        public async Task<IActionResult> EditChapterTranslation(EditChapterTranslationViewModel model)
+        {
+            var user = await _webNovelService.GetUserAsync(User);
+            var spoofedModel = await _webNovelService.GetEditChapterTranslationViewModelAsync(user, model.WebNovelChapterContentId);
+            model.Languages = spoofedModel.Languages;
+            model.WebNovel = spoofedModel.WebNovel;
+            model.WebNovelContent = spoofedModel.WebNovelContent;
+            
+            if (!ModelState.IsValid)
+                return View(model);
+
+            await _webNovelService.UpdateChapterAsync(user, model);
+            return RedirectToAction(nameof(Read), new {webNovelUrl = model.WebNovel.UrlName, languageCode = model.WebNovelContent.Language.Code, volume = model.Volume, chapterNumber = model.Number});
+        }
     }
 }
