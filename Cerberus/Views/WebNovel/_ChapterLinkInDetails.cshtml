@@ -5,7 +5,7 @@
 {   
     foreach (var translation in chapter.Translations
         .Where(c => !User.Identity.IsAuthenticated || Model.DisplayedLanguages.Contains(c.Language))
-        .OrderBy(c => Model.DisplayedLanguages.IndexOf(c.Language))
+        .OrderByDescending(c => Model.DisplayedLanguages.IndexOf(c.Language))
     )
     {
         var chapterTitle = $"<b>Chapter {chapter.Number}</b>";
@@ -52,8 +52,8 @@
             </div>
         </div>
 
-        // Only one best translation match per chapter for authorized users
-        if (User.Identity.IsAuthenticated)
+        // Only one best translation match per chapter for authorized users or users with no editor access
+        if (User.Identity.IsAuthenticated && !Model.HasEditorAccess)
         {
             break;
         }

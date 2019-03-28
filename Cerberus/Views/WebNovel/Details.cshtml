@@ -61,7 +61,8 @@
                                                               .Where(c => c.Volume == volume)
                                                               .OrderByDescending(c => c.Translations.Select(d => d.CreationDate).OrderByDescending(d => d).FirstOrDefault()),
                                                           WebNovel = webNovel,
-                                                          DisplayedLanguages = Model.WebNovelInfo.UserLanguages
+                                                          DisplayedLanguages = Model.WebNovelInfo.UserLanguages,
+                                                          HasEditorAccess = User.HasWebNovelEditorAccess()
                                                       })"/>
                                 </div>
                             </div>
@@ -78,7 +79,8 @@
                                                       Chapters = webNovel.Chapters
                                                           .OrderByDescending(c => c.Translations.Select(d => d.CreationDate).OrderByDescending(d => d).FirstOrDefault()),
                                                       WebNovel = webNovel,
-                                                      DisplayedLanguages = Model.WebNovelInfo.UserLanguages
+                                                      DisplayedLanguages = Model.WebNovelInfo.UserLanguages,
+                                                      HasEditorAccess = User.HasWebNovelEditorAccess()
                                                   })"/>
                             </div>
                         </div>

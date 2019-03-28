@@ -9,5 +9,6 @@ namespace Cerberus.Models.ViewModels
         public WebNovel WebNovel { get; set; }
         public IOrderedEnumerable<WebNovelChapter> Chapters { get; set; }
         public ICollection<Language> DisplayedLanguages { get; set; }
+        public bool HasEditorAccess { get; set; }
     }
 }
