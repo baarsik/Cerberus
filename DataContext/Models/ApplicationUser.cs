@@ -32,6 +32,9 @@ namespace DataContext.Models
 
         [MaxLength(8)]
         public string Culture { get; set; }
+        
+        [Required]
+        public bool IsAdultContentConsentGiven { get; set; } = false;
 
         public virtual ICollection<ApplicationUserLanguage> UserLanguages { get; set; }
 

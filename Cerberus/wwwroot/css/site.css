@@ -3641,6 +3641,30 @@ ol.counter > li:before {
     padding-left: 0;
 }
 
+.note-editor .dropdown-menu {
+    color: #949ba2;
+    background: rgba(30, 30, 40, 0.85);
+}
+
+.note-editor .dropdown-menu > li > a:hover,
+.note-editor .dropdown-menu > li > a:focus {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.note-editor .dropdown-menu > li > a {
+    color: #949ba2;
+}
+
+.note-popover .popover-content .note-color .dropdown-menu .btn-group .note-color-reset:hover,
+.panel-heading.note-toolbar .note-color .dropdown-menu .btn-group .note-color-reset:hover {
+    background: rgba(97, 103, 121, 0.1);
+}
+
+.note-popover .popover-content .note-color-palette div .note-color-btn,
+.panel-heading.note-toolbar .note-color-palette div .note-color-btn {
+    border: 1px solid #252525;
+}
+
 @font-face {
     font-family: 'Furore';
     font-style: normal;

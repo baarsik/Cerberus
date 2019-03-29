@@ -13,6 +13,9 @@ namespace DataContext.Models
         public int Number { get; set; }
         
         [Required]
+        public bool IsAdultContent { get; set; } = false;
+        
+        [Required]
         public virtual WebNovel WebNovel { get; set; }
         
         public virtual WebNovelChapter PreviousChapter { get; set; }

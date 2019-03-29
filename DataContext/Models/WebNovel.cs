@@ -22,6 +22,9 @@ namespace DataContext.Models
         public bool IsComplete { get; set; } = false;
 
         [Required]
+        public bool IsAdultContent { get; set; } = false;
+
+        [Required]
         public DateTime CreationDate { get; set; } = DateTime.Now;
 
         public virtual Country Country { get; set; }
@@ -29,5 +32,7 @@ namespace DataContext.Models
         public virtual ICollection<WebNovelChapter> Chapters { get; set; }
 
         public virtual ICollection<WebNovelContent> Translations { get; set; }
+        
+        public virtual ICollection<WebNovelTagBinding> TagBindings { get; set; }
     }
 }
