@@ -28,7 +28,10 @@
             <div class="header-title">
                 <h3>@title</h3>
                 <small>
-                    @StringHelpers.GetCommaSpaceSeparatedString(Model.WebNovelContent.Name, Model.Translation.Chapter.WebNovel.Author)
+                    @StringHelpers.GetCommaSpaceSeparatedString(
+                        Model.WebNovelContent.Name,
+                        Model.Translation.Chapter.WebNovel.Author,
+                        Model.Translation.CreationDate.ToFormattedString())
                 </small>
             </div>
         </div>
@@ -72,7 +75,7 @@
 <script>
     var readPageScriptLoadTime = $.now();
     $(document).keydown(function(e) {
-        if ($.now() - readPageScriptLoadTime < 500) // 0.5s multiple redirect prevention
+        if ($.now() - readPageScriptLoadTime < 400) // 0.4s multiple redirect prevention
             return;
         
         if (e.which == 37) {
