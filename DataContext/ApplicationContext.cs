@@ -31,6 +31,7 @@ namespace DataContext
         public DbSet<Country> Countries { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<ApplicationUserLanguage> UserLanguages { get; set; }
+        public DbSet<WebNovelTag> WebNovelTag { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

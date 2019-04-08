@@ -26,7 +26,13 @@
                 }
             </div>
             <div class="header-title">
-                <h3>@webNovelContent.Name</h3>
+                <h3>
+                    @webNovelContent.Name
+                    @if (webNovel.IsAdultContent)
+                    {
+                        <small class="text-accent">(18+)</small>
+                    }
+                </h3>
                 <small>
                     @StringHelpers.GetCommaSpaceSeparatedString(webNovel.OriginalName, webNovel.Author)
                 </small>

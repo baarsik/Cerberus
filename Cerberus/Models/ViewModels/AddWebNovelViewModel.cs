@@ -22,6 +22,9 @@ namespace Cerberus.Models.ViewModels
         public string Description { get; set; }
 
         public string Author { get; set; }
+
+        [Required]
+        public bool IsAdultContent { get; set; }
         
         [Required]
         public bool UsesVolumes { get; set; }

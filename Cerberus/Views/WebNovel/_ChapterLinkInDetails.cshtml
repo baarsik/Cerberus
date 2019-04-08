@@ -29,6 +29,10 @@
                         @Html.Raw(chapterTitle)
                     </a>
                 }
+                @if (translation.Chapter.IsAdultContent)
+                {
+                    <span class="text-accent">(18+)</span>
+                }
             </div>
             <div class="flex-row align-center">
                 <div style="padding-right: 1em">

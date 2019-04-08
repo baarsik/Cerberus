@@ -85,6 +85,7 @@ namespace Cerberus.Controllers.Services
                 Author = webNovel.Author,
                 Name = translation.Name,
                 Description = translation.Description,
+                IsAdultContent = webNovel.IsAdultContent,
                 UsesVolumes = webNovel.UsesVolumes,
                 Languages = await GetLanguagesAsync(webNovel.Translations.Select(c => c.Language).ToList())
             };
@@ -166,6 +167,7 @@ namespace Cerberus.Controllers.Services
                 Id = Guid.NewGuid(),
                 OriginalName = model.OriginalName.RemoveHTML(),
                 UrlName = url.RemoveHTML(),
+                IsAdultContent = model.IsAdultContent,
                 UsesVolumes = model.UsesVolumes,
                 Author = model.Author,
                 CreationDate = DateTime.Now
@@ -272,6 +274,7 @@ namespace Cerberus.Controllers.Services
                     Id = Guid.NewGuid(),
                     Volume = model.Volume,
                     Number = model.Number,
+                    IsAdultContent = model.IsAdultContent,
                     WebNovel = webNovel
                 };
                 Db.WebNovelChapters.Add(chapter);
@@ -293,6 +296,11 @@ namespace Cerberus.Controllers.Services
                 chapter.NextChapter = nextChapter;
                 Db.Update(chapter);
                 await Db.SaveChangesAsync();
+            }
+
+            if (chapter.IsAdultContent != model.IsAdultContent)
+            {
+                chapter.IsAdultContent = model.IsAdultContent;
             }
 
             var chapterContent = new WebNovelChapterContent
@@ -391,6 +399,7 @@ namespace Cerberus.Controllers.Services
                 Number = content.Chapter.Number,
                 Title = content.Title,
                 Text = content.Text,
+                IsAdultContent = content.Chapter.IsAdultContent,
                 FreeToAccessDate = content.FreeToAccessDate.ToString(Constants.Misc.DateFormat),
                 LanguageId = content.Language.Id,
                 WebNovel = content.Chapter.WebNovel,
@@ -404,9 +413,18 @@ namespace Cerberus.Controllers.Services
         
         public async Task UpdateChapterAsync(ApplicationUser uploader, EditChapterTranslationViewModel model)
         {
-            var chapterContent = await Db.WebNovelChapterContent.FindAsync(model.WebNovelChapterContentId);
+            var chapterContent = await Db.WebNovelChapterContent
+                .Include(c => c.Chapter)
+                .FirstOrDefaultAsync(c => c.Id == model.WebNovelChapterContentId);
+            
             if (chapterContent == null)
                 return;
+
+            if (chapterContent.Chapter.IsAdultContent != model.IsAdultContent)
+            {
+                chapterContent.Chapter.IsAdultContent = model.IsAdultContent;
+                Db.WebNovelChapters.Update(chapterContent.Chapter);
+            }
             
             chapterContent.Title = model.Title;
             chapterContent.Text = model.Text;

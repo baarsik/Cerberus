@@ -74,6 +74,16 @@
                         </span>
                     </div>
                     <div class="form-group">
+                        <div class="checkbox">
+                            <input type="checkbox" asp-for="IsAdultContent">
+                            <label asp-for="IsAdultContent">Is 18+</label>
+                        </div>
+                        <span class="help-block small">
+                            <div>Please, check this if web novel contains lots of erotic and/or pornographic material</div>
+                            <span asp-validation-for="IsAdultContent" class="text-danger"></span>
+                        </span>
+                    </div>
+                    <div class="form-group">
                         <label>Free To Access Date</label>
                         <input type="text" id="freeToAccessDateInput" asp-for="FreeToAccessDate" class="form-control" placeholder="Free To Access Date">
                         <span class="help-block small">

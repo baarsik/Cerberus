@@ -23,6 +23,9 @@ namespace Cerberus.Models.ViewModels
         public string Text { get; set; }
 
         [Required]
+        public bool IsAdultContent { get; set; }
+        
+        [Required]
         [Date]
         public string FreeToAccessDate { get; set; } = DateTime.Today.ToString(Constants.Misc.DateFormat);
 

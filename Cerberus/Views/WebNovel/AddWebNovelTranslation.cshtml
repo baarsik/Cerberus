@@ -87,8 +87,18 @@
                     }
                     <div class="form-group">
                         <div class="checkbox">
-                            <input type="checkbox" id="UsesVolumes" asp-for="UsesVolumes" disabled="disabled">
-                            <label for="UsesVolumes">Uses Volumes</label>
+                            <input type="checkbox" asp-for="IsAdultContent" disabled="disabled">
+                            <label asp-for="IsAdultContent">Is 18+</label>
+                        </div>
+                        <span class="help-block small">
+                            <div>Please, check this if web novel contains lots of erotic and/or pornographic material</div>
+                            <span asp-validation-for="IsAdultContent" class="text-danger"></span>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <input type="checkbox" asp-for="UsesVolumes" disabled="disabled">
+                            <label asp-for="UsesVolumes">Uses Volumes</label>
                         </div>
                         <span class="help-block small">
                             <div>If not checked, volume segregation will be unavailable</div>

@@ -11,6 +11,7 @@ using Cerberus.Controllers.Services;
 using Cerberus.Models.Helpers;
 using DataContext;
 using DataContext.Models;
+using DataContextDataFiller;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -142,7 +143,7 @@ namespace Cerberus
             context.Database.Migrate();
 
             CreateRolesAsync(serviceProvider).Wait();
-            CreateLanguagesAsync(serviceProvider).Wait();
+            InsertData(serviceProvider);
         }
         
         private async Task CreateRolesAsync(IServiceProvider serviceProvider)
@@ -183,23 +184,12 @@ namespace Cerberus
             }
         }
 
-        private async Task CreateLanguagesAsync(IServiceProvider serviceProvider)
+        private void InsertData(IServiceProvider serviceProvider)
         {
-            var languages = new List<Language>
-            {
-                new Language {Code = "en", GlobalName = "English", LocalName = "English", CountryFlagIconName = "us"},
-                new Language {Code = "ru", GlobalName = "Russian", LocalName = "Русский", CountryFlagIconName = "ru"}
-            };
-
-            var db = serviceProvider.GetRequiredService<ApplicationContext>();
-            foreach (var lang in languages)
-            {
-                if (await db.Languages.AnyAsync(c => c.Code == lang.Code))
-                    continue;
-
-                db.Languages.Add(lang);
-            }
-            await db.SaveChangesAsync();
+            var dbContext = serviceProvider.GetRequiredService<ApplicationContext>();
+            var dataInserter = new DataInserter();
+            dataInserter.InsertValues(dbContext);
+            dbContext.SaveChanges();
         }
     }
 }

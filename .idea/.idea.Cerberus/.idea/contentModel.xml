@@ -100,6 +100,9 @@
         <e p="Properties" t="Include">
           <e p="launchSettings.json" t="Include" />
         </e>
+        <e p="RawData" t="Include">
+          <e p="web_novel_tags.min.json" t="Include" />
+        </e>
         <e p="Resources" t="Include" />
         <e p="Startup.cs" t="Include" />
         <e p="Views" t="Include">
@@ -937,6 +940,46 @@
             </e>
           </e>
         </e>
+      </e>
+      <e p="DataContextDataInserter" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Data" t="Include">
+          <e p="LanguageData.cs" t="Include" />
+          <e p="WebNovelTagData.cs" t="Include" />
+        </e>
+        <e p="DataContextDataInserter.csproj" t="IncludeRecursive" />
+        <e p="DataInserter.cs" t="Include" />
+        <e p="Interfaces" t="Include">
+          <e p="IData.cs" t="Include" />
+          <e p="IDataInserter.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="DataContextDataInserter.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="DataGrabber" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="DataGrabber.csproj" t="IncludeRecursive" />
+        <e p="Models" t="Include">
+          <e p="WebNovelTagModel.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="DataGrabber.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="OutputData" t="Include">
+          <e p="web_novel_tags.json" t="Include" />
+          <e p="web_novel_tags.min.json" t="Include" />
+        </e>
+        <e p="Parser.cs" t="Include" />
+        <e p="Program.cs" t="Include" />
       </e>
       <e p="packages" t="ExcludeRecursive" />
     </e>
