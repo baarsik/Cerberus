@@ -2,6 +2,10 @@
 @using Cerberus.Models
 @using Cerberus.Models.Extensions
 @using Cerberus.Models.ViewModels
+@using Microsoft.AspNetCore.Mvc.Localization
+
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, PaulMiami.AspNetCore.Mvc.Recaptcha
 @addTagHelper *, Cerberus
+
+@inject IViewLocalizer Localizer

@@ -91,12 +91,16 @@ namespace Cerberus
             {
                 var supportedCultures = new[]
                 {
-                    new CultureInfo("en-US"),
-                    new CultureInfo("ru-RU")
+                    new CultureInfo("en"),
+                    new CultureInfo("ru")
                 };  
-                options.DefaultRequestCulture = new RequestCulture("en-US", "en-US");
+                options.DefaultRequestCulture = new RequestCulture("en", "en");
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
+                options.RequestCultureProviders = new List<IRequestCultureProvider>
+                {
+                    new CookieRequestCultureProvider()
+                };
             }); 
             
             services.AddMvc()

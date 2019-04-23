@@ -17,11 +17,11 @@
                 @if (User.HasWebNovelEditorAccess() && !webNovel.IsComplete)
                 {
                     <a class="btn btn-lg btn-default" asp-action="AddWebNovelTranslation" asp-route-webNovelUrl="@webNovel.UrlName">
-                        Add language
+                        @Localizer["AddWebNovelTranslation"]
                     </a>
                     <a class="btn btn-lg btn-default" asp-action="AddChapter" asp-route-webNovelId="@webNovel.Id">
                         <i class="far fa-plus"></i>
-                        Add chapter
+                        @Localizer["AddChapter"]
                     </a>
                 }
             </div>
@@ -47,9 +47,16 @@
         <div class="panel">
             <div class="panel-body">
                 <div class="panel panel-filled">
-                    <div class="panel-heading">Description</div>
+                    <div class="panel-heading">@Localizer["Description"]</div>
                     <div class="panel-body">@Html.Raw(webNovelContent.Description)</div>
                 </div>
+                @if (webNovel.Translations.Count > 1)
+                {
+                    <div class="panel panel-filled">
+                        <div class="panel-heading">@Localizer["AlternativeNames"]</div>
+                        <div class="panel-body">@StringHelpers.GetCommaSpaceSeparatedString(webNovel.Translations.Select(c => c.Name))</div>
+                    </div>
+                }
                 @if (webNovel.Chapters.Any(c => c.Translations.Any(d => Model.WebNovelInfo.UserLanguages.Contains(d.Language))))
                 {
                     if (webNovel.UsesVolumes)
@@ -58,7 +65,7 @@
                         foreach (var volume in volumes)
                         {
                             <div class="panel panel-c-accent panel-filled">
-                                <div class="panel-heading">Volume @volume</div>
+                                <div class="panel-heading">@Localizer["Volume"] @volume</div>
                                 <div class="panel-body">
                                     <partial name="_ChapterLinkInDetails"
                                              model="@(new ChapterLinkInDetailsViewModel
@@ -78,7 +85,7 @@
                     else
                     {
                         <div class="panel panel-c-accent panel-filled">
-                            <div class="panel-heading">Chapters</div>
+                            <div class="panel-heading">@Localizer["Chapters"]</div>
                             <div class="panel-body">
                                 <partial name="_ChapterLinkInDetails"
                                          model="@(new ChapterLinkInDetailsViewModel
@@ -97,8 +104,8 @@
                 else
                 {
                     <div class="panel panel-c-accent panel-filled">
-                        <div class="panel-heading">Chapters</div>
-                        <div class="panel-body">Sorry, there are currently no chapters available</div>
+                        <div class="panel-heading">@Localizer["Chapters"]</div>
+                        <div class="panel-body">@Localizer["Chapters_NoChapters"]</div>
                     </div>
                 }
             </div>

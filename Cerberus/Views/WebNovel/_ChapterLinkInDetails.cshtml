@@ -8,7 +8,7 @@
         .OrderByDescending(c => Model.DisplayedLanguages.IndexOf(c.Language))
     )
     {
-        var chapterTitle = $"<b>Chapter {chapter.Number}</b>";
+        var chapterTitle = $"<b>{Localizer["Chapter"].Value} {chapter.Number}</b>";
         if (!string.IsNullOrEmpty(translation.Title))
         {
             chapterTitle += $" - {translation.Title}";
@@ -43,13 +43,13 @@
                     @if (Model.WebNovel.UsesVolumes)
                     {
                         <a class="btn btn-accent text-uppercase font-bold c-white" asp-action="Read" asp-route-languageCode="@translation.Language.Code" asp-route-volume="@chapter.Volume" asp-route-chapterNumber="@chapter.Number" asp-route-webNovelUrl="@Model.WebNovel.UrlName">
-                            Read <i class="fas fa-chevron-right"></i>
+                            @Localizer["Read"] <i class="fas fa-chevron-right"></i>
                         </a>
                     }
                     else
                     {
                         <a class="btn btn-accent text-uppercase font-bold c-white" asp-action="Read" asp-route-languageCode="@translation.Language.Code" asp-route-chapterNumber="@chapter.Number" asp-route-webNovelUrl="@Model.WebNovel.UrlName">
-                            Read <i class="fas fa-chevron-right"></i>
+                            @Localizer["Read"] <i class="fas fa-chevron-right"></i>
                         </a>
                     }
                 </div>

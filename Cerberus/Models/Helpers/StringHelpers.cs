@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Cerberus.Models.Helpers
@@ -21,6 +22,11 @@ namespace Cerberus.Models.Helpers
                 .Aggregate(string.Empty, (current, arg) => current.Length > 0
                     ? $"{current}, {arg}"
                     : $"{arg}");
+        }
+        
+        public static string GetCommaSpaceSeparatedString(IEnumerable<object> args)
+        {
+            return GetCommaSpaceSeparatedString(args.ToArray());
         }
     }
 }

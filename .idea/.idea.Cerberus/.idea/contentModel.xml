@@ -43,6 +43,7 @@
           <e p="Extensions" t="Include">
             <e p="ApplicationUserExtensions.cs" t="Include" />
             <e p="ClaimsPrincipalExtensions.cs" t="Include" />
+            <e p="ControllerBaseExtensions.cs" t="Include" />
             <e p="DateTimeExtensions.cs" t="Include" />
             <e p="RazorPageExtensions.cs" t="Include" />
             <e p="StringExtensions.cs" t="Include" />
@@ -103,7 +104,24 @@
         <e p="RawData" t="Include">
           <e p="web_novel_tags.min.json" t="Include" />
         </e>
-        <e p="Resources" t="Include" />
+        <e p="Resources" t="Include">
+          <e p="Views" t="Include">
+            <e p="webnovel" t="Include">
+              <e p="_ChapterLinkInDetails.en.Designer.cs" t="Include" />
+              <e p="_ChapterLinkInDetails.en.resx" t="Include" />
+              <e p="_ChapterLinkInDetails.ru.Designer.cs" t="Include" />
+              <e p="_ChapterLinkInDetails.ru.resx" t="Include" />
+              <e p="_ChapterMiniPaginator.en.Designer.cs" t="Include" />
+              <e p="_ChapterMiniPaginator.en.resx" t="Include" />
+              <e p="_ChapterMiniPaginator.ru.Designer.cs" t="Include" />
+              <e p="_ChapterMiniPaginator.ru.resx" t="Include" />
+              <e p="Details.en.Designer.cs" t="Include" />
+              <e p="Details.en.resx" t="Include" />
+              <e p="Details.ru.Designer.cs" t="Include" />
+              <e p="Details.ru.resx" t="Include" />
+            </e>
+          </e>
+        </e>
         <e p="Startup.cs" t="Include" />
         <e p="Views" t="Include">
           <e p="_ViewImports.cshtml" t="Include" />

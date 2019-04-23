@@ -42,6 +42,19 @@ namespace Cerberus.Controllers.Services
         {
             return await UserManager.GetUserAsync(user);
         }
+
+        /// <summary>
+        /// Returns language code of user-preferred or default language for the user
+        /// </summary>
+        /// <param name="user">ApplicationUser entity</param>
+        /// <returns>Language code (ex. "en")</returns>
+        public string GetDefaultUserLanguageCode(ApplicationUser user)
+        {
+            return user
+                .GetUserOrDefaultLanguages(Db, Configuration)
+                .Select(c => c.Code)
+                .FirstOrDefault();
+        }
         
         /// <summary>
         /// Returns all languages available on server

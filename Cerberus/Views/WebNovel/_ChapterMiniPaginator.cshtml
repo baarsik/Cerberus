@@ -10,7 +10,7 @@
                asp-route-volume="@Model.PrevChapterContent.Chapter.Volume"
                asp-route-chapterNumber="@Model.PrevChapterContent.Chapter.Number"
                asp-route-webNovelUrl="@Model.Translation.Chapter.WebNovel.UrlName">
-                <i class="fas fa-chevron-left"></i> Previous chapter
+                <i class="fas fa-chevron-left"></i> @Localizer["PreviousChapter"]
             </a>
         }
         else
@@ -19,18 +19,18 @@
                asp-route-languageCode="@Model.PrevChapterContent.Language.Code"
                asp-route-chapterNumber="@Model.PrevChapterContent.Chapter.Number"
                asp-route-webNovelUrl="@Model.Translation.Chapter.WebNovel.UrlName">
-                <i class="fas fa-chevron-left"></i> Previous chapter
+                <i class="fas fa-chevron-left"></i> @Localizer["PreviousChapter"]
             </a>
         }
     }
     else
     {
-        <a class="btn btn-default disabled"><i class="fas fa-chevron-left"></i> Previous chapter</a>
+        <a class="btn btn-default disabled"><i class="fas fa-chevron-left"></i> @Localizer["PreviousChapter"]</a>
     }
     <a class="btn btn-default"
        asp-action="Details"
        asp-route-webNovelUrl="@Model.Translation.Chapter.WebNovel.UrlName">
-        Back to web novel
+        @Localizer["BackToWebNovel"]
     </a>
     @if (Model.NextChapterContent != null)
     {
@@ -41,7 +41,7 @@
                asp-route-volume="@Model.NextChapterContent.Chapter.Volume"
                asp-route-chapterNumber="@Model.NextChapterContent.Chapter.Number"
                asp-route-webNovelUrl="@Model.Translation.Chapter.WebNovel.UrlName">
-                Next chapter <i class="fas fa-chevron-right"></i>
+                @Localizer["NextChapter"] <i class="fas fa-chevron-right"></i>
             </a>
         }
         else
@@ -50,12 +50,12 @@
                asp-route-languageCode="@Model.NextChapterContent.Language.Code"
                asp-route-chapterNumber="@Model.NextChapterContent.Chapter.Number"
                asp-route-webNovelUrl="@Model.Translation.Chapter.WebNovel.UrlName">
-                Next chapter <i class="fas fa-chevron-right"></i>
+                @Localizer["NextChapter"] <i class="fas fa-chevron-right"></i>
             </a>
         }
     }
     else
     {
-        <a class="btn btn-default disabled">Next chapter <i class="fas fa-chevron-right"></i></a>
+        <a class="btn btn-default disabled">@Localizer["NextChapter"] <i class="fas fa-chevron-right"></i></a>
     }
 </div>

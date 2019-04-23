@@ -37,6 +37,8 @@ namespace Cerberus.Controllers
             switch (result.Status)
             {
                 case LoginStatus.Success:
+                    var user = await _authService.GetUserByCredentialsAsync(model.Email, model.Password);
+                    this.UpdateCultureCookie(_authService, user);
                     return RedirectToLocal(returnUrl);
                 case LoginStatus.InvalidCredentials:
                     ModelState.AddModelError("", "Invalid E-Mail or password");
@@ -98,6 +100,7 @@ namespace Cerberus.Controllers
         public async Task<IActionResult> Logout()
         {
             await _authService.SignOutAsync();
+            this.UpdateCultureCookie(_authService, null);
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
@@ -157,6 +160,7 @@ namespace Cerberus.Controllers
                 return View(model);
 
             await _authService.UpdateProfile(model);
+            this.UpdateCultureCookie(_authService, model.User);
             return RedirectToAction(nameof(ProfileController.Profile), "Profile", new {name = model.User.DisplayName});
         }
     }
