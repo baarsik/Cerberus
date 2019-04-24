@@ -119,6 +119,10 @@
               <e p="Details.en.resx" t="Include" />
               <e p="Details.ru.Designer.cs" t="Include" />
               <e p="Details.ru.resx" t="Include" />
+              <e p="Index.en.Designer.cs" t="Include" />
+              <e p="Index.en.resx" t="Include" />
+              <e p="Index.ru.Designer.cs" t="Include" />
+              <e p="Index.ru.resx" t="Include" />
             </e>
           </e>
         </e>

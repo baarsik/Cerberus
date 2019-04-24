@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="PageTitle" xml:space="preserve">
+        <value>Новеллы</value>
+    </data>
+    <data name="NewNovelButton" xml:space="preserve">
+        <value>Создать</value>
+    </data>
+    <data name="HeaderTitle" xml:space="preserve">
+        <value>Новеллы</value>
+    </data>
+    <data name="HeaderDescription" xml:space="preserve">
+        <value>Список веб-новелл</value>
+    </data>
+    <data name="Data_Volumes" xml:space="preserve">
+        <value>Томов</value>
+    </data>
+    <data name="Data_Chapters" xml:space="preserve">
+        <value>Глав</value>
+    </data>
+    <data name="Data_LastUpdate" xml:space="preserve">
+        <value>Последнее обновление</value>
+    </data>
+    <data name="Data_Complete" xml:space="preserve">
+        <value>Завершено</value>
+    </data>
+    <data name="DetailsButton" xml:space="preserve">
+        <value>Подробнее</value>
+    </data>
+    <data name="ReadChapterButton" xml:space="preserve">
+        <value>Читать главу</value>
+    </data>
+    <data name="ReadChapterButton_Volume" xml:space="preserve">
+        <value>Том</value>
+    </data>
+    <data name="NoWebNovelsMessage" xml:space="preserve">
+        <value>Простите, на данный момент доступные веб-новеллы отсутствуют</value>
+    </data>
+</root>

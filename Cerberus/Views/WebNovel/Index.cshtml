@@ -1,7 +1,7 @@
 @model WebNovelIndexViewModel
 
 @{
-    ViewBag.Title = "Web Novels";
+    ViewBag.Title = Localizer["PageTitle"];
 }
 
 <div class="row">
@@ -15,15 +15,13 @@
                 {
                     <a class="btn btn-lg btn-default" asp-action="AddWebNovel">
                         <i class="far fa-plus"></i>
-                        New
+                        @Localizer["NewNovelButton"]
                     </a>
                 }
             </div>
             <div class="header-title">
-                <h3>Web Novels</h3>
-                <small>
-                    List of web novels
-                </small>
+                <h3>@Localizer["HeaderTitle"]</h3>
+                <small>@Localizer["HeaderDescription"]</small>
             </div>
         </div>
         <hr>
@@ -45,12 +43,12 @@
                                  </a>
                                  @if (item.WebNovel.UsesVolumes)
                                  {
-                                     <div class="badge">Volumes: @item.TotalVolumes</div>
+                                     <div class="badge">@Localizer["Data_Volumes"]: @item.TotalVolumes</div>
                                  }
-                                 <div class="badge">Chapters: @item.TotalChapters</div>
+                                 <div class="badge">@Localizer["Data_Chapters"]: @item.TotalChapters</div>
                                  @if (item.LastUpdateDate.HasValue)
                                  {
-                                     <div class="badge">Last update: @item.LastUpdateDate.Value.ToFormattedString()</div>
+                                     <div class="badge">@Localizer["Data_LastUpdate"]: @item.LastUpdateDate.Value.ToFormattedString()</div>
                                  }
                                  @if (item.WebNovel.IsAdultContent)
                                  {
@@ -58,14 +56,14 @@
                                  }
                                  @if (item.WebNovel.IsComplete)
                                  {
-                                     <div class="badge badge-accent">Complete</div>
+                                     <div class="badge badge-accent">@Localizer["Data_Complete"]</div>
                                  }
                              </div>
                              <div class="panel-body overflow-100">
                                  @Html.Raw(item.WebNovelContent.Description)
                              </div>
                              <div class="panel-footer">
-                                 <a class="btn btn-sm btn-default" asp-action="Details" asp-route-webNovelUrl="@item.WebNovel.UrlName">Details</a>
+                                 <a class="btn btn-sm btn-default" asp-action="Details" asp-route-webNovelUrl="@item.WebNovel.UrlName">@Localizer["DetailsButton"]</a>
                                  @if (item.TotalChapters > 0)
                                  {
                                      if (item.WebNovel.UsesVolumes)
@@ -75,7 +73,7 @@
                                             asp-route-volume="@item.LastChapterTranslation.Chapter.Volume"
                                             asp-route-webNovelUrl="@item.WebNovel.UrlName"
                                             asp-route-chapterNumber="@item.LastChapterTranslation.Chapter.Number">
-                                             Read chapter @item.LastChapterTranslation.Chapter.Number (Volume @item.LastChapterTranslation.Chapter.Volume)
+                                             @Localizer["ReadChapterButton"] @item.LastChapterTranslation.Chapter.Number (@Localizer["ReadChapterButton_Volume"] @item.LastChapterTranslation.Chapter.Volume)
                                          </a>
                                      }
                                      else
@@ -84,7 +82,7 @@
                                             asp-route-languageCode="@item.LastChapterTranslation.Language.Code"
                                             asp-route-webNovelUrl="@item.WebNovel.UrlName"
                                             asp-route-chapterNumber="@item.LastChapterTranslation.Chapter.Number">
-                                             Read chapter @item.LastChapterTranslation.Chapter.Number
+                                             @Localizer["ReadChapterButton"] @item.LastChapterTranslation.Chapter.Number
                                          </a>
                                      }
                                  }
@@ -95,7 +93,7 @@
                 }
                 else
                 {
-                    <div>Sorry, the list of web novels is empty</div>
+                    <div>@Localizer["NoWebNovelsMessage"]</div>
                 }
             </div>
         </div>

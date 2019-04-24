@@ -1,10 +1,11 @@
+@using System.Web
 @using Cerberus.Models.Helpers
 @model WebNovelDetailsViewModel
 
 @{
-    ViewBag.Title = "Web Novels";
     var webNovel = Model.WebNovelInfo.WebNovel;
     var webNovelContent = Model.WebNovelInfo.WebNovelContent;
+    ViewBag.Title = $"{HttpUtility.HtmlDecode(webNovelContent.Name)} – {Localizer["PageTitle"].Value}";
 }
 
 <div class="row">
@@ -27,7 +28,7 @@
             </div>
             <div class="header-title">
                 <h3>
-                    @webNovelContent.Name
+                    @HttpUtility.HtmlDecode(webNovelContent.Name)
                     @if (webNovel.IsAdultContent)
                     {
                         <small class="text-accent">(18+)</small>

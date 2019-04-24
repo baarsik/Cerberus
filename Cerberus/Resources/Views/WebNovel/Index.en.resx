@@ -21,25 +21,37 @@
     <data name="PageTitle" xml:space="preserve">
         <value>Web Novels</value>
     </data>
-    <data name="Description" xml:space="preserve">
-        <value>Description</value>
+    <data name="NewNovelButton" xml:space="preserve">
+        <value>New</value>
     </data>
-    <data name="AlternativeNames" xml:space="preserve">
-        <value>Alternative Names</value>
+    <data name="HeaderTitle" xml:space="preserve">
+        <value>Web Novels</value>
     </data>
-    <data name="Chapters" xml:space="preserve">
+    <data name="HeaderDescription" xml:space="preserve">
+        <value>List of web novels</value>
+    </data>
+    <data name="Data_Volumes" xml:space="preserve">
+        <value>Volumes</value>
+    </data>
+    <data name="Data_Chapters" xml:space="preserve">
         <value>Chapters</value>
     </data>
-    <data name="Chapters_NoChapters" xml:space="preserve">
-        <value>Sorry, there are currently no chapters available</value>
+    <data name="Data_LastUpdate" xml:space="preserve">
+        <value>Last update</value>
     </data>
-    <data name="Volume" xml:space="preserve">
+    <data name="Data_Complete" xml:space="preserve">
+        <value>Complete</value>
+    </data>
+    <data name="DetailsButton" xml:space="preserve">
+        <value>Details</value>
+    </data>
+    <data name="ReadChapterButton" xml:space="preserve">
+        <value>Read chapter</value>
+    </data>
+    <data name="ReadChapterButton_Volume" xml:space="preserve">
         <value>Volume</value>
     </data>
-    <data name="AddWebNovelTranslation" xml:space="preserve">
-        <value>Add language</value>
-    </data>
-    <data name="AddChapter" xml:space="preserve">
-        <value>Add chapter</value>
+    <data name="NoWebNovelsMessage" xml:space="preserve">
+        <value>Sorry, the list of web novels is empty</value>
     </data>
 </root>

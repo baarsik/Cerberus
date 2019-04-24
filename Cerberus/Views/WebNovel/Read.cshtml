@@ -1,3 +1,4 @@
+@using System.Web
 @using Cerberus.Models.Helpers
 @model WebNovelReadViewModel
 
@@ -5,10 +6,10 @@
     var title = $"Chapter {Model.Translation.Chapter.Number}";
     if (!string.IsNullOrEmpty(Model.Translation.Title))
     {
-        title += $" - {Model.Translation.Title}";
+        title += HttpUtility.HtmlDecode($" - {Model.Translation.Title}");
     }
 
-    ViewBag.Title = $"{Model.WebNovelContent.Name} - {title}";
+    ViewBag.Title = HttpUtility.HtmlDecode($"{Model.WebNovelContent.Name} - {title}");
 }
 
 <div class="row">
