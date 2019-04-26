@@ -14,7 +14,7 @@
         <div id="navbar" class="flex-row justify-between">
             <ul class="nav navbar-nav cerberus-nav flex-row align-center">
                 <li class="@ViewContext.FillClassIfActive("WebNovel")">
-                    <a asp-area="" asp-controller="WebNovel" asp-action="Index">Web Novels</a>
+                    <a asp-area="" asp-controller="WebNovel" asp-action="Index">@Localizer["MenuItem_WebNovels"]</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav cerberus-nav flex-row align-center">
@@ -31,20 +31,20 @@
                                 <li class="text-accent">
                                     <a asp-area="" asp-controller="Settings" asp-action="Index">
                                         <i class="far fa-cog m-r-xs"></i>
-                                        Site Settings
+                                        @Localizer["DropDown_SiteSettings"]
                                     </a>
                                 </li>
                             }
                             <li>
                                 <a asp-area="" asp-controller="Profile" asp-action="Profile" asp-all-route-data="profileRouteData">
                                     <i class="far fa-user-alt m-r-xs"></i>
-                                    Profile
+                                    @Localizer["DropDown_Profile"]
                                 </a>
                             </li>
                             <li>
                                 <a asp-area="" asp-controller="Account" asp-action="Logout">
                                     <i class="far fa-power-off m-r-xs"></i>
-                                    Sign Out
+                                    @Localizer["DropDown_SignOut"]
                                 </a>
                             </li>
                         </ul>
@@ -53,10 +53,10 @@
                 else
                 {
                     <li>
-                        <a asp-area="" asp-controller="Account" asp-action="Login">Sign In</a>
+                        <a asp-area="" asp-controller="Account" asp-action="Login">@Localizer["MenuItem_SignIn"]</a>
                     </li>
                     <li>
-                        <a asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a>
+                        <a asp-area="" asp-controller="Account" asp-action="Register">@Localizer["MenuItem_SignUp"]</a>
                     </li>
                 }
             </ul>

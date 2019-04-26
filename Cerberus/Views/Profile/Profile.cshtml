@@ -26,35 +26,35 @@
                 <div>@Model.User.DisplayName</div>
             </div>
             <div>
-                Registered on @Model.User.RegisterDate.ToLongDateString()
+                @Localizer["RegisteredOn"] @Model.User.RegisterDate.ToLongDateString()
             </div>
             @if (Model.IsOwnProfile)
             {
                 <div class="m-t-xs">
-                    <a class="btn btn-default btn-xs" asp-action="ChangePassword" asp-controller="Account">Change password</a>
-                    <a class="btn btn-default btn-xs" asp-action="EditProfile" asp-controller="Account">Edit profile</a>
+                    <a class="btn btn-default btn-xs" asp-action="ChangePassword" asp-controller="Account">@Localizer["ChangePasswordButton"]</a>
+                    <a class="btn btn-default btn-xs" asp-action="EditProfile" asp-controller="Account">@Localizer["EditProfileButton"]</a>
                 </div>
             }
         </div>
     </div>
-    @if (Model.IsOwnProfile)
+    @if (Model.IsOwnProfile && false)
     {
         <div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-filled panel-c-warning">
                     <div class="panel-heading">
-                        API data
+                        @Localizer["APIData_Title"]
                     </div>
                     <div class="panel-body confidential">
                         <div>
-                            <i class="fas fa-key"></i> API key:
+                            <i class="fas fa-key"></i> @Localizer["APIData_Key"]:
                             <span class="spoiler">@Model.User.ApiKey</span>
                         </div>
                         <div class="m-t-xs">
-                            <a class="btn btn-default btn-xs" asp-action="RegenerateApiKey" asp-controller="Profile">Generate new API key</a>
+                            <a class="btn btn-default btn-xs" asp-action="RegenerateApiKey" asp-controller="Profile">@Localizer["APIData_RegenerateKeyButton"]</a>
                         </div>
                         <div class="m-t">
-                            Your products:
+                            @Localizer["APIData_YourProducts"]:
                             @if (Model.ProductLicenses.Any())
                             {
                                 <ol class="counter">
@@ -73,7 +73,7 @@
                             }
                             else
                             {
-                                <span>None</span>
+                                <span>@Localizer["APIData_NoProducts"]</span>
                             }
                         </div>
                     </div>
@@ -107,15 +107,16 @@
         <div class="col-lg-12">
             <div class="panel panel-filled panel-c-warning">
                 <div class="panel-heading">
-                    Web novel statistics
+                    @Localizer["WNStats_Title"]
                 </div>
                 <div class="panel-body">
-                    <div><b>Total web novels:</b> @Model.Statistics.WebNovel.TotalWebNovels</div>
-                    <div><b>Total chapters:</b> @Model.Statistics.WebNovel.TotalChapters</div>
+                    <div><b>@Localizer["WNStats_TotalWNs"]:</b> @Model.Statistics.WebNovel.TotalWebNovels</div>
+                    <div><b>@Localizer["WNStats_TotalChapters"]:</b> @Model.Statistics.WebNovel.TotalChapters</div>
                 </div>
             </div>
         </div>
     </div>
+    
     @if (this.IsInDebugMode() && Model.IsOwnProfile)
     {
         <div class="row">

@@ -106,6 +106,20 @@
         </e>
         <e p="Resources" t="Include">
           <e p="Views" t="Include">
+            <e p="Profile" t="Include">
+              <e p="Profile.en.Designer.cs" t="Include" />
+              <e p="Profile.en.resx" t="Include" />
+              <e p="Profile.ru.Designer.cs" t="Include" />
+              <e p="Profile.ru.resx" t="Include" />
+            </e>
+            <e p="Shared" t="Include">
+              <e p="Navbars" t="Include">
+                <e p="Regular.en.Designer.cs" t="Include" />
+                <e p="Regular.en.resx" t="Include" />
+                <e p="Regular.ru.Designer.cs" t="Include" />
+                <e p="Regular.ru.resx" t="Include" />
+              </e>
+            </e>
             <e p="webnovel" t="Include">
               <e p="_ChapterLinkInDetails.en.Designer.cs" t="Include" />
               <e p="_ChapterLinkInDetails.en.resx" t="Include" />
@@ -123,6 +137,10 @@
               <e p="Index.en.resx" t="Include" />
               <e p="Index.ru.Designer.cs" t="Include" />
               <e p="Index.ru.resx" t="Include" />
+              <e p="Read.en.Designer.cs" t="Include" />
+              <e p="Read.en.resx" t="Include" />
+              <e p="Read.ru.Designer.cs" t="Include" />
+              <e p="Read.ru.resx" t="Include" />
             </e>
           </e>
         </e>

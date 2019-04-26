@@ -3,10 +3,10 @@
 @model WebNovelReadViewModel
 
 @{
-    var title = $"Chapter {Model.Translation.Chapter.Number}";
+    var title = $"{Localizer["Chapter"].Value} {Model.Translation.Chapter.Number}";
     if (!string.IsNullOrEmpty(Model.Translation.Title))
     {
-        title += HttpUtility.HtmlDecode($" - {Model.Translation.Title}");
+        title += HttpUtility.HtmlDecode($" – {Model.Translation.Title}");
     }
 
     ViewBag.Title = HttpUtility.HtmlDecode($"{Model.WebNovelContent.Name} - {title}");
@@ -22,7 +22,8 @@
                 @if (User.HasWebNovelEditorAccess())
                 {
                     <a class="btn btn-lg btn-default" asp-action="EditChapterTranslation" asp-route-webNovelChapterContentId="@Model.Translation.Id">
-                        <i class="far fa-pen"></i> Edit
+                        <i class="far fa-pen"></i>
+                        @Localizer["EditButton"]
                     </a>
                 }
             </div>
@@ -52,11 +53,11 @@
         <div class="col-lg-12">
             <div class="panel panel-c-danger panel-filled">
                 <div class="panel-heading">
-                    Information
+                    @Localizer["Unauthorized_Heading"]
                 </div>
                 <div class="panel-body">
-                    <p>Please, <a asp-area="" asp-controller="Account" asp-action="Login">Sign In</a> or <a asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a></p>
-                    <p>As an unauthorized user you may experience some language issues as language prioritizing is available only to authorized members</p>
+                    <p>@Localizer["Unauthorized_L1_Please"], <a asp-area="" asp-controller="Account" asp-action="Login">@Localizer["Unauthorized_L1_SignIn"]</a> @Localizer["Unauthorized_L1_Or"] <a asp-area="" asp-controller="Account" asp-action="Register">@Localizer["Unauthorized_L1_SignUp"]</a></p>
+                    <p>@Localizer["Unauthorized_L2_DetailedInfo"]</p>
                 </div>
             </div>
         </div>
