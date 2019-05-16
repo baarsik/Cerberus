@@ -25,6 +25,10 @@
                         <i class="far fa-pen"></i>
                         @Localizer["EditButton"]
                     </a>
+                    <a class="btn btn-lg btn-default" asp-action="AddChapterTranslation" asp-route-webNovelChapterContentId="@Model.Translation.Id">
+                        <i class="far fa-pen"></i>
+                        @Localizer["AddTranslationButton"]
+                    </a>
                 }
             </div>
             <div class="header-title">

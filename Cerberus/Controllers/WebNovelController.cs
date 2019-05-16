@@ -1,10 +1,9 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Cerberus.Controllers.Services;
 using Cerberus.Models.ViewModels;
-using DataContext.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cerberus.Controllers
@@ -163,7 +162,9 @@ namespace Cerberus.Controllers
         public async Task<IActionResult> AddChapter(AddChapterViewModel model)
         {
             var user = await _webNovelService.GetUserAsync(User);
-            var spoofModel = await _webNovelService.GetWebNovelAddChapterViewModelAsync(user, model.WebNovelId);
+            var spoofModel = model.IsTranslation
+                ? await _webNovelService.GetWebNovelAddChapterTranslationViewModelAsync(user, model.WebNovelId, model.Number)
+                : await _webNovelService.GetWebNovelAddChapterViewModelAsync(user, model.WebNovelId);
             model.WebNovel = spoofModel.WebNovel;
             model.WebNovelContent = spoofModel.WebNovelContent;
             model.Languages = spoofModel.Languages;
@@ -180,7 +181,11 @@ namespace Cerberus.Controllers
                 case WebNovelAddChapterResult.Success:
                     return RedirectToAction(nameof(Details), new { webNovelUrl = model.WebNovel.UrlName });
                 case WebNovelAddChapterResult.TranslatedChapterNumberExists:
-                    ModelState.AddModelError(string.Empty, $"Translation for chapter number {model.Number} already exists");
+                    var languageName = model.Languages
+                        .Where(c => c.Id == model.LanguageId)
+                        .Select(c => c.GlobalName)
+                        .FirstOrDefault();
+                    ModelState.AddModelError(string.Empty, $"{languageName} translation for chapter number {model.Number} already exists");
                     return View(model);
                 case WebNovelAddChapterResult.WebNovelNotExists:
                     ModelState.AddModelError(string.Empty, "Parent web novel was not found");
@@ -193,6 +198,19 @@ namespace Cerberus.Controllers
                     ModelState.AddModelError(string.Empty, $"Unknown error (Result code {result.ToString()})");
                     return View(model);
             }
+        }
+        
+        [Authorize(Roles = Constants.Permissions.WebNovelEdit)]
+        [Route("[action]/{webNovelChapterContentId}")]
+        public async Task<IActionResult> AddChapterTranslation(Guid webNovelChapterContentId)
+        {
+            var user = await _webNovelService.GetUserAsync(User);
+            var model = await _webNovelService.GetWebNovelAddChapterTranslationViewModelAsync(user, webNovelChapterContentId);
+
+            if (model.WebNovel.IsComplete)
+                return View("IsCompleteError", model.WebNovel);
+            
+            return View("AddChapter", model);
         }
         
         [HttpGet]

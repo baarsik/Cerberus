@@ -111,15 +111,13 @@ namespace Cerberus.Controllers.Services
             return model;
         }
         
-        public async Task<AddChapterViewModel> GetWebNovelAddChapterViewModelAsync(ApplicationUser user, Guid webNovelId, AddChapterViewModel model = null)
+        public async Task<AddChapterViewModel> GetWebNovelAddChapterViewModelAsync(ApplicationUser user, Guid webNovelId)
         {
-            if (model == null)
+            var model = new AddChapterViewModel
             {
-                model = new AddChapterViewModel
-                {
-                    WebNovelId = webNovelId
-                };
-            }
+                WebNovelId = webNovelId,
+                IsTranslation = false
+            };
 
             var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
             model.WebNovel = await GetWebNovelByIdAsync(model.WebNovelId);
@@ -137,6 +135,52 @@ namespace Cerberus.Controllers.Services
                 model.Volume = model.Volume == 0 ? lastChapter.Volume : model.Volume;
                 model.Number = lastChapter.Number + 1;
             }
+            
+            return model;
+        }
+        
+        public async Task<AddChapterViewModel> GetWebNovelAddChapterTranslationViewModelAsync(ApplicationUser user, Guid webNovelId, int chapterNumber)
+        {
+            var webNovelChapterContentId = await Db.WebNovelChapters
+                .Where(c => c.WebNovel.Id == webNovelId && c.Number == chapterNumber)
+                .SelectMany(c => c.Translations)
+                .Select(c => c.Id)
+                .FirstOrDefaultAsync();
+
+            return await GetWebNovelAddChapterTranslationViewModelAsync(user, webNovelChapterContentId);
+        }
+        
+        public async Task<AddChapterViewModel> GetWebNovelAddChapterTranslationViewModelAsync(ApplicationUser user, Guid webNovelChapterContentId)
+        {
+            var chapterContent = await Db.WebNovelChapterContent
+                .Include(c => c.Chapter)
+                    .ThenInclude(c => c.WebNovel)
+                    .ThenInclude(c => c.Translations)
+                    .ThenInclude(c => c.Language)
+                .Include(c => c.Chapter)
+                    .ThenInclude(c => c.Translations)
+                    .ThenInclude(c => c.Language)
+                .Where(c => c.Id == webNovelChapterContentId)
+                .SingleOrDefaultAsync();
+
+            if (chapterContent == null)
+                return null;
+
+            var chapterLanguages = chapterContent.Chapter.Translations.Select(c => c.Language).ToList();
+            var webNovelLanguages = chapterContent.Chapter.WebNovel.Translations.Select(c => c.Language).ToList();
+            
+            var model = await GetWebNovelAddChapterViewModelAsync(user, chapterContent.Chapter.WebNovel.Id);
+            model.IsTranslation = true;
+            model.Volume = chapterContent.Chapter.Volume;
+            model.Number = chapterContent.Chapter.Number;
+            model.Title = chapterContent.Title;
+            model.Text = chapterContent.Text;
+            model.Languages = model.Languages
+                .Where(c => webNovelLanguages.Contains(c) && !chapterLanguages.Contains(c))
+                .ToList();
+            model.LanguageId = model.Languages
+                .Select(c => c.Id)
+                .FirstOrDefault();
             
             return model;
         }

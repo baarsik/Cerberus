@@ -12,6 +12,9 @@ namespace Cerberus.Models.ViewModels
         public Guid WebNovelId { get; set; }
 
         [Required]
+        public bool IsTranslation { get; set; }
+
+        [Required]
         public int Volume { get; set; }
         
         [Required]

@@ -21,6 +21,9 @@
     <data name="Chapter" xml:space="preserve">
         <value>Глава</value>
     </data>
+    <data name="AddTranslationButton" xml:space="preserve">
+        <value>Добавить перевод</value>
+    </data>
     <data name="EditButton" xml:space="preserve">
         <value>Редактировать</value>
     </data>

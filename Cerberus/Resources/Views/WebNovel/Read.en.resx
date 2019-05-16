@@ -21,6 +21,9 @@
     <data name="Chapter" xml:space="preserve">
         <value>Chapter</value>
     </data>
+    <data name="AddTranslationButton" xml:space="preserve">
+        <value>Add translation</value>
+    </data>
     <data name="EditButton" xml:space="preserve">
         <value>Edit</value>
     </data>

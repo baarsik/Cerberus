@@ -30,9 +30,10 @@
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-body">
-                <form method="post">
+                <form method="post" asp-action="AddChapter" asp-route-webNovelId="@Model.WebNovelId">
                     @Html.ValidationSummary(true, null, new {@class="alert alert-danger"})
                     <input type="hidden" asp-for="WebNovelId"/>
+                    <input type="hidden" asp-for="IsTranslation"/>
                     @if (Model.WebNovel.UsesVolumes)
                     {
                         <div class="form-group">
