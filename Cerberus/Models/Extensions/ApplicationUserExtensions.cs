@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DataContext;
 using DataContext.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Cerberus.Models.Extensions
@@ -15,7 +16,7 @@ namespace Cerberus.Models.Extensions
             
             return user.UserLanguages?.OrderBy(c => c.Priority).Select(c => c.Language).ToList() ??
                    dbContext.UserLanguages
-                       .Where(c => c.User == user)
+                       .Where(c => c.User.Id == user.Id)
                        .OrderBy(c => c.Priority)
                        .Select(c => c.Language)
                        .ToList();

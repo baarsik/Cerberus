@@ -486,6 +486,7 @@ namespace Cerberus.Controllers.Services
                 return null;
             }
 
+            var lastChapter = webNovel.GetLastChapter(languages);
             var lastChapterTranslation = webNovel.GetLastChapterTranslation(languages);
             
             return new WebNovelInfo
@@ -494,7 +495,7 @@ namespace Cerberus.Controllers.Services
                 WebNovelContent = webNovel.GetTranslation(languages),
                 TotalChapters = webNovel.Chapters
                     .Count(c => c.Translations.Any(t => languages.Contains(t.Language))),
-                LastChapterTranslation = lastChapterTranslation,
+                LastChapterTranslation = lastChapter,
                 LastUpdateDate = lastChapterTranslation == null ?
                     (DateTime?)null
                     : webNovel.Chapters

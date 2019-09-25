@@ -23,12 +23,22 @@ namespace Cerberus.Models.Extensions
                 .FirstOrDefault();
         }
         
-        public static WebNovelChapterContent GetLastChapterTranslation(this WebNovel webNovel, ICollection<Language> languages)
+        public static WebNovelChapterContent GetLastChapter(this WebNovel webNovel, ICollection<Language> languages)
         {
-            return webNovel.Chapters
+            return webNovel?.Chapters
                 .Where(c => c.Translations.Any(d => languages.Contains(d.Language)))
                 .OrderByDescending(c => c.Volume)
                 .ThenByDescending(c => c.Number)
+                .SelectMany(c => c.Translations)
+                .Where(c => languages.Contains(c.Language))
+                .OrderByDescending(c => languages.IndexOf(c.Language))
+                .ThenByDescending(c => c.CreationDate)
+                .FirstOrDefault();
+        }
+        
+        public static WebNovelChapterContent GetLastChapterTranslation(this WebNovel webNovel, ICollection<Language> languages)
+        {
+            return webNovel?.Chapters
                 .SelectMany(c => c.Translations)
                 .Where(c => languages.Contains(c.Language))
                 .OrderByDescending(c => languages.IndexOf(c.Language))
