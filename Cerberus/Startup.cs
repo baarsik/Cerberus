@@ -12,8 +12,11 @@ using Cerberus.Models.Helpers;
 using DataContext;
 using DataContext.Models;
 using DataContextDataFiller;
+using JavaScriptEngineSwitcher.ChakraCore;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +28,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
+using React.AspNet;
 
 namespace Cerberus
 {
@@ -103,6 +107,12 @@ namespace Cerberus
                 };
             }); 
             
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddReact();
+
+            services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
+                .AddChakraCore();
+            
             services.AddMvc()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization();
@@ -135,6 +145,8 @@ namespace Cerberus
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseReact(config => { config.AddScript("~/components/footer.jsx"); });
+            
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvc(routes =>

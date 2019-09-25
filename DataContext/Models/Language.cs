@@ -15,5 +15,20 @@ namespace DataContext.Models
 
         [Required]
         public string CountryFlagIconName { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Language);
+        }
+
+        protected bool Equals(Language other)
+        {
+            return other != null && Code == other.Code;
+        }
+
+        public override int GetHashCode()
+        {
+            return Code != null ? Code.GetHashCode() : 0;
+        }
     }
 }

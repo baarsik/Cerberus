@@ -248,7 +248,7 @@ namespace Cerberus.Controllers.Services
             if (language == null)
                 return WebNovelAddWebNovelTranslationResult.LanguageNotExists;
 
-            if (webNovel.Translations.Any(c => c.Language == language))
+            if (webNovel.Translations.Any(c => Equals(c.Language, language)))
                 return WebNovelAddWebNovelTranslationResult.TranslationExists;
 
             var webNovelContent = new WebNovelContent
@@ -287,7 +287,7 @@ namespace Cerberus.Controllers.Services
 
             var chapter = webNovel.Chapters.FirstOrDefault(c => c.Volume == model.Volume && c.Number == model.Number);
             
-            if (chapter != null && chapter.Translations.Any(c => c.Language == language))
+            if (chapter != null && chapter.Translations.Any(c => Equals(c.Language, language)))
             {
                 return WebNovelAddChapterResult.TranslatedChapterNumberExists;
             }
@@ -447,9 +447,9 @@ namespace Cerberus.Controllers.Services
                 FreeToAccessDate = content.FreeToAccessDate.ToString(Constants.Misc.DateFormat),
                 LanguageId = content.Language.Id,
                 WebNovel = content.Chapter.WebNovel,
-                WebNovelContent = content.Chapter.WebNovel.Translations.FirstOrDefault(c => c.Language == content.Language),
+                WebNovelContent = content.Chapter.WebNovel.Translations.FirstOrDefault(c => Equals(c.Language, content.Language)),
                 Languages = user.GetUserOrDefaultLanguages(Db, Configuration)
-                    .Where(c => c == content.Language || content.Chapter.Translations.All(t => t.Language != c))
+                    .Where(lang => Equals(lang, content.Language) || content.Chapter.Translations.All(t => !Equals(t.Language, lang)))
                     .ToList()
             };
             return model;

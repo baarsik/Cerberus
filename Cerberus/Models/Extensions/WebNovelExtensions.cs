@@ -36,7 +36,7 @@ namespace Cerberus.Models.Extensions
             
             foreach (var language in languages)
             {
-                var translation = chapter.Translations.FirstOrDefault(c => c.Language == language);
+                var translation = chapter.Translations.FirstOrDefault(c => Equals(c.Language, language));
                 if (translation == null)
                     continue;
 
