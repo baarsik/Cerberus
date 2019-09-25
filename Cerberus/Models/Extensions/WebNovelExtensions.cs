@@ -25,25 +25,15 @@ namespace Cerberus.Models.Extensions
         
         public static WebNovelChapterContent GetLastChapterTranslation(this WebNovel webNovel, ICollection<Language> languages)
         {
-            var chapter = webNovel.Chapters
+            return webNovel.Chapters
                 .Where(c => c.Translations.Any(d => languages.Contains(d.Language)))
                 .OrderByDescending(c => c.Volume)
                 .ThenByDescending(c => c.Number)
+                .SelectMany(c => c.Translations)
+                .Where(c => languages.Contains(c.Language))
+                .OrderByDescending(c => languages.IndexOf(c.Language))
+                .ThenByDescending(c => c.CreationDate)
                 .FirstOrDefault();
-
-            if (chapter == null)
-                return null;
-            
-            foreach (var language in languages)
-            {
-                var translation = chapter.Translations.FirstOrDefault(c => Equals(c.Language, language));
-                if (translation == null)
-                    continue;
-
-                return translation;
-            }
-
-            return null;
         }
     }
 }
