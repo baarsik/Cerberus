@@ -1,5 +1,4 @@
-﻿@using Microsoft.EntityFrameworkCore.Internal
-@model ProfileViewModel
+﻿@model ProfileViewModel
 
 @{
     ViewBag.Title = Model.User.DisplayName;
@@ -131,7 +130,9 @@
                                 Claims:
                             </div>
                             <div>
-                                @Html.Raw(User.Claims.Select(c => $"<span class=\"text-success\">{c.Type}:</span> {c.Value}").Join("<br/>"))
+                                @Html.Raw(User.Claims
+                                    .Select(c => $"<span class=\"text-success\">{c.Type}:</span> {c.Value}")
+                                    .Aggregate((current, next) => $"{current}<br/>{next}"))
                             </div>
                         </div>
                         <div class="m-t">

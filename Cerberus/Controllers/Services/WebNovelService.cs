@@ -26,7 +26,7 @@ namespace Cerberus.Controllers.Services
         public async Task<WebNovelIndexViewModel> GetWebNovelIndexViewModelAsync(ApplicationUser user, int page)
         {
             var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
-            var webNovelsToDisplayCount = await Db.WebNovels.CountAsync(c => c.Translations.Any(d => languages.Contains(d.Language)));
+            var webNovelsToDisplayCount = await Db.WebNovels.CountAsync(c => c.Translations.Any(d => languages.Any(l => Equals(l, d.Language))));
             var totalPages = (int) Math.Ceiling(webNovelsToDisplayCount / (double) Constants.WebNovel.ItemsPerIndexPage);
             if (totalPages == 0)
             {
@@ -49,7 +49,7 @@ namespace Cerberus.Controllers.Services
                     .ThenInclude(c => c.Language)
                 .Include(c => c.Translations)
                     .ThenInclude(c => c.Language)
-                .Where(c => c.Translations.Any(d => languages.Contains(d.Language)))
+                .Where(c => c.Translations.Any(d => languages.Any(l => Equals(l, d.Language))))
                 .ToList();
             
             model.Items = webNovels
@@ -479,7 +479,7 @@ namespace Cerberus.Controllers.Services
             await Db.SaveChangesAsync();
         }
 
-        private WebNovelInfo GetWebNovelInfo(WebNovel webNovel, ICollection<Language> languages)
+        private WebNovelInfo GetWebNovelInfo(WebNovel webNovel, IList<Language> languages)
         {
             if (webNovel?.Chapters == null)
             {
@@ -494,7 +494,7 @@ namespace Cerberus.Controllers.Services
                 WebNovel = webNovel,
                 WebNovelContent = webNovel.GetTranslation(languages),
                 TotalChapters = webNovel.Chapters
-                    .Count(c => c.Translations.Any(t => languages.Contains(t.Language))),
+                    .Count(c => c.Translations.Any(t => languages.Any(l => Equals(l, t.Language)))),
                 LastChapterTranslation = lastChapter,
                 LastUpdateDate = lastChapterTranslation == null ?
                     (DateTime?)null

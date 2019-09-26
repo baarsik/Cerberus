@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using DataContext.Models;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Cerberus.Models.Extensions
 {
@@ -15,7 +14,7 @@ namespace Cerberus.Models.Extensions
                 .FirstOrDefault();
         }
         
-        public static WebNovelContent GetTranslation(this WebNovel webNovel, ICollection<Language> languages)
+        public static WebNovelContent GetTranslation(this WebNovel webNovel, IList<Language> languages)
         {
             return webNovel?.Translations
                 .Where(c => languages.Contains(c.Language))
@@ -23,7 +22,7 @@ namespace Cerberus.Models.Extensions
                 .FirstOrDefault();
         }
         
-        public static WebNovelChapterContent GetLastChapter(this WebNovel webNovel, ICollection<Language> languages)
+        public static WebNovelChapterContent GetLastChapter(this WebNovel webNovel, IList<Language> languages)
         {
             return webNovel?.Chapters
                 .Where(c => c.Translations.Any(d => languages.Contains(d.Language)))
@@ -36,7 +35,7 @@ namespace Cerberus.Models.Extensions
                 .FirstOrDefault();
         }
         
-        public static WebNovelChapterContent GetLastChapterTranslation(this WebNovel webNovel, ICollection<Language> languages)
+        public static WebNovelChapterContent GetLastChapterTranslation(this WebNovel webNovel, IList<Language> languages)
         {
             return webNovel?.Chapters
                 .SelectMany(c => c.Translations)

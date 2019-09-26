@@ -7,8 +7,8 @@ namespace Cerberus.Models.ViewModels
     public class ChapterLinkInDetailsViewModel
     {
         public WebNovel WebNovel { get; set; }
-        public IOrderedEnumerable<WebNovelChapter> Chapters { get; set; }
-        public ICollection<Language> DisplayedLanguages { get; set; }
+        public IList<WebNovelChapter> Chapters { get; set; }
+        public IList<Language> DisplayedLanguages { get; set; }
         public bool HasEditorAccess { get; set; }
     }
 }

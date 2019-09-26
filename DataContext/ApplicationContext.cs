@@ -142,6 +142,11 @@ namespace DataContext
                 .HasOne(c => c.User)
                 .WithMany(c => c.UserLanguages)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<WebNovelChapter>()
+                .HasOne(c => c.NextChapter)
+                .WithOne(c => c.PreviousChapter)
+                .OnDelete(DeleteBehavior.Restrict);
             
             base.OnModelCreating(builder);
         }

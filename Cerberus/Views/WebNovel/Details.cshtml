@@ -74,7 +74,8 @@
                                                           Chapters = webNovel.Chapters
                                                               .Where(c => c.Volume == volume)
                                                               .OrderByDescending(c => c.Number)
-                                                              .ThenByDescending(c => c.Translations.Select(d => d.CreationDate).OrderByDescending(d => d).FirstOrDefault()),
+                                                              .ThenByDescending(c => c.Translations.Select(d => d.CreationDate).OrderByDescending(d => d).FirstOrDefault())
+                                                              .ToList(),
                                                           WebNovel = webNovel,
                                                           DisplayedLanguages = Model.WebNovelInfo.UserLanguages,
                                                           HasEditorAccess = User.HasWebNovelEditorAccess()
@@ -93,7 +94,8 @@
                                                   {
                                                       Chapters = webNovel.Chapters
                                                           .OrderByDescending(c => c.Number)
-                                                          .ThenByDescending(c => c.Translations.Select(d => d.CreationDate).OrderByDescending(d => d).FirstOrDefault()),
+                                                          .ThenByDescending(c => c.Translations.Select(d => d.CreationDate).OrderByDescending(d => d).FirstOrDefault())
+                                                          .ToList(),
                                                       WebNovel = webNovel,
                                                       DisplayedLanguages = Model.WebNovelInfo.UserLanguages,
                                                       HasEditorAccess = User.HasWebNovelEditorAccess()

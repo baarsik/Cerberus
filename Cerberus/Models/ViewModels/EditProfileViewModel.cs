@@ -8,9 +8,9 @@ namespace Cerberus.Models.ViewModels
 {
     public class EditProfileViewModel
     {   
-        public IEnumerable<Guid> SelectedLanguages { get; set; }
+        public IList<Guid> SelectedLanguages { get; set; }
 
-        public IEnumerable<Language> Languages { get; set; }
+        public IList<Language> Languages { get; set; }
 
         public ApplicationUser User { get; set; }
     }

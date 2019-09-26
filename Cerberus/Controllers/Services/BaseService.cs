@@ -60,7 +60,7 @@ namespace Cerberus.Controllers.Services
         /// Returns all languages available on server
         /// </summary>
         /// <returns>List of Language</returns>
-        public async Task<IEnumerable<Language>> GetLanguagesAsync()
+        public async Task<IList<Language>> GetLanguagesAsync()
         {
             return await Db.Languages.ToListAsync();
         }

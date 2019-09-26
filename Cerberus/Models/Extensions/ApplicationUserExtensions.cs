@@ -9,7 +9,7 @@ namespace Cerberus.Models.Extensions
 {
     public static class ApplicationUserExtensions
     {
-        public static ICollection<Language> GetUserLanguages(this ApplicationUser user, ApplicationContext dbContext)
+        public static IList<Language> GetUserLanguages(this ApplicationUser user, ApplicationContext dbContext)
         {
             if (user == null)
                 return new List<Language>();
@@ -23,7 +23,7 @@ namespace Cerberus.Models.Extensions
 
         }
         
-        public static ICollection<Language> GetUserOrDefaultLanguages(this ApplicationUser user, ApplicationContext dbContext, IConfiguration configuration)
+        public static IList<Language> GetUserOrDefaultLanguages(this ApplicationUser user, ApplicationContext dbContext, IConfiguration configuration)
         {
             var userLanguages = user.GetUserLanguages(dbContext);
             if (userLanguages.Any())
@@ -31,9 +31,8 @@ namespace Cerberus.Models.Extensions
 
             var defaultLanguageCodes = configuration["DefaultLanguages"].Split(",").ToList();
             return dbContext.Languages
-                .Where(c => defaultLanguageCodes.Contains(c.Code))
-                .OrderBy(c => defaultLanguageCodes.IndexOf(c.Code))
-                .ToList();
+                .Where(c => defaultLanguageCodes.Contains(c.Code)).ToList()
+                .OrderBy(c => defaultLanguageCodes.IndexOf(c.Code)).ToList();
         }
     }
 }

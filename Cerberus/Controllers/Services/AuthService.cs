@@ -15,7 +15,6 @@ using DataContext.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -100,7 +99,7 @@ namespace Cerberus.Controllers.Services
                 : LoginStatus.InvalidCredentials);
         }
         
-        public async Task<RegisterResult> RegisterAsync(string email, string displayName, string password, ICollection<Guid> languageIds)
+        public async Task<RegisterResult> RegisterAsync(string email, string displayName, string password, IList<Guid> languageIds)
         {
             displayName = displayName.RemoveHTML().FixSpacing();
             
@@ -290,7 +289,7 @@ namespace Cerberus.Controllers.Services
             await Db.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Language>> GetLanguagesForEditProfileViewModel(ApplicationUser user)
+        public async Task<IList<Language>> GetLanguagesForEditProfileViewModel(ApplicationUser user)
         {
             if (user == null)
                 return await GetLanguagesAsync();
