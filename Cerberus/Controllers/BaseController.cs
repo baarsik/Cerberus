@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using reCAPTCHA.AspNetCore;
 
 namespace Cerberus.Controllers
 {
@@ -15,6 +17,15 @@ namespace Cerberus.Controllers
         {
             Response.StatusCode = 404;
             return RedirectToLocal("/error/404.html");
+        }
+
+        protected async Task ValidateReCaptchaAsync(IRecaptchaService recaptchaService)
+        {
+            var recaptchaValidationResult = await recaptchaService.Validate(Request);
+            if (!recaptchaValidationResult.success)
+            {
+                ModelState.AddModelError("", "There was an error validating reCaptcha");
+            }
         }
     }
 }

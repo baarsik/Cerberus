@@ -36,7 +36,7 @@ namespace Cerberus.Controllers.Services
         /// </summary>
         public async Task<bool> IsDisplayNameInUseAsync(string displayName)
         {
-            return await UserManager.Users.AnyAsync(c => string.Compare(c.DisplayName, displayName, StringComparison.InvariantCultureIgnoreCase) == 0);
+            return await UserManager.Users.AnyAsync(c => c.DisplayName == displayName);
         }
         
         /// <summary>
@@ -44,7 +44,7 @@ namespace Cerberus.Controllers.Services
         /// </summary>
         public async Task<bool> IsEmailInUseAsync(string email)
         {
-            return await UserManager.Users.AnyAsync(c => string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0);
+            return await UserManager.Users.AnyAsync(c => c.Email == email);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Cerberus.Controllers.Services
         /// <returns>ApplicationUser on success, null on failure</returns>
         public async Task<ApplicationUser> GetUserByCredentialsAsync(string email, string password)
         {
-            var user = await UserManager.Users.FirstOrDefaultAsync(c => string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0);
+            var user = await UserManager.Users.FirstOrDefaultAsync(c => c.Email == email);
             
             return user != null && await UserManager.CheckPasswordAsync(user, password)
                 ? user

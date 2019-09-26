@@ -7,17 +7,19 @@ using Cerberus.Models.Services;
 using Cerberus.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PaulMiami.AspNetCore.Mvc.Recaptcha;
+using reCAPTCHA.AspNetCore;
 
 namespace Cerberus.Controllers
 {
     public class AccountController : BaseController
     {
         private readonly AuthService _authService;
+        private readonly IRecaptchaService _recaptchaService;
 
-        public AccountController(AuthService authService)
+        public AccountController(AuthService authService, IRecaptchaService recaptchaService)
         {
             _authService = authService;
+            _recaptchaService = recaptchaService;
         }
 
         public IActionResult Login()
@@ -25,10 +27,10 @@ namespace Cerberus.Controllers
             return View();
         }
 
-        [ValidateRecaptcha]
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            await ValidateReCaptchaAsync(_recaptchaService);
             if (!ModelState.IsValid)
                 return View(model);
             
@@ -62,12 +64,12 @@ namespace Cerberus.Controllers
             return View(model);
         }
 
-        [ValidateRecaptcha]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             model.Languages = await _authService.GetLanguagesAsync();
             
+            await ValidateReCaptchaAsync(_recaptchaService);
             if (!ModelState.IsValid)
                 return View(model);
             

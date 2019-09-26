@@ -27,8 +27,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using PaulMiami.AspNetCore.Mvc.Recaptcha;
 using React.AspNet;
+using reCAPTCHA.AspNetCore;
 
 namespace Cerberus
 {
@@ -107,6 +107,9 @@ namespace Cerberus
                 };
             }); 
             
+            services.Configure<RecaptchaSettings>(Configuration.GetSection("RecaptchaSettings"));
+            services.AddTransient<IRecaptchaService, RecaptchaService>();
+            
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddReact();
 
@@ -120,12 +123,6 @@ namespace Cerberus
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization();
             
-            services.AddRecaptcha(new RecaptchaOptions
-            {
-                SiteKey = Configuration["ReCaptcha:SiteKey"],
-                SecretKey = Configuration["ReCaptcha:SecretKey"]
-            });
-
             services.AddSingleton(Configuration);
             services.AddScoped<AuthService>();
             services.AddScoped<ProfileService>();
