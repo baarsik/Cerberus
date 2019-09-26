@@ -38,6 +38,10 @@ namespace DataContext.Models
 
         public virtual ICollection<ApplicationUserLanguage> UserLanguages { get; set; }
 
+        public virtual ICollection<WebNovelReaderData> WebNovelReaderData { get; set; }
+        
+        public virtual ICollection<ApplicationUserNotifications> Notifications { get; set; }
+
         public override string ToString()
         {
             return DisplayName;

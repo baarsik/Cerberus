@@ -113,6 +113,11 @@ namespace DataContext
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
             
+            builder.Entity<WebNovel>()
+                .HasMany(c => c.ReaderData)
+                .WithOne(c => c.WebNovel)
+                .OnDelete(DeleteBehavior.Cascade);
+            
             builder.Entity<WebNovelContent>()
                 .HasOne(c => c.Language)
                 .WithMany()
@@ -147,6 +152,19 @@ namespace DataContext
                 .HasOne(c => c.NextChapter)
                 .WithOne(c => c.PreviousChapter)
                 .OnDelete(DeleteBehavior.Restrict);
+            
+            builder.Entity<ApplicationUser>()
+                .HasMany(c => c.WebNovelReaderData)
+                .WithOne(c => c.User)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.Entity<ApplicationUser>()
+                .HasMany(c => c.Notifications)
+                .WithOne(c => c.User)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<ApplicationUserNotifications>()
+                .HasQueryFilter(c => !c.IsDeleted);
             
             base.OnModelCreating(builder);
         }

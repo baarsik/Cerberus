@@ -3665,6 +3665,11 @@ ol.counter > li:before {
     border: 1px solid #252525;
 }
 
+.fa-layers-counter {
+    background-color: #f6a821;
+    color: #2a2d35;
+}
+
 @font-face {
     font-family: 'Furore';
     font-style: normal;

@@ -34,5 +34,7 @@ namespace DataContext.Models
         public virtual ICollection<WebNovelContent> Translations { get; set; }
         
         public virtual ICollection<WebNovelTagBinding> TagBindings { get; set; }
+        
+        public virtual ICollection<WebNovelReaderData> ReaderData { get; set; }
     }
 }
