@@ -67,7 +67,7 @@ namespace Cerberus.Controllers.Services
         public async Task<ApplicationUser> GetUserByDisplayNameAsync(string displayName)
         {
             return await UserManager.Users
-                .FirstOrDefaultAsync(c => string.Compare(c.DisplayName, displayName, StringComparison.InvariantCultureIgnoreCase) == 0);
+                .FirstOrDefaultAsync(c => c.DisplayName == displayName);
         }
         
         /// <summary>
@@ -76,9 +76,7 @@ namespace Cerberus.Controllers.Services
         /// <returns>ApplicationUser on success, null on failure</returns>
         public async Task<ApplicationUser> GetUserByDisplayNameAsync(string displayName, string password)
         {
-            var user = await UserManager.Users
-                .FirstOrDefaultAsync(c => string.Compare(c.DisplayName, displayName, StringComparison.InvariantCultureIgnoreCase) == 0);
-            
+            var user = await GetUserByDisplayNameAsync(displayName);
             return user != null && await UserManager.CheckPasswordAsync(user, password)
                 ? user
                 : null;
@@ -203,9 +201,7 @@ namespace Cerberus.Controllers.Services
         public async Task<GenerateJwtResult> GenerateJwtAsync(string email, string apiKey, string ip)
         {
             var user = await UserManager.Users
-                .FirstOrDefaultAsync(c =>
-                    string.Compare(c.Email, email, StringComparison.InvariantCultureIgnoreCase) == 0 
-                    && c.ApiKey == apiKey);
+                .FirstOrDefaultAsync(c => c.Email == email && c.ApiKey == apiKey);
             
             if (user == null)
                 return new GenerateJwtResult(false);
@@ -295,7 +291,7 @@ namespace Cerberus.Controllers.Services
                 return await GetLanguagesAsync();
 
             var languages = user.GetUserLanguages(Db);
-            foreach (var language in await Db.Languages.Where(c => !languages.Contains(c)).ToListAsync())
+            foreach (var language in await Db.Languages.Where(dbLang => languages.All(userLang => !Equals(userLang, dbLang))).ToListAsync())
             {
                 languages.Add(language);
             }
