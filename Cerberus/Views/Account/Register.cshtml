@@ -1,4 +1,5 @@
-﻿@model RegisterViewModel
+﻿@using Cerberus.Controllers
+@model RegisterViewModel
 
 @{
     ViewBag.Title = "Register";
@@ -27,7 +28,8 @@
 
 <div class="panel panel-filled">
     <div class="panel-body">
-        <form asp-action="Register" method="post">
+        @using (Html.BeginForm(nameof(AccountController.Register), "Account", FormMethod.Post))
+        {
             <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
             <div class="form-group">
                 <label>Display Name</label>
@@ -85,7 +87,7 @@
                 <button class="btn btn-accent">Register</button>
                 <a class="btn btn-unimportant" asp-action="Login">I already have an account</a>
             </div>
-        </form>
+        }
     </div>
 </div>
 
