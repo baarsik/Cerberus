@@ -19,6 +19,11 @@ namespace Cerberus
             public const string WebNovelEdit = Roles.Admin + "," + Roles.GlobalModerator + "," + Roles.WebNovelEditor;
         }
 
+        public static class Notifications
+        {
+            public const int NotificationsPerIndexPage = 25;
+        }
+
         public static class WebNovel
         {
             public const int ItemsPerIndexPage = 10;

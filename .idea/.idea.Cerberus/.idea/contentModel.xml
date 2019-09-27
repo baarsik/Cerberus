@@ -24,11 +24,13 @@
           </e>
           <e p="BaseController.cs" t="Include" />
           <e p="HomeController.cs" t="Include" />
+          <e p="NotificationsController.cs" t="Include" />
           <e p="PageController.cs" t="Include" />
           <e p="ProfileController.cs" t="Include" />
           <e p="Services" t="Include">
             <e p="AuthService.cs" t="Include" />
             <e p="BaseService.cs" t="Include" />
+            <e p="NotificationsService.cs" t="Include" />
             <e p="ProfileService.cs" t="Include" />
             <e p="SettingsService.cs" t="Include" />
             <e p="WebNovelService.cs" t="Include" />
@@ -54,6 +56,7 @@
           <e p="ForumHierarchyJson.cs" t="Include" />
           <e p="GenerateJwtResult.cs" t="Include" />
           <e p="Helpers" t="Include">
+            <e p="DataHelper.cs" t="Include" />
             <e p="StringHelpers.cs" t="Include" />
           </e>
           <e p="LayoutSettings.cs" t="Include" />
@@ -82,6 +85,7 @@
             <e p="ErrorViewModel.cs" t="Include" />
             <e p="ForumSettingsViewModel.cs" t="Include" />
             <e p="LoginViewModel.cs" t="Include" />
+            <e p="NotificationsIndexViewModel.cs" t="Include" />
             <e p="ProfileViewModel.cs" t="Include" />
             <e p="RegisterViewModel.cs" t="Include" />
             <e p="WebNovelDetailsViewModel.cs" t="Include" />
@@ -106,6 +110,12 @@
         </e>
         <e p="Resources" t="Include">
           <e p="Views" t="Include">
+            <e p="Notifications" t="Include">
+              <e p="Index.en.Designer.cs" t="Include" />
+              <e p="Index.en.resx" t="Include" />
+              <e p="Index.ru.Designer.cs" t="Include" />
+              <e p="Index.ru.resx" t="Include" />
+            </e>
             <e p="Profile" t="Include">
               <e p="Profile.en.Designer.cs" t="Include" />
               <e p="Profile.en.resx" t="Include" />
@@ -155,6 +165,9 @@
             <e p="Register.cshtml" t="Include" />
           </e>
           <e p="Home" t="Include">
+            <e p="Index.cshtml" t="Include" />
+          </e>
+          <e p="Notifications" t="Include">
             <e p="Index.cshtml" t="Include" />
           </e>
           <e p="Page" t="Include">

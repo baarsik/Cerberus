@@ -116,18 +116,21 @@ namespace Cerberus
             services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
                 .AddChakraCore();
             
-            services.AddMvc(options =>
-                {
-                    options.EnableEndpointRouting = false;
-                })
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+            
+            services.AddMvc()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization();
             
             services.AddSingleton(Configuration);
             services.AddScoped<AuthService>();
+            services.AddScoped<NotificationsService>();
             services.AddScoped<ProfileService>();
             services.AddScoped<SettingsService>();
             services.AddScoped<WebNovelService>();
+            
+            services.AddScoped<DataHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -148,11 +151,18 @@ namespace Cerberus
             app.UseReact(config => { config.AddScript("~/components/footer.jsx"); });
             
             app.UseStaticFiles();
+            
+            app.UseRouting();
+            app.UseCors();
+            
             app.UseAuthentication();
-            app.UseMvc(routes =>
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+            
             app.UseStatusCodePages();
             app.UseStatusCodePagesWithRedirects("/error/{0}.html");
             

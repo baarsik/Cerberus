@@ -3665,9 +3665,45 @@ ol.counter > li:before {
     border: 1px solid #252525;
 }
 
+.fas[data-count]{
+    position:relative;
+}
+
+.fas[data-count]:after{
+    position: absolute;
+    right: -1.25em;
+    top: -1em;
+    content: attr(data-count);
+    padding: 0.25em 0.35em;
+    border-radius: 5px;
+    line-height: 0.9em;
+    color: #2a2d35;
+    background: #f6a821;
+    text-align: center;
+    min-width: 1.85em;
+    font: bold 0.65em sans-serif;
+}
+
 .fa-layers-counter {
     background-color: #f6a821;
     color: #2a2d35;
+}
+
+footer,
+.body-content {
+    border-radius: 0.5em;
+    background: #2f323b;
+}
+
+footer {
+    padding: 0.5em;
+    margin-bottom: 1em;
+}
+footer > p {
+    margin: 0;
+}
+footer > p + p {
+    margin-top: 0.5em;
 }
 
 @font-face {

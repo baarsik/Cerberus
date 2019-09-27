@@ -74,5 +74,23 @@ namespace Cerberus.Controllers.Services
         {
             return await Db.Languages.Where(c => !excludedLanguages.Contains(c)).ToListAsync();
         }
+
+        /// <summary>
+        /// Adds notification to the specified user
+        /// </summary>
+        /// <param name="user">ApplicationUser entity</param>
+        /// <param name="body">Notification body (HTML enabled)</param>
+        public async Task AddNotificationAsync(ApplicationUser user, string body)
+        {
+            Db.Add(new ApplicationUserNotifications
+            {
+                Id = Guid.NewGuid(),
+                Body = body,
+                NotificationDate = DateTime.Now,
+                User = user
+            });
+            
+            await Db.SaveChangesAsync();
+        }
     }
 }
