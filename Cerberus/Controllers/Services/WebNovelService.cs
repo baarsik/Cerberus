@@ -90,7 +90,31 @@ namespace Cerberus.Controllers.Services
                 Languages = await GetLanguagesAsync(webNovel.Translations.Select(c => c.Language).ToList())
             };
         }
-        
+
+        public async Task<EditWebNovelViewModel> GetEditWebNovelViewModelAsync(Guid translationId)
+        {
+            var translation = await Db.WebNovelContent
+                .Include(x => x.WebNovel)
+                .Include(x => x.Language)
+                .FirstOrDefaultAsync(x => x.Id == translationId);
+
+            if (translation == null)
+                return null;
+
+            return new EditWebNovelViewModel
+            {
+                TranslationId = translation.Id,
+                UrlName = translation.WebNovel.UrlName,
+                OriginalName = translation.WebNovel.OriginalName,
+                Author = translation.WebNovel.Author,
+                Name = translation.Name,
+                Description = translation.Description,
+                IsAdultContent = translation.WebNovel.IsAdultContent,
+                UsesVolumes = translation.WebNovel.UsesVolumes,
+                LanguageName = translation.Language.LocalName
+            };
+        }
+
         public async Task<WebNovelDetailsViewModel> GetWebNovelDetailsViewModelAsync(ApplicationUser user, string webNovelUrl)
         {
             var webNovel = await Db.WebNovels
@@ -264,7 +288,7 @@ namespace Cerberus.Controllers.Services
             
             return WebNovelAddWebNovelTranslationResult.Success;
         }
-        
+
         public async Task<WebNovelAddChapterResult> AddChapterAsync(ApplicationUser uploader, AddChapterViewModel model)
         {
             var webNovel = await Db.WebNovels
@@ -363,7 +387,29 @@ namespace Cerberus.Controllers.Services
             
             return WebNovelAddChapterResult.Success;
         }
-        
+
+        public async Task<WebNovelEditWebNovelTranslationResult> EditWebNovelTranslationAsync(EditWebNovelViewModel model)
+        {
+            var translation = await Db.WebNovelContent
+                .Include(x => x.WebNovel)
+                .SingleOrDefaultAsync(x => x.Id == model.TranslationId);
+
+            if (translation == null)
+                return WebNovelEditWebNovelTranslationResult.TranslationNotExists;
+
+            translation.Name = model.Name;
+            translation.Description = model.Description;
+            Db.Update(translation);
+
+            var webNovel = translation.WebNovel;
+            webNovel.IsAdultContent = model.IsAdultContent;
+            webNovel.UsesVolumes |= model.UsesVolumes;
+            Db.Update(webNovel);
+            await Db.SaveChangesAsync();
+
+            return WebNovelEditWebNovelTranslationResult.Success;
+        }
+
         public async Task<WebNovelChapter> GetChapterAsync(string webNovelUrl, int volume, int chapterNumber)
         {
             var webNovel = await Db.WebNovels
@@ -536,6 +582,13 @@ namespace Cerberus.Controllers.Services
         WebNovelNotExists,
         TranslatedChapterNumberExists,
         LanguageNotExists,
+        Success
+    }
+
+    public enum WebNovelEditWebNovelTranslationResult
+    {
+        UnknownFailure,
+        TranslationNotExists,
         Success
     }
 }

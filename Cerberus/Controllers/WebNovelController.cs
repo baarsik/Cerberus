@@ -89,7 +89,7 @@ namespace Cerberus.Controllers
                     return View(model);
                 case WebNovelAddWebNovelResult.UnknownFailure:
                 default:
-                    ModelState.AddModelError(string.Empty, $"Unknown error (Result code {result.ToString()})");
+                    ModelState.AddModelError(string.Empty, $"Unknown error (Result code {result})");
                     return View(model);
             }
         }
@@ -102,10 +102,9 @@ namespace Cerberus.Controllers
             var user = await _webNovelService.GetUserAsync(User);
             var model = await _webNovelService.GetAddWebNovelViewModelAsync(user, webNovelUrl);
             
-            if (model == null)
-                return RedirectToNotFound();
-            
-            return View(model);
+            return model == null
+                ? RedirectToNotFound()
+                : View(model);
         }
         
         [HttpPost]
@@ -138,11 +137,47 @@ namespace Cerberus.Controllers
                     return View(model);
                 case WebNovelAddWebNovelTranslationResult.UnknownFailure:
                 default:
-                    ModelState.AddModelError(string.Empty, $"Unknown error (Result code {result.ToString()})");
+                    ModelState.AddModelError(string.Empty, $"Unknown error (Result code {result})");
                     return View(model);
             }
         }
-        
+
+        [HttpGet]
+        [Authorize(Roles = Constants.Permissions.WebNovelEdit)]
+        [Route("[action]/{translationId}")]
+        public async Task<IActionResult> EditWebNovelTranslation(Guid translationId)
+        {
+            var model = await _webNovelService.GetEditWebNovelViewModelAsync(translationId);
+            return model == null
+                ? RedirectToNotFound()
+                : View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = Constants.Permissions.WebNovelEdit)]
+        [Route("[action]/{translationId}")]
+        public async Task<IActionResult> EditWebNovelTranslation(EditWebNovelViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var result = await _webNovelService.EditWebNovelTranslationAsync(model);
+            switch (result)
+            {
+                case WebNovelEditWebNovelTranslationResult.Success:
+                    return RedirectToAction(nameof(Details), new { webNovelUrl = model.UrlName });
+                case WebNovelEditWebNovelTranslationResult.TranslationNotExists:
+                    ModelState.AddModelError(string.Empty, $"Translation for '{model.LanguageName}' language does not exist");
+                    return View(model);
+                case WebNovelEditWebNovelTranslationResult.UnknownFailure:
+                default:
+                    ModelState.AddModelError(string.Empty, $"Unknown error (Result code {result})");
+                    return View(model);
+            }
+        }
+
         [Authorize(Roles = Constants.Permissions.WebNovelEdit)]
         [Route("[action]/{webNovelId}")]
         public async Task<IActionResult> AddChapter(Guid webNovelId)
@@ -195,7 +230,7 @@ namespace Cerberus.Controllers
                     return View(model);
                 case WebNovelAddChapterResult.UnknownFailure:
                 default:
-                    ModelState.AddModelError(string.Empty, $"Unknown error (Result code {result.ToString()})");
+                    ModelState.AddModelError(string.Empty, $"Unknown error (Result code {result})");
                     return View(model);
             }
         }

@@ -6,6 +6,10 @@
 [Bb]in/
 packages/
 TestResults/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
 
 # globs
 Makefile.in
@@ -35,6 +39,40 @@ Thumbs.db
 # resharper
 *_Resharper.*
 *.Resharper
+*.DotSettings.user
 
 # dotCover
 *.dotCover
+
+# IDE
+.vs/
+.idea/
+
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
