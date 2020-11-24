@@ -24,6 +24,17 @@
                         <i class="far fa-plus"></i>
                         @Localizer["AddChapter"]
                     </a>
+                    <div class="btn-group">
+                        <button class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown">
+                            <i class="far fa-pen"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            @foreach (var translation in Model.WebNovelInfo.WebNovel.Translations)
+                            {
+                                <li><a class="dropdown-item" asp-action="EditWebNovelTranslation" asp-route-translationId="@translation.Id">@translation.Language.LocalName</a></li>
+                            }
+                        </ul>
+                    </div>
                 }
             </div>
             <div class="header-title">
