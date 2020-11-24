@@ -1,4 +1,5 @@
 ﻿@using Cerberus.Controllers
+@using reCAPTCHA.AspNetCore.Templates
 @model RegisterViewModel
 
 @{
@@ -30,7 +31,7 @@
     <div class="panel-body">
         @using (Html.BeginForm(nameof(AccountController.Register), "Account", FormMethod.Post))
         {
-            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <div asp-validation-summary="All" class="alert alert-danger"></div>
             <div class="form-group">
                 <label>Display Name</label>
                 <input type="" asp-for="DisplayName" class="form-control" placeholder="Display Name">
@@ -81,7 +82,7 @@
                 </div>
             </div>
             <div class="form-group">
-                @Html.Recaptcha(RecaptchaSettings.Value)
+                @(Html.Recaptcha<RecaptchaV2Checkbox>(RecaptchaSettings?.Value))
             </div>
             <div>
                 <button class="btn btn-accent">Register</button>

@@ -3641,6 +3641,10 @@ ol.counter > li:before {
     padding-left: 0;
 }
 
+.validation-summary-valid {
+    display: none;
+}
+
 .note-editor .dropdown-menu {
     color: #949ba2;
     background: rgba(30, 30, 40, 0.85);
