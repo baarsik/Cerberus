@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cerberus.Models.Extensions;
 using Cerberus.Models.ViewModels;
 using DataContext;
 using DataContext.Models;
@@ -12,11 +14,51 @@ namespace Cerberus.Controllers.Services
 {
     public class NotificationsService : BaseService
     {
-        public NotificationsService(ApplicationContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public NotificationsService(ApplicationContext context,
+            UserManager<ApplicationUser> userManager,
+            IConfiguration configuration)
             : base(context, userManager, configuration)
         {
         }
 
+        public async Task AddNewWebNovelChapterNotificationAsync(WebNovelChapterContent webNovelChapterContent)
+        {
+            var applicableUsers = await Db.WebNovelReaderData
+                .Where(x => x.NotificationsEnabled &&
+                            x.WebNovel.Id == webNovelChapterContent.Chapter.WebNovel.Id)
+                .Select(x => x.User)
+                .ToListAsync();
+
+            var notifications = new List<ApplicationUserNotifications>();
+            foreach (var user in applicableUsers)
+            {
+                var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
+                if (languages.All(language => language.Id != webNovelChapterContent.Language.Id))
+                    continue;
+
+                var webNovelName = await Db.WebNovelContent
+                    .Where(x => x.WebNovel.Id == webNovelChapterContent.Chapter.WebNovel.Id &&
+                                x.Language.Id == webNovelChapterContent.Language.Id)
+                    .Select(x => x.Name)
+                    .FirstOrDefaultAsync();
+
+                var linkText = webNovelChapterContent.Chapter.WebNovel.UsesVolumes
+                    ? $"<b>{webNovelName}</b> Vol. {webNovelChapterContent.Chapter.Volume} Chapter {webNovelChapterContent.Chapter.Number}"
+                    : $"<b>{webNovelName}</b> Chapter {webNovelChapterContent.Chapter.Number}";
+
+                var link = $"<a href=\"/wn/read/{webNovelChapterContent.Language.Code}/{webNovelChapterContent.Chapter.WebNovel.UrlName}/{webNovelChapterContent.Chapter.Number}/\">{linkText}</a>";
+                notifications.Add(new ApplicationUserNotifications
+                {
+                    Body = $"New Release: {link}",
+                    User = user
+                });
+            }
+
+            Db.AddRange(notifications);
+            await Db.SaveChangesAsync();
+
+        }
+        
         public async Task<NotificationsIndexViewModel> GetNotificationsIndexViewModelAsync(ApplicationUser user, int page)
         {
             var itemsToDisplayCount = await Db.ApplicationUserNotifications.CountAsync(c => c.User == user);

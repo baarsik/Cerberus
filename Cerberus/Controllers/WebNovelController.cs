@@ -279,5 +279,23 @@ namespace Cerberus.Controllers
             await _webNovelService.UpdateChapterAsync(user, model);
             return RedirectToAction(nameof(Read), new {webNovelUrl = model.WebNovel.UrlName, languageCode = model.WebNovelContent.Language.Code, volume = model.Volume, chapterNumber = model.Number});
         }
+
+        [Authorize]
+        [Route("notifications/subscribe/{webNovelUrl}")]
+        public async Task<IActionResult> EnableNotifications(string webNovelUrl)
+        {
+            var user = await _webNovelService.GetUserAsync(User);
+            await _webNovelService.UpdateNotificationStatus(user, webNovelUrl, true);
+            return RedirectToAction(nameof(Details), new {webNovelUrl});
+        }
+        
+        [Authorize]
+        [Route("notifications/unsubscribe/{webNovelUrl}")]
+        public async Task<IActionResult> DisableNotifications(string webNovelUrl)
+        {
+            var user = await _webNovelService.GetUserAsync(User);
+            await _webNovelService.UpdateNotificationStatus(user, webNovelUrl, false);
+            return RedirectToAction(nameof(Details), new {webNovelUrl});
+        }
     }
 }

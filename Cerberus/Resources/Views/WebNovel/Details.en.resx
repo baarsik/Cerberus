@@ -42,4 +42,10 @@
     <data name="AddChapter" xml:space="preserve">
         <value>Add chapter</value>
     </data>
+    <data name="EnableNotifications" xml:space="preserve">
+        <value>Follow</value>
+    </data>
+    <data name="DisableNotifications" xml:space="preserve">
+        <value>Unfollow</value>
+    </data>
 </root>

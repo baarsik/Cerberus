@@ -15,26 +15,41 @@
                 <i class="fal fa-book fa-sm"></i>
             </div>
             <div class="pull-right text-right">
-                @if (User.HasWebNovelEditorAccess() && !webNovel.IsComplete)
+                @if (User.Identity.IsAuthenticated)
                 {
-                    <a class="btn btn-lg btn-default" asp-action="AddWebNovelTranslation" asp-route-webNovelUrl="@webNovel.UrlName">
-                        @Localizer["AddWebNovelTranslation"]
-                    </a>
-                    <a class="btn btn-lg btn-default" asp-action="AddChapter" asp-route-webNovelId="@webNovel.Id">
-                        <i class="far fa-plus"></i>
-                        @Localizer["AddChapter"]
-                    </a>
-                    <div class="btn-group">
-                        <button class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown">
-                            <i class="far fa-pen"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            @foreach (var translation in Model.WebNovelInfo.WebNovel.Translations)
-                            {
-                                <li><a class="dropdown-item" asp-action="EditWebNovelTranslation" asp-route-translationId="@translation.Id">@translation.Language.LocalName</a></li>
-                            }
-                        </ul>
-                    </div>
+                    if (Model.NotificationsEnabled)
+                    {
+                        <a class="btn btn-lg btn-default" asp-action="DisableNotifications" asp-route-webNovelUrl="@webNovel.UrlName">
+                            @Localizer["DisableNotifications"]
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-lg btn-default" asp-action="EnableNotifications" asp-route-webNovelUrl="@webNovel.UrlName">
+                            @Localizer["EnableNotifications"]
+                        </a>
+                    }
+                    @if (User.HasWebNovelEditorAccess() && !webNovel.IsComplete)
+                    {
+                        <a class="btn btn-lg btn-default" asp-action="AddWebNovelTranslation" asp-route-webNovelUrl="@webNovel.UrlName">
+                            @Localizer["AddWebNovelTranslation"]
+                        </a>
+                        <a class="btn btn-lg btn-default" asp-action="AddChapter" asp-route-webNovelId="@webNovel.Id">
+                            <i class="far fa-plus"></i>
+                            @Localizer["AddChapter"]
+                        </a>
+                        <div class="btn-group">
+                            <button class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown">
+                                <i class="far fa-pen"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                @foreach (var translation in Model.WebNovelInfo.WebNovel.Translations)
+                                {
+                                    <li><a class="dropdown-item" asp-action="EditWebNovelTranslation" asp-route-translationId="@translation.Id">@translation.Language.LocalName</a></li>
+                                }
+                            </ul>
+                        </div>
+                    }
                 }
             </div>
             <div class="header-title">

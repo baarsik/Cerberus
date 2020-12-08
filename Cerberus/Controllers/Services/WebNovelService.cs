@@ -16,11 +16,15 @@ namespace Cerberus.Controllers.Services
 {
     public sealed class WebNovelService : BaseService
     {
+        private readonly NotificationsService _notificationsService;
+
         public WebNovelService(ApplicationContext context,
             UserManager<ApplicationUser> userManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            NotificationsService notificationsService)
             : base(context, userManager, configuration)
         {
+            _notificationsService = notificationsService;
         }
 
         public async Task<WebNovelIndexViewModel> GetWebNovelIndexViewModelAsync(ApplicationUser user, int page)
@@ -129,6 +133,10 @@ namespace Cerberus.Controllers.Services
             var model = new WebNovelDetailsViewModel
             {
                 WebNovelInfo = GetWebNovelInfo(webNovel, languages),
+                NotificationsEnabled = await Db.WebNovelReaderData.AnyAsync(x =>
+                    x.User.Id == user.Id &&
+                    x.NotificationsEnabled &&
+                    x.WebNovel.Id == webNovel.Id),
                 IsValid = webNovel != null
             };
             
@@ -384,6 +392,8 @@ namespace Cerberus.Controllers.Services
             };
             Db.WebNovelChapterContent.Add(chapterContent);
             await Db.SaveChangesAsync();
+
+            await _notificationsService.AddNewWebNovelChapterNotificationAsync(chapterContent);
             
             return WebNovelAddChapterResult.Success;
         }
@@ -522,6 +532,31 @@ namespace Cerberus.Controllers.Services
             chapterContent.Language = await Db.Languages.FindAsync(model.LanguageId);
             
             Db.WebNovelChapterContent.Update(chapterContent);
+            await Db.SaveChangesAsync();
+        }
+
+        public async Task UpdateNotificationStatus(ApplicationUser user, string webNovelUrl, bool notificationsEnabled)
+        {
+            var webNovel = await Db.WebNovels
+                .Include(x=> x.ReaderData)
+                    .ThenInclude(x => x.User)
+                .SingleOrDefaultAsync(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture));
+
+            var readerData = webNovel.ReaderData.FirstOrDefault(x => x.User.Id == user.Id);
+            if (readerData == null)
+            {
+                Db.Add(new WebNovelReaderData
+                {
+                    User = user,
+                    WebNovel = webNovel,
+                    NotificationsEnabled = notificationsEnabled
+                });
+            }
+            else
+            {
+                readerData.NotificationsEnabled = notificationsEnabled;
+                Db.Update(readerData);
+            }
             await Db.SaveChangesAsync();
         }
 
