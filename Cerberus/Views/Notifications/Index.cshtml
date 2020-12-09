@@ -27,12 +27,15 @@
                 {
                     foreach (var item in Model.Items)
                     {
-                         <div class="panel panel-filled @(item.IsRead ? "panel-c-warning" : "panel-c-info")">
-                             <div class="panel-body">
-                                 <div class="c-white">@Html.Raw(item.Body)</div>
-                                 <div><small>@(item.NotificationDate.ToFormattedString())</small></div>
-                             </div>
-                         </div>
+                        <div class="panel panel-filled @(item.IsRead ? "panel-c-warning" : "panel-c-info")">
+                            <div class="panel-body">
+                                <div class="pull-right text-right">
+                                    <a asp-action="Delete" asp-route-notificationId="@item.Id" asp-route-page="@Model.Page"><i class="far fa-trash"></i></a>
+                                </div>
+                                <div class="c-white">@Html.Raw(item.Body)</div>
+                                <div><small>@(item.NotificationDate.ToFormattedString())</small></div>
+                            </div>
+                        </div>
                     }
                     <paginator asp-action="Index" model="@Model"/>
                 }

@@ -43,9 +43,9 @@
         <value>Add chapter</value>
     </data>
     <data name="EnableNotifications" xml:space="preserve">
-        <value>Follow</value>
+        <value>&lt;i class="far fa-eye"&gt;&lt;/i&gt; Follow</value>
     </data>
     <data name="DisableNotifications" xml:space="preserve">
-        <value>Unfollow</value>
+        <value>&lt;i class="far fa-eye-slash"&gt;&lt;/i&gt; Unfollow</value>
     </data>
 </root>

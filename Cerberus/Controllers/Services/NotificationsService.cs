@@ -100,6 +100,20 @@ namespace Cerberus.Controllers.Services
             return model;
         }
 
+        public async Task DeleteNotificationAsync(ApplicationUser user, Guid notificationId)
+        {
+            var notification = await Db.ApplicationUserNotifications
+                .FirstOrDefaultAsync(x => x.User.Id == user.Id && x.Id == notificationId);
+
+            if (notification == null)
+                return;
+
+            notification.IsRead = true;
+            notification.IsDeleted = true;
+            Db.Update(notification);
+            await Db.SaveChangesAsync();
+        }
+
         private async Task MarkAsRead(ApplicationUser user, int page)
         {
             var notifications = Db.ApplicationUserNotifications
