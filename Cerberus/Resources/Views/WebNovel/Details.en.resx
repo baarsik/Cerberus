@@ -48,4 +48,7 @@
     <data name="DisableNotifications" xml:space="preserve">
         <value>&lt;i class="far fa-eye-slash"&gt;&lt;/i&gt; Unfollow</value>
     </data>
+    <data name="ContinueReadingBtn" xml:space="preserve">
+        <value>Continue Reading</value>
+    </data>
 </root>

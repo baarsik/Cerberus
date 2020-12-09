@@ -127,16 +127,38 @@ namespace Cerberus.Controllers.Services
                     .ThenInclude(c => c.Language)
                 .Include(c => c.Translations)
                     .ThenInclude(c => c.Language)
+                .Include(c => c.ReaderData)
+                    .ThenInclude(c => c.User)
+                .Include(c => c.ReaderData)
+                    .ThenInclude(c => c.LastOpenedChapter)
+                    .ThenInclude(c => c.Translations)
+                    .ThenInclude(c => c.Language)
                 .SingleOrDefaultAsync(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture));
 
             var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
+            var readerData = webNovel?.ReaderData
+                .Where(c => c.User.Id == user.Id)
+                .Select(c => new WebNovelDetailsViewModel.ReaderUserData
+                {
+                    NotificationsEnabled = c.NotificationsEnabled,
+                    LastOpenedChapter = c.LastOpenedChapter == null ? null : new WebNovelDetailsViewModel.ChapterLinkInfo
+                    {
+                        LanguageCode = languages.Where(c.LastOpenedChapter.Translations.Select(tl => tl.Language).Contains)
+                            .Select(x => x.Code)
+                            .FirstOrDefault(),
+                        Volume = c.LastOpenedChapter.Volume,
+                        Number = c.LastOpenedChapter.Number
+                    }
+                })
+                .FirstOrDefault();
+            
             var model = new WebNovelDetailsViewModel
             {
                 WebNovelInfo = GetWebNovelInfo(webNovel, languages),
-                NotificationsEnabled = await Db.WebNovelReaderData.AnyAsync(x =>
-                    x.User.Id == user.Id &&
-                    x.NotificationsEnabled &&
-                    x.WebNovel.Id == webNovel.Id),
+                ReaderData = readerData ?? new WebNovelDetailsViewModel.ReaderUserData
+                {
+                    NotificationsEnabled = false
+                },
                 IsValid = webNovel != null
             };
             
@@ -473,6 +495,31 @@ namespace Cerberus.Controllers.Services
             };
             
             return model;
+        }
+
+        public async Task UpdateLastReadChapterAsync(ApplicationUser user, WebNovelChapter chapter)
+        {
+            var webNovel = await Db.WebNovels
+                .Include(c => c.ReaderData)
+                    .ThenInclude(c => c.User)
+                .FirstOrDefaultAsync(x => x.Chapters.Contains(chapter));
+            
+            var readerData = webNovel.ReaderData.FirstOrDefault(x => x.User.Id == user.Id);
+            if (readerData == null)
+            {
+                Db.Add(new WebNovelReaderData
+                {
+                    User = user,
+                    WebNovel = webNovel,
+                    LastOpenedChapter = chapter
+                });
+            }
+            else
+            {
+                readerData.LastOpenedChapter = chapter;
+                Db.Update(readerData);
+            }
+            await Db.SaveChangesAsync();
         }
 
         public async Task<EditChapterTranslationViewModel> GetEditChapterTranslationViewModelAsync(ApplicationUser user, Guid id)

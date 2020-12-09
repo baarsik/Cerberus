@@ -48,7 +48,8 @@ namespace Cerberus.Controllers
             
             if (model == null)
                 return RedirectToNotFound();
-            
+
+            await _webNovelService.UpdateLastReadChapterAsync(user, model.Translation.Chapter);
             return View(model);
         }
         

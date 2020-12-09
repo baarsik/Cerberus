@@ -5,6 +5,7 @@
 @{
     var webNovel = Model.WebNovelInfo.WebNovel;
     var webNovelContent = Model.WebNovelInfo.WebNovelContent;
+    var isAuthenticated = User?.Identity?.IsAuthenticated == true;
     ViewBag.Title = $"{HttpUtility.HtmlDecode(webNovelContent.Name)} – {Localizer["PageTitle"].Value}";
 }
 
@@ -15,21 +16,9 @@
                 <i class="fal fa-book fa-sm"></i>
             </div>
             <div class="pull-right text-right">
-                @if (User.Identity.IsAuthenticated)
+                @if (User?.Identity?.IsAuthenticated == true)
                 {
-                    if (Model.NotificationsEnabled)
-                    {
-                        <a class="btn btn-lg btn-default" asp-action="DisableNotifications" asp-route-webNovelUrl="@webNovel.UrlName">
-                            @Localizer["DisableNotifications"]
-                        </a>
-                    }
-                    else
-                    {
-                        <a class="btn btn-lg btn-default" asp-action="EnableNotifications" asp-route-webNovelUrl="@webNovel.UrlName">
-                            @Localizer["EnableNotifications"]
-                        </a>
-                    }
-                    @if (User.HasWebNovelEditorAccess() && !webNovel.IsComplete)
+                    if (User.HasWebNovelEditorAccess() && !webNovel.IsComplete)
                     {
                         <a class="btn btn-lg btn-default" asp-action="AddWebNovelTranslation" asp-route-webNovelUrl="@webNovel.UrlName">
                             @Localizer["AddWebNovelTranslation"]
@@ -76,14 +65,39 @@
                 <div class="panel panel-filled">
                     <div class="panel-heading">@Localizer["Description"]</div>
                     <div class="panel-body">@Html.Raw(webNovelContent.Description)</div>
-                </div>
-                @if (webNovel.Translations.Count > 1)
-                {
-                    <div class="panel panel-filled">
+                    @if (webNovel.Translations.Count > 1)
+                    {
                         <div class="panel-heading">@Localizer["AlternativeNames"]</div>
                         <div class="panel-body">@StringHelpers.GetCommaSpaceSeparatedString(webNovel.Translations.Select(c => c.Name))</div>
+                    }
+                    <div class="panel-body">
+                        @if (isAuthenticated)
+                        {
+                            if (Model.ReaderData.LastOpenedChapter != null)
+                            {
+                                var chapterLinkInfo = Model.ReaderData.LastOpenedChapter;
+                                <a class="btn btn-accent"
+                                   asp-action="Read"
+                                   asp-route-webNovelUrl="@Model.WebNovelInfo.WebNovel.UrlName"
+                                   asp-route-volume="@chapterLinkInfo.Volume"
+                                   asp-route-chapterNumber="@chapterLinkInfo.Number"
+                                   asp-route-languageCode="@chapterLinkInfo.LanguageCode">@Localizer["ContinueReadingBtn"]</a>
+                            }
+                            if (Model.ReaderData.NotificationsEnabled)
+                            {
+                                <a class="btn btn-default" asp-action="DisableNotifications" asp-route-webNovelUrl="@webNovel.UrlName">
+                                    @Localizer["DisableNotifications"]
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-default" asp-action="EnableNotifications" asp-route-webNovelUrl="@webNovel.UrlName">
+                                    @Localizer["EnableNotifications"]
+                                </a>
+                            }
+                        }
                     </div>
-                }
+                </div>
                 @if (webNovel.Chapters.Any(c => c.Translations.Any(d => Model.WebNovelInfo.UserLanguages.Contains(d.Language))))
                 {
                     if (webNovel.UsesVolumes)
