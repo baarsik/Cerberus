@@ -12,6 +12,8 @@ namespace DataContext.Models
         [Required]
         public virtual WebNovel WebNovel { get; set; }
 
+        public virtual WebNovelChapter LastOpenedChapter { get; set; }
+
         [Required]
         public virtual ApplicationUser User { get; set; }
     }

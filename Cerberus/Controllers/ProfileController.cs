@@ -30,7 +30,6 @@ namespace Cerberus.Controllers
                 IsOwnProfile = isOwnProfile,
                 User = user,
                 Statistics = await _profileService.GetUserStatisticsAsync(user),
-                ProductLicenses = isOwnProfile ? await _profileService.GetProductLicensesAsync(user) : null
             };
             return View(model);
         }

@@ -19,9 +19,6 @@ namespace DataContext
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<AttachmentDownloads> AttachmentDownloads { get; set; }
         public DbSet<PrivateMessage> PrivateMessages { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<ProductSettings> ProductSettings { get; set; }
-        public DbSet<ProductLicense> ProductLicenses { get; set; }
         public DbSet<Settings> Settings { get; set; }
         public DbSet<WebNovel> WebNovels { get; set; }
         public DbSet<WebNovelContent> WebNovelContent { get; set; }
@@ -89,21 +86,6 @@ namespace DataContext
             builder.Entity<NewsComment>()
                 .HasMany(c => c.Children)
                 .WithOne(c => c.Parent)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Product>()
-                .HasMany(c => c.Attachments)
-                .WithOne(c => c.Product)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Product>()
-                .HasMany(c => c.Licenses)
-                .WithOne(c => c.Product)
-                .OnDelete(DeleteBehavior.Restrict);
-            
-            builder.Entity<Product>()
-                .HasMany(c => c.SharedData)
-                .WithOne(c => c.Product)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<WebNovel>()

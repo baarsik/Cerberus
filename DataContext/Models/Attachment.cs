@@ -22,8 +22,6 @@ namespace DataContext.Models
 
         public virtual News News { get; set; }
 
-        public virtual Product Product { get; set; }
-
         public virtual ICollection<AttachmentDownloads> Downloads { get; set; }
     }
 }

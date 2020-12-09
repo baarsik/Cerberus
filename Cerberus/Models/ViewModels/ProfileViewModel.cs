@@ -10,8 +10,6 @@ namespace Cerberus.Models.ViewModels
         public ApplicationUser User { get; set; }
         
         public ProfileStatistics Statistics { get; set; }
-        
-        public ICollection<ProductLicense> ProductLicenses { get; set; }
     }
 
     public class ProfileStatistics

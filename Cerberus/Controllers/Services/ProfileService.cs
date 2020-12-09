@@ -47,15 +47,5 @@ namespace Cerberus.Controllers.Services
             };
             return statistics;
         }
-        
-        public async Task<ICollection<ProductLicense>> GetProductLicensesAsync(ApplicationUser user)
-        {
-            return await Db.ProductLicenses
-                .Include(c => c.User)
-                .Include(c => c.Product)
-                .Where(c => c.User == user)
-                .OrderByDescending(c => c.EndDate)
-                .ToListAsync();
-        }
     }
 }
