@@ -137,7 +137,7 @@ namespace Cerberus.Controllers.Services
 
             var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
             var readerData = webNovel?.ReaderData
-                .Where(c => c.User.Id == user.Id)
+                .Where(c => user != null && c.User.Id == user.Id)
                 .Select(c => new WebNovelDetailsViewModel.ReaderUserData
                 {
                     NotificationsEnabled = c.NotificationsEnabled,
@@ -501,6 +501,9 @@ namespace Cerberus.Controllers.Services
 
         public async Task UpdateLastReadChapterAsync(ApplicationUser user, WebNovelChapter chapter)
         {
+            if (user == null)
+                return;
+            
             var webNovel = await Db.WebNovels
                 .Include(c => c.ReaderData)
                     .ThenInclude(c => c.User)
