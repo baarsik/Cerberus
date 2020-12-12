@@ -15,6 +15,8 @@ namespace DataContext.Models
         [Required]
         public DateTime FreeToAccessDate { get; set; } = DateTime.Now;
 
+        public int Symbols { get; set; }
+
         [Required]
         public virtual Language Language { get; set; }
         

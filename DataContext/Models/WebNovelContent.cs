@@ -10,6 +10,8 @@ namespace DataContext.Models
         [Required]
         public string Description { get; set; }
 
+        public int Symbols { get; set; }
+
         [Required]
         public virtual Language Language { get; set; }
 

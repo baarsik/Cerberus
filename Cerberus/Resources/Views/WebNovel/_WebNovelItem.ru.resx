@@ -18,19 +18,25 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="PageTitle" xml:space="preserve">
-        <value>Новеллы</value>
+    <data name="Data_Volumes" xml:space="preserve">
+        <value>Томов</value>
     </data>
-    <data name="NewNovelButton" xml:space="preserve">
-        <value>Создать</value>
+    <data name="Data_Chapters" xml:space="preserve">
+        <value>Глав</value>
     </data>
-    <data name="HeaderTitle" xml:space="preserve">
-        <value>Новеллы</value>
+    <data name="Data_LastUpdate" xml:space="preserve">
+        <value>Последнее обновление</value>
     </data>
-    <data name="HeaderDescription" xml:space="preserve">
-        <value>Список веб-новелл</value>
+    <data name="Data_Complete" xml:space="preserve">
+        <value>Завершено</value>
     </data>
-    <data name="NoWebNovelsMessage" xml:space="preserve">
-        <value>Простите, на данный момент доступные веб-новеллы отсутствуют</value>
+    <data name="DetailsButton" xml:space="preserve">
+        <value>Подробнее</value>
+    </data>
+    <data name="ReadChapterButton" xml:space="preserve">
+        <value>Читать главу</value>
+    </data>
+    <data name="ReadChapterButton_Volume" xml:space="preserve">
+        <value>Том</value>
     </data>
 </root>

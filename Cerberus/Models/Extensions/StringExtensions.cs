@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Web;
 using Ganss.XSS;
 
 namespace Cerberus.Models.Extensions
@@ -43,6 +43,16 @@ namespace Cerberus.Models.Extensions
             };
             htmlSanitizer.AllowedTags.Clear();
             return htmlSanitizer.Sanitize(value);
+        }
+
+        /// <summary>
+        /// Completely removes all HTML tags while saving all inner content, unescapes HTML symbols and counts length
+        /// </summary>
+        /// <param name="value">Source string</param>
+        /// <returns></returns>
+        public static int GetPureTextLength(this string value)
+        {
+            return HttpUtility.HtmlDecode(value.RemoveHTML()).Length;
         }
     }
 }

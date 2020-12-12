@@ -32,11 +32,14 @@
                 {
                     <span class="text-accent">(18+)</span>
                 }
+                <br/>
+                <small>
+                    <i class="far fa-calendar-alt"></i> @translation.CreationDate.ToFormattedString()
+                </small>
             </div>
             <div class="flex-row align-center">
                 <div style="padding-right: 1em">
-                    <i class="far fa-calendar-alt"></i>
-                    @translation.CreationDate.ToFormattedString()
+                    <i class="far fa-pen"></i> @translation.Symbols
                 </div>
                 <div>
                     @if (Model.WebNovel.UsesVolumes)

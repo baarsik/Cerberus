@@ -36,58 +36,7 @@
                 {
                     foreach (var item in Model.Items)
                     {
-                         <div class="panel panel-filled panel-c-warning">
-                             <div class="panel-heading">
-                                 <a class="no-text-decoration" asp-action="Details" asp-route-webNovelUrl="@item.WebNovel.UrlName">
-                                     <h3>@item.WebNovelContent.Name</h3>
-                                 </a>
-                                 @if (item.WebNovel.UsesVolumes)
-                                 {
-                                     <div class="badge">@Localizer["Data_Volumes"]: @item.TotalVolumes</div>
-                                 }
-                                 <div class="badge">@Localizer["Data_Chapters"]: @item.TotalChapters</div>
-                                 @if (item.LastUpdateDate.HasValue)
-                                 {
-                                     <div class="badge">@Localizer["Data_LastUpdate"]: @item.LastUpdateDate.Value.ToFormattedString()</div>
-                                 }
-                                 @if (item.WebNovel.IsAdultContent)
-                                 {
-                                     <div class="badge badge-accent">18+</div>
-                                 }
-                                 @if (item.WebNovel.IsComplete)
-                                 {
-                                     <div class="badge badge-accent">@Localizer["Data_Complete"]</div>
-                                 }
-                             </div>
-                             <div class="panel-body overflow-100">
-                                 @Html.Raw(item.WebNovelContent.Description)
-                             </div>
-                             <div class="panel-footer">
-                                 <a class="btn btn-sm btn-default" asp-action="Details" asp-route-webNovelUrl="@item.WebNovel.UrlName">@Localizer["DetailsButton"]</a>
-                                 @if (item.TotalChapters > 0)
-                                 {
-                                     if (item.WebNovel.UsesVolumes)
-                                     {
-                                         <a class="btn btn-sm btn-default" asp-action="Read"
-                                            asp-route-languageCode="@item.LastChapterTranslation.Language.Code"
-                                            asp-route-volume="@item.LastChapterTranslation.Chapter.Volume"
-                                            asp-route-webNovelUrl="@item.WebNovel.UrlName"
-                                            asp-route-chapterNumber="@item.LastChapterTranslation.Chapter.Number">
-                                             @Localizer["ReadChapterButton"] @item.LastChapterTranslation.Chapter.Number (@Localizer["ReadChapterButton_Volume"] @item.LastChapterTranslation.Chapter.Volume)
-                                         </a>
-                                     }
-                                     else
-                                     {
-                                         <a class="btn btn-sm btn-default" asp-action="Read"
-                                            asp-route-languageCode="@item.LastChapterTranslation.Language.Code"
-                                            asp-route-webNovelUrl="@item.WebNovel.UrlName"
-                                            asp-route-chapterNumber="@item.LastChapterTranslation.Chapter.Number">
-                                             @Localizer["ReadChapterButton"] @item.LastChapterTranslation.Chapter.Number
-                                         </a>
-                                     }
-                                 }
-                             </div>
-                         </div>
+                         <partial name="_WebNovelItem" model="@item"/>
                     }
                     <paginator asp-action="Index" model="@Model"/>
                 }

@@ -319,7 +319,7 @@ namespace Cerberus.Controllers.Services
             return WebNovelAddWebNovelTranslationResult.Success;
         }
 
-        public async Task<WebNovelAddChapterResult> AddChapterAsync(ApplicationUser uploader, AddChapterViewModel model)
+        public async Task<WebNovelAddChapterResult> AddChapterContentAsync(ApplicationUser uploader, AddChapterViewModel model)
         {
             var webNovel = await Db.WebNovels
                 .Include(c => c.Chapters)
@@ -408,6 +408,7 @@ namespace Cerberus.Controllers.Services
                 Text = model.Text.SanitizeHTML(),
                 CreationDate = DateTime.Now,
                 FreeToAccessDate = DateTime.ParseExact(model.FreeToAccessDate, Constants.Misc.DateFormat, CultureInfo.InvariantCulture),
+                Symbols = model.Text.GetPureTextLength(),
                 Uploader = uploader,
                 Language = language,
                 Chapter = chapter
@@ -415,6 +416,7 @@ namespace Cerberus.Controllers.Services
             Db.WebNovelChapterContent.Add(chapterContent);
             await Db.SaveChangesAsync();
 
+            await UpdateWebNovelSymbolCountAsync(webNovel.Id, language.Id);
             await _notificationsService.AddNewWebNovelChapterNotificationAsync(chapterContent);
             
             return WebNovelAddChapterResult.Success;
@@ -558,10 +560,11 @@ namespace Cerberus.Controllers.Services
             return model;
         }
         
-        public async Task UpdateChapterAsync(ApplicationUser uploader, EditChapterTranslationViewModel model)
+        public async Task UpdateChapterContentAsync(ApplicationUser uploader, EditChapterTranslationViewModel model)
         {
             var chapterContent = await Db.WebNovelChapterContent
                 .Include(c => c.Chapter)
+                    .ThenInclude(c => c.WebNovel)
                 .FirstOrDefaultAsync(c => c.Id == model.WebNovelChapterContentId);
             
             if (chapterContent == null)
@@ -573,13 +576,16 @@ namespace Cerberus.Controllers.Services
                 Db.WebNovelChapters.Update(chapterContent.Chapter);
             }
             
-            chapterContent.Title = model.Title;
-            chapterContent.Text = model.Text;
+            chapterContent.Title = model.Title.RemoveHTML();
+            chapterContent.Text = model.Text.SanitizeHTML();
+            chapterContent.Symbols = model.Text.GetPureTextLength();
             chapterContent.FreeToAccessDate = DateTime.ParseExact(model.FreeToAccessDate, Constants.Misc.DateFormat, CultureInfo.InvariantCulture);
             chapterContent.Language = await Db.Languages.FindAsync(model.LanguageId);
             
             Db.WebNovelChapterContent.Update(chapterContent);
             await Db.SaveChangesAsync();
+
+            await UpdateWebNovelSymbolCountAsync(chapterContent.Chapter.WebNovel.Id, model.LanguageId);
         }
 
         public async Task UpdateNotificationStatus(ApplicationUser user, string webNovelUrl, bool notificationsEnabled)
@@ -638,6 +644,22 @@ namespace Cerberus.Controllers.Services
                     .FirstOrDefault(),
                 UserLanguages = languages
             };
+        }
+        
+        private async Task UpdateWebNovelSymbolCountAsync(Guid webNovelId, Guid languageId)
+        {
+            var webNovelContent = await Db.WebNovelContent
+                .FirstOrDefaultAsync(x =>
+                    x.WebNovel.Id == webNovelId &&
+                    x.Language.Id == languageId);
+            
+            webNovelContent.Symbols = await Db.WebNovelChapterContent
+                .Where(x =>
+                    x.Language.Id == webNovelContent.Language.Id &&
+                    x.Chapter.WebNovel.Id == webNovelContent.WebNovel.Id)
+                .SumAsync(x => x.Symbols);
+            Db.Update(webNovelContent);
+            await Db.SaveChangesAsync();
         }
     }
 

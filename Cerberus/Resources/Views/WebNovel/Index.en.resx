@@ -30,27 +30,6 @@
     <data name="HeaderDescription" xml:space="preserve">
         <value>List of web novels</value>
     </data>
-    <data name="Data_Volumes" xml:space="preserve">
-        <value>Volumes</value>
-    </data>
-    <data name="Data_Chapters" xml:space="preserve">
-        <value>Chapters</value>
-    </data>
-    <data name="Data_LastUpdate" xml:space="preserve">
-        <value>Last update</value>
-    </data>
-    <data name="Data_Complete" xml:space="preserve">
-        <value>Complete</value>
-    </data>
-    <data name="DetailsButton" xml:space="preserve">
-        <value>Details</value>
-    </data>
-    <data name="ReadChapterButton" xml:space="preserve">
-        <value>Read chapter</value>
-    </data>
-    <data name="ReadChapterButton_Volume" xml:space="preserve">
-        <value>Volume</value>
-    </data>
     <data name="NoWebNovelsMessage" xml:space="preserve">
         <value>Sorry, the list of web novels is empty</value>
     </data>

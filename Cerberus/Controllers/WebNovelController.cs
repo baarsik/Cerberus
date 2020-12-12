@@ -211,7 +211,7 @@ namespace Cerberus.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var result = await _webNovelService.AddChapterAsync(user, model);
+            var result = await _webNovelService.AddChapterContentAsync(user, model);
             switch (result)
             {
                 case WebNovelAddChapterResult.Success:
@@ -277,7 +277,7 @@ namespace Cerberus.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            await _webNovelService.UpdateChapterAsync(user, model);
+            await _webNovelService.UpdateChapterContentAsync(user, model);
             return RedirectToAction(nameof(Read), new {webNovelUrl = model.WebNovel.UrlName, languageCode = model.WebNovelContent.Language.Code, volume = model.Volume, chapterNumber = model.Number});
         }
 

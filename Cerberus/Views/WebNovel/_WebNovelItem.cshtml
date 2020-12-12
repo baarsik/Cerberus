@@ -1,0 +1,57 @@
+@model WebNovelInfo
+
+<div class="panel panel-filled panel-c-warning">
+    <div class="panel-heading">
+        <a class="no-text-decoration" asp-action="Details" asp-route-webNovelUrl="@Model.WebNovel.UrlName">
+            <h3>@Model.WebNovelContent.Name</h3>
+        </a>
+        @if (Model.WebNovel.UsesVolumes)
+        {
+            <div class="badge">@Localizer["Data_Volumes"]: @Model.TotalVolumes</div>
+        }
+        <div class="badge">@Localizer["Data_Chapters"]: @Model.TotalChapters</div>
+        @if (Model.LastUpdateDate.HasValue)
+        {
+            <div class="badge">@Localizer["Data_LastUpdate"]: @Model.LastUpdateDate.Value.ToFormattedString()</div>
+        }
+        <div class="badge">
+            <i class="far fa-pen"></i> @Model.WebNovelContent.Symbols
+        </div>
+        @if (Model.WebNovel.IsAdultContent)
+        {
+            <div class="badge badge-accent">18+</div>
+        }
+        @if (Model.WebNovel.IsComplete)
+        {
+            <div class="badge badge-accent">@Localizer["Data_Complete"]</div>
+        }
+    </div>
+    <div class="panel-body overflow-100">
+        @Html.Raw(Model.WebNovelContent.Description)
+    </div>
+    <div class="panel-footer">
+        <a class="btn btn-sm btn-default" asp-action="Details" asp-route-webNovelUrl="@Model.WebNovel.UrlName">@Localizer["DetailsButton"]</a>
+        @if (Model.TotalChapters > 0)
+        {
+            if (Model.WebNovel.UsesVolumes)
+            {
+                <a class="btn btn-sm btn-default" asp-action="Read"
+                   asp-route-languageCode="@Model.LastChapterTranslation.Language.Code"
+                   asp-route-volume="@Model.LastChapterTranslation.Chapter.Volume"
+                   asp-route-webNovelUrl="@Model.WebNovel.UrlName"
+                   asp-route-chapterNumber="@Model.LastChapterTranslation.Chapter.Number">
+                    @Localizer["ReadChapterButton"] @Model.LastChapterTranslation.Chapter.Number (@Localizer["ReadChapterButton_Volume"] @Model.LastChapterTranslation.Chapter.Volume)
+                </a>
+            }
+            else
+            {
+                <a class="btn btn-sm btn-default" asp-action="Read"
+                   asp-route-languageCode="@Model.LastChapterTranslation.Language.Code"
+                   asp-route-webNovelUrl="@Model.WebNovel.UrlName"
+                   asp-route-chapterNumber="@Model.LastChapterTranslation.Chapter.Number">
+                    @Localizer["ReadChapterButton"] @Model.LastChapterTranslation.Chapter.Number
+                </a>
+            }
+        }
+    </div>
+</div>
