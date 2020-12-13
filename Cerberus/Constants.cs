@@ -21,7 +21,7 @@ namespace Cerberus
 
         public static class Notifications
         {
-            public const int NotificationsPerIndexPage = 25;
+            public const int ItemsPerIndexPage = 25;
         }
 
         public static class WebNovel

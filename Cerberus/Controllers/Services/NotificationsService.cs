@@ -62,7 +62,7 @@ namespace Cerberus.Controllers.Services
         public async Task<NotificationsIndexViewModel> GetNotificationsIndexViewModelAsync(ApplicationUser user, int page)
         {
             var itemsToDisplayCount = await Db.ApplicationUserNotifications.CountAsync(c => c.User == user);
-            var totalPages = (int) Math.Ceiling(itemsToDisplayCount / (double) Constants.Notifications.NotificationsPerIndexPage);
+            var totalPages = (int) Math.Ceiling(itemsToDisplayCount / (double) Constants.Notifications.ItemsPerIndexPage);
             if (totalPages == 0)
             {
                 totalPages = 1;
@@ -81,8 +81,8 @@ namespace Cerberus.Controllers.Services
             model.Items = await Db.ApplicationUserNotifications
                 .Where(c => c.User == user)
                 .OrderByDescending(c => c.NotificationDate)
-                .Take(Constants.WebNovel.ItemsPerIndexPage)
-                .Skip(Constants.WebNovel.ItemsPerIndexPage * (model.Page - 1))
+                .Take(Constants.Notifications.ItemsPerIndexPage)
+                .Skip(Constants.Notifications.ItemsPerIndexPage * (model.Page - 1))
                 .Select(c => new NotificationsIndexViewModelItem
                 {
                     Id = c.Id,
@@ -119,8 +119,8 @@ namespace Cerberus.Controllers.Services
             var notifications = Db.ApplicationUserNotifications
                 .Where(c => c.User == user)
                 .OrderByDescending(c => c.NotificationDate)
-                .Take(Constants.WebNovel.ItemsPerIndexPage)
-                .Skip(Constants.WebNovel.ItemsPerIndexPage * (page - 1));
+                .Take(Constants.Notifications.ItemsPerIndexPage)
+                .Skip(Constants.Notifications.ItemsPerIndexPage * (page - 1));
 
             foreach (var notification in notifications)
             {
