@@ -33,5 +33,45 @@
     <Folder Include="wwwroot\images\avatars" />
     <Folder Include="wwwroot\images\webnovel" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Views\WebNovel\AddChapter.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddChapter.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views\WebNovel\AddChapter.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddChapter.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views\WebNovel\EditChapterTranslation.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditChapterTranslation.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views\WebNovel\EditChapterTranslation.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditChapterTranslation.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\Views\WebNovel\EditChapterTranslation.ru.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EditChapterTranslation.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Views\WebNovel\EditChapterTranslation.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EditChapterTranslation.en.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Views\WebNovel\AddChapter.ru.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AddChapter.ru.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="Resources\Views\WebNovel\AddChapter.en.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AddChapter.en.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+  </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

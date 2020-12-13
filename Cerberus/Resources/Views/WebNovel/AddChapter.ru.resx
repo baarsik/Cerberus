@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Volume" xml:space="preserve">
+        <value>Том</value>
+    </data>
+    <data name="ChapterNumber" xml:space="preserve">
+        <value>Глава</value>
+    </data>
+    <data name="PageTitle" xml:space="preserve">
+        <value>Добавить главу</value>
+    </data>
+    <data name="HeaderDescription" xml:space="preserve">
+        <value>Добавить новую главу</value>
+    </data>
+    <data name="Title" xml:space="preserve">
+        <value>Заголовок</value>
+    </data>
+    <data name="Title_Description" xml:space="preserve">
+        <value>Заголовок главы (3-64 символа)</value>
+    </data>
+    <data name="Language" xml:space="preserve">
+        <value>Язык</value>
+    </data>
+    <data name="Language_Description" xml:space="preserve">
+        <value>Язык текста</value>
+    </data>
+    <data name="Body" xml:space="preserve">
+        <value>Содержимое</value>
+    </data>
+    <data name="Is18Plus" xml:space="preserve">
+        <value>18+</value>
+    </data>
+    <data name="Is18Plus_Description" xml:space="preserve">
+        <value>Поставьте галочку, если данная глава содержит большое количество эротического и/или порнографического материала</value>
+    </data>
+    <data name="FreeToAccessDate" xml:space="preserve">
+        <value>Дата бесплатного доступа</value>
+    </data>
+    <data name="FreeToAccessDate_Description" xml:space="preserve">
+        <value>Дата, когда глава становится бесплатной</value>
+    </data>
+    <data name="SubmitButton" xml:space="preserve">
+        <value>Добавить главу</value>
+    </data>
+    <data name="CancelButton" xml:space="preserve">
+        <value>Отмена</value>
+    </data>
+</root>
