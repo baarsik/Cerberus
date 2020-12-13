@@ -50,6 +50,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>EditChapterTranslation.en.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views\WebNovel\AddWebNovel.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddWebNovel.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views\WebNovel\AddWebNovel.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddWebNovel.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\Views\WebNovel\EditChapterTranslation.ru.Designer.cs">
@@ -71,6 +79,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>AddChapter.en.resx</DependentUpon>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="Resources\Views\WebNovel\AddWebNovel.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AddWebNovel.en.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Views\WebNovel\AddWebNovel.ru.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AddWebNovel.ru.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

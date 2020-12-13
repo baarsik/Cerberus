@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="PageTitle" xml:space="preserve">
+        <value>Add Web Novel</value>
+    </data>
+    <data name="Header_Title" xml:space="preserve">
+        <value>Add New Web Novel</value>
+    </data>
+    <data name="Header_Description" xml:space="preserve">
+        <value>Please specify details</value>
+    </data>
+    <data name="Data_UrlName" xml:space="preserve">
+        <value>URL Name</value>
+    </data>
+    <data name="Data_UrlName_Description" xml:space="preserve">
+        <value>URL name (latin, no spaces or special symbols)</value>
+    </data>
+    <data name="Data_OriginalName" xml:space="preserve">
+        <value>Original Name</value>
+    </data>
+    <data name="Data_OriginalName_Description" xml:space="preserve">
+        <value>Web novel original name</value>
+    </data>
+    <data name="Data_Language" xml:space="preserve">
+        <value>Language</value>
+    </data>
+    <data name="Data_Language_Description" xml:space="preserve">
+        <value>Text language</value>
+    </data>
+    <data name="Data_Name" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="Data_Name_Description" xml:space="preserve">
+        <value>Web novel name</value>
+    </data>
+    <data name="Data_Description" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="Data_Description_Description" xml:space="preserve">
+        <value>Web novel description. Please, note that it may be shortened on the main page.</value>
+    </data>
+    <data name="Data_Author" xml:space="preserve">
+        <value>Author</value>
+    </data>
+    <data name="Data_Author_Description" xml:space="preserve">
+        <value>Web novel original author</value>
+    </data>
+    <data name="Data_IsAdultContent" xml:space="preserve">
+        <value>Is 18+</value>
+    </data>
+    <data name="Data_IsAdultContent_Description" xml:space="preserve">
+        <value>Please, check this if web novel contains lots of erotic and/or pornographic material</value>
+    </data>
+    <data name="Data_UsesVolumes" xml:space="preserve">
+        <value>Uses Volumes</value>
+    </data>
+    <data name="Data_UsesVolumes_Description" xml:space="preserve">
+        <value>If not checked, volume segregation will be unavailable</value>
+    </data>
+    <data name="SubmitButton" xml:space="preserve">
+        <value>Add Web Novel</value>
+    </data>
+    <data name="CancelButton" xml:space="preserve">
+        <value>Cancel</value>
+    </data>
+</root>

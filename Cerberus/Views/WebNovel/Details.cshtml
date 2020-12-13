@@ -74,10 +74,10 @@
                         <div class="panel-heading">@Localizer["AlternativeNames"]</div>
                         <div class="panel-body">@StringHelpers.GetCommaSpaceSeparatedString(webNovel.Translations.Select(c => c.Name))</div>
                     }
-                    <div class="panel-body">
-                        @if (isAuthenticated)
-                        {
-                            if (Model.ReaderData.LastOpenedChapter != null)
+                    @if (isAuthenticated)
+                    {
+                        <div class="panel-body">
+                            @if (Model.ReaderData.LastOpenedChapter != null)
                             {
                                 var chapterLinkInfo = Model.ReaderData.LastOpenedChapter;
                                 <a class="btn btn-accent"
@@ -87,7 +87,7 @@
                                    asp-route-chapterNumber="@chapterLinkInfo.Number"
                                    asp-route-languageCode="@chapterLinkInfo.LanguageCode">@Localizer["ContinueReadingBtn"]</a>
                             }
-                            if (Model.ReaderData.NotificationsEnabled)
+                            @if (Model.ReaderData.NotificationsEnabled)
                             {
                                 <a class="btn btn-default" asp-action="DisableNotifications" asp-route-webNovelUrl="@webNovel.UrlName">
                                     @Localizer["DisableNotifications"]
@@ -99,8 +99,9 @@
                                     @Localizer["EnableNotifications"]
                                 </a>
                             }
-                        }
-                    </div>
+
+                        </div>
+                    }
                 </div>
                 @if (webNovel.Chapters.Any(c => c.Translations.Any(d => Model.WebNovelInfo.UserLanguages.Contains(d.Language))))
                 {

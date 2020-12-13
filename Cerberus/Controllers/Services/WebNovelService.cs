@@ -486,6 +486,12 @@ namespace Cerberus.Controllers.Services
             chapterContent.Chapter = chapter;
 
             var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
+            if (user == null)
+            {
+                languages = languages
+                    .OrderByDescending(x => x.Code == languageCode)
+                    .ToList();
+            }
             var model = new WebNovelReadViewModel
             {
                 WebNovelContent = chapter.WebNovel.Translations.SingleOrDefault(c => c.Language.Code == languageCode),

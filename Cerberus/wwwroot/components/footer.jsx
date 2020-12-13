@@ -4,7 +4,7 @@ class Footer extends React.Component {
             <div className="container">
                 <hr/>
                 <footer>
-                    <p>&copy; 2019, Cerberus</p>
+                    <p>&copy; 2017-2021, Cerberus</p>
                 </footer>
             </div>
         );
