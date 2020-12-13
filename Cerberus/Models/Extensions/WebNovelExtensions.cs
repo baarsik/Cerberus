@@ -22,7 +22,7 @@ namespace Cerberus.Models.Extensions
                 .FirstOrDefault();
         }
         
-        public static WebNovelChapterContent GetLastChapter(this WebNovel webNovel, IList<Language> languages)
+        public static WebNovelChapterContent GetLastChapterContent(this WebNovel webNovel, IList<Language> languages)
         {
             return webNovel?.Chapters
                 .Where(c => c.Translations.Any(d => languages.Contains(d.Language)))

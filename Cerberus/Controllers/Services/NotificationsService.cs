@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cerberus.Models.Extensions;
-using Cerberus.Models.ViewModels;
+using Cerberus.Models.ViewModels.Notifications;
 using DataContext;
 using DataContext.Models;
 using Microsoft.AspNetCore.Identity;
@@ -46,7 +46,7 @@ namespace Cerberus.Controllers.Services
                     ? $"<b>{webNovelName}</b> Vol. {webNovelChapterContent.Chapter.Volume} Chapter {webNovelChapterContent.Chapter.Number}"
                     : $"<b>{webNovelName}</b> Chapter {webNovelChapterContent.Chapter.Number}";
 
-                var link = $"<a href=\"/wn/read/{webNovelChapterContent.Language.Code}/{webNovelChapterContent.Chapter.WebNovel.UrlName}/{webNovelChapterContent.Chapter.Number}/\">{linkText}</a>";
+                var link = $"<a href=\"/wn/{nameof(WebNovelController.Read)}/{webNovelChapterContent.Language.Code}/{webNovelChapterContent.Chapter.WebNovel.UrlName}/{webNovelChapterContent.Chapter.Number}/\">{linkText}</a>";
                 notifications.Add(new ApplicationUserNotifications
                 {
                     Body = $"New Release: {link}",
@@ -81,8 +81,8 @@ namespace Cerberus.Controllers.Services
             model.Items = await Db.ApplicationUserNotifications
                 .Where(c => c.User == user)
                 .OrderByDescending(c => c.NotificationDate)
-                .Take(Constants.Notifications.ItemsPerIndexPage)
                 .Skip(Constants.Notifications.ItemsPerIndexPage * (model.Page - 1))
+                .Take(Constants.Notifications.ItemsPerIndexPage)
                 .Select(c => new NotificationsIndexViewModelItem
                 {
                     Id = c.Id,
@@ -97,6 +97,53 @@ namespace Cerberus.Controllers.Services
                 await MarkAsRead(user, page);
             }
 
+            return model;
+        }
+
+        public async Task<ManageNotificationsViewModel> GetManageNotificationsViewModelAsync(ApplicationUser user, int page)
+        {
+            var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
+            
+            var itemsToDisplayCount = await Db.WebNovelReaderData
+                .CountAsync(c =>
+                    c.User.Id == user.Id &&
+                    c.NotificationsEnabled);
+            var totalPages = (int) Math.Ceiling(itemsToDisplayCount / (double) Constants.Notifications.ItemsPerIndexPage);
+            if (totalPages == 0)
+            {
+                totalPages = 1;
+            }
+            
+            var model = new ManageNotificationsViewModel
+            {
+                Page = page < 1
+                    ? 1
+                    : page > totalPages
+                        ? totalPages
+                        : page,
+                TotalPages = totalPages,
+            };
+
+            model.Items = await Db.WebNovelReaderData
+                .Include(x => x.WebNovel)
+                .ThenInclude(x => x.Translations)
+                    .ThenInclude(x => x.Language)
+                .Where(readerData => readerData.User.Id == user.Id && readerData.NotificationsEnabled)
+                .Select(x => new
+                {
+                    ReaderData = x,
+                    WebNovelContent = x.WebNovel.GetTranslation(languages)
+                })
+                .Select(x => new ManageNotificationsViewModelItem
+                {
+                    Id = x.ReaderData.Id,
+                    WebNovelContent = x.WebNovelContent,
+                    WebNovelURL = $"/wn/{nameof(WebNovelController.Details)}/{x.ReaderData.WebNovel.UrlName}/"
+                })
+                .Skip(Constants.Notifications.ItemsPerIndexPage * (model.Page - 1))
+                .Take(Constants.Notifications.ItemsPerIndexPage)
+                .ToListAsync();
+            
             return model;
         }
 

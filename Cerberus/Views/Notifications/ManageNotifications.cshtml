@@ -1,0 +1,46 @@
+@model Cerberus.Models.ViewModels.Notifications.ManageNotificationsViewModel
+
+@{
+    ViewBag.Title = Localizer["PageTitle"];
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="view-header">
+            <div class="header-icon">
+                <i class="fal fa-bell fa-sm"></i>
+            </div>
+            <div class="header-title">
+                <h3>@Localizer["Header_Title"]</h3>
+                <small>@Localizer["Header_Description"]</small>
+            </div>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-body">
+                @if (Model.Items.Any())
+                {
+                    foreach (var item in Model.Items)
+                    {
+                        <div class="panel panel-filled panel-c-warning">
+                            <div class="panel-body">
+                                <div><a href="@item.WebNovelURL">@item.WebNovelContent.Name</a></div>
+                                <div><small><i class="far fa-pen"></i> @item.WebNovelContent.Symbols.ToStringDisplayFormat()</small></div>
+                            </div>
+                        </div>
+                    }
+                    <paginator asp-action="ManageNotifications" model="@Model"/>
+                }
+                else
+                {
+                    <div>@Localizer["NoItemsMessage"]</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

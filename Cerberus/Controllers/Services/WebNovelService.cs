@@ -59,8 +59,8 @@ namespace Cerberus.Controllers.Services
             model.Items = webNovels
                 .Select(webNovel => GetWebNovelInfo(webNovel, languages))
                 .OrderByDescending(c => c.LastUpdateDate)
-                .Take(Constants.WebNovel.ItemsPerIndexPage)
                 .Skip(Constants.WebNovel.ItemsPerIndexPage * (model.Page - 1))
+                .Take(Constants.WebNovel.ItemsPerIndexPage)
                 .ToList();
             
             return model;
@@ -627,7 +627,7 @@ namespace Cerberus.Controllers.Services
                 return null;
             }
 
-            var lastChapter = webNovel.GetLastChapter(languages);
+            var lastChapter = webNovel.GetLastChapterContent(languages);
             var lastChapterTranslation = webNovel.GetLastChapterTranslation(languages);
             
             return new WebNovelInfo

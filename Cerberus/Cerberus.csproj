@@ -58,6 +58,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AddWebNovel.ru.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views\Notifications\ManageNotifications.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ManageNotifications.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views\Notifications\ManageNotifications.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ManageNotifications.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\Views\WebNovel\EditChapterTranslation.ru.Designer.cs">
@@ -89,6 +97,16 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>AddWebNovel.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Views\Notifications\ManageNotifications.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ManageNotifications.en.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Views\Notifications\ManageNotifications.ru.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ManageNotifications.ru.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

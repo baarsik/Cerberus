@@ -30,5 +30,12 @@ namespace Cerberus.Controllers
             await _notificationsService.DeleteNotificationAsync(user, notificationId);
             return RedirectToAction(nameof(Index), new {page});
         }
+
+        public async Task<IActionResult> ManageNotifications(int? page)
+        {
+            var user = await _notificationsService.GetUserAsync(User);
+            var model = await _notificationsService.GetManageNotificationsViewModelAsync(user, page ?? 1);
+            return View(model);
+        }
     }
 }

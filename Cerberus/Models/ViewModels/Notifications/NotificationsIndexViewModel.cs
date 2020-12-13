@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Cerberus.Interfaces;
-using DataContext.Models;
 
-namespace Cerberus.Models.ViewModels
+namespace Cerberus.Models.ViewModels.Notifications
 {
     public class NotificationsIndexViewModel : IPageableViewModel<NotificationsIndexViewModelItem>
     {
