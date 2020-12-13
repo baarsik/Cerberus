@@ -23,11 +23,6 @@ namespace Cerberus.Controllers.Services
         {
             var statistics = new ProfileStatistics
             {
-                News = new ProfileNewsStatistics
-                {
-                    TotalNews = await Db.News.CountAsync(c => c.Author == user),
-                    TotalComments = await Db.NewsComments.CountAsync(c => c.Author == user)
-                },
                 Forum = new ProfileForumStatistics
                 {
                     TotalStartedThreads = await Db.ForumThreads.CountAsync(c => c.Author == user),

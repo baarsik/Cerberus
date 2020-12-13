@@ -148,17 +148,15 @@ namespace Cerberus.Controllers.Services
                             .FirstOrDefault(),
                         Volume = c.LastOpenedChapter.Volume,
                         Number = c.LastOpenedChapter.Number
-                    }
+                    },
+                    SortOrder = c.SortOrder
                 })
                 .FirstOrDefault();
             
             var model = new WebNovelDetailsViewModel
             {
                 WebNovelInfo = GetWebNovelInfo(webNovel, languages),
-                ReaderData = readerData ?? new WebNovelDetailsViewModel.ReaderUserData
-                {
-                    NotificationsEnabled = false
-                },
+                ReaderData = readerData ?? new WebNovelDetailsViewModel.ReaderUserData(),
                 IsValid = webNovel != null
             };
             

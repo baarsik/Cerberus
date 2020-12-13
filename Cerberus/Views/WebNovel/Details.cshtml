@@ -1,5 +1,6 @@
 @using System.Web
 @using Cerberus.Models.Helpers
+@using DataContext.EnumDataTypes
 @model WebNovelDetailsViewModel
 
 @{
@@ -50,7 +51,7 @@
                     }
                 </h3>
                 <span class="badge">
-                    <i class="far fa-pen"></i> @webNovelContent.Symbols
+                    <i class="far fa-pen"></i> @webNovelContent.Symbols.ToStringDisplayFormat()
                 </span>
                 <small>
                     @StringHelpers.GetCommaSpaceSeparatedString(webNovel.OriginalName, webNovel.Author)
@@ -105,7 +106,10 @@
                 {
                     if (webNovel.UsesVolumes)
                     {
-                        var volumes = webNovel.Chapters.Select(c => c.Volume).Distinct().OrderByDescending(c => c);
+                        var volumes = webNovel.Chapters
+                            .Select(c => c.Volume)
+                            .Distinct()
+                            .OrderByDescending(c => c * (Model.ReaderData.SortOrder == SortOrder.FromNewToOld ? 1 : -1));
                         foreach (var volume in volumes)
                         {
                             <div class="panel panel-c-accent panel-filled">
@@ -116,7 +120,7 @@
                                                       {
                                                           Chapters = webNovel.Chapters
                                                               .Where(c => c.Volume == volume)
-                                                              .OrderByDescending(c => c.Number)
+                                                              .OrderByDescending(c => c.Number * (Model.ReaderData.SortOrder == SortOrder.FromNewToOld ? 1 : -1))
                                                               .ThenByDescending(c => c.Translations.Select(d => d.CreationDate).OrderByDescending(d => d).FirstOrDefault())
                                                               .ToList(),
                                                           WebNovel = webNovel,
@@ -136,7 +140,7 @@
                                          model="@(new ChapterLinkInDetailsViewModel
                                                   {
                                                       Chapters = webNovel.Chapters
-                                                          .OrderByDescending(c => c.Number)
+                                                          .OrderByDescending(c => c.Number * (Model.ReaderData.SortOrder == SortOrder.FromNewToOld ? 1 : -1))
                                                           .ThenByDescending(c => c.Translations.Select(d => d.CreationDate).OrderByDescending(d => d).FirstOrDefault())
                                                           .ToList(),
                                                       WebNovel = webNovel,

@@ -14,15 +14,8 @@ namespace Cerberus.Models.ViewModels
 
     public class ProfileStatistics
     {
-        public ProfileNewsStatistics News { get; set; }
         public ProfileForumStatistics Forum { get; set; }
         public ProfileWebNovelStatistics WebNovel { get; set; }
-    }
-
-    public class ProfileNewsStatistics
-    {
-        public int TotalNews { get; set; }
-        public int TotalComments { get; set; }
     }
 
     public class ProfileForumStatistics

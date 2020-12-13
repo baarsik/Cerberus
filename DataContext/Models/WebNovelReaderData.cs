@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using DataContext.EnumDataTypes;
 
 namespace DataContext.Models
 {
@@ -8,6 +9,10 @@ namespace DataContext.Models
         public bool NotificationsEnabled { get; set; } = false;
 
         public int? Rating { get; set; }
+
+        public ReadingStatus ReadingStatus { get; set; } = ReadingStatus.None;
+
+        public SortOrder SortOrder { get; set; } = SortOrder.FromNewToOld;
         
         [Required]
         public virtual WebNovel WebNovel { get; set; }

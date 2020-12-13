@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DataContext.Models
@@ -9,6 +10,8 @@ namespace DataContext.Models
         
         [Required]
         public string Text { get; set; }
+
+        public string SourceURL { get; set; }
         
         public DateTime CreationDate { get; set; } = DateTime.Now;
         
@@ -25,5 +28,7 @@ namespace DataContext.Models
         
         [Required]
         public WebNovelChapter Chapter { get; set; }
+        
+        public virtual ICollection<WebNovelChapterContentReaderData> ReaderData { get; set; }
     }
 }

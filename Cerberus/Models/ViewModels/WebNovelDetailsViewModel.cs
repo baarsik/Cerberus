@@ -1,3 +1,4 @@
+using DataContext.EnumDataTypes;
 using DataContext.Models;
 
 namespace Cerberus.Models.ViewModels
@@ -10,8 +11,9 @@ namespace Cerberus.Models.ViewModels
 
         public class ReaderUserData
         {
-            public bool NotificationsEnabled { get; set; }
+            public bool NotificationsEnabled { get; set; } = false;
             public ChapterLinkInfo LastOpenedChapter { get; set; }
+            public SortOrder SortOrder { get; set; } = SortOrder.FromNewToOld;
         }
 
         public class ChapterLinkInfo

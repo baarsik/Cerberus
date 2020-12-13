@@ -40,6 +40,8 @@ namespace DataContext.Models
 
         public virtual ICollection<WebNovelReaderData> WebNovelReaderData { get; set; }
         
+        public virtual ICollection<WebNovelChapterContentReaderData> WebNovelChapterContentReaderData { get; set; }
+        
         public virtual ICollection<ApplicationUserNotifications> Notifications { get; set; }
 
         public override string ToString()

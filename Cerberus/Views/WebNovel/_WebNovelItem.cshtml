@@ -15,7 +15,7 @@
             <div class="badge">@Localizer["Data_LastUpdate"]: @Model.LastUpdateDate.Value.ToFormattedString()</div>
         }
         <div class="badge">
-            <i class="far fa-pen"></i> @Model.WebNovelContent.Symbols
+            <i class="far fa-pen"></i> @Model.WebNovelContent.Symbols.ToStringDisplayFormat()
         </div>
         @if (Model.WebNovel.IsAdultContent)
         {

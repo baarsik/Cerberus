@@ -30,8 +30,6 @@ namespace DataContext.Models
         
         public virtual ICollection<ForumThreadReply> Replies { get; set; }
         
-        public virtual ICollection<Attachment> Attachments { get; set; }
-        
         public override string ToString()
         {
             return Title;
