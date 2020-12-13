@@ -1,7 +1,7 @@
 @model EditChapterTranslationViewModel
 
 @{
-    ViewBag.Title = $"Edit Chapter {Model.Number} – {Model.Title}";
+    ViewBag.Title = string.Format(Localizer["PageTitle"].Value, Model.Number, Model.Title);
     var settings = new LayoutSettings();
     settings.ActivateLibrary(Constants.Libraries.Datepicker);
     settings.ActivateLibrary(Constants.Libraries.Select2);
@@ -17,9 +17,7 @@
             </div>
             <div class="header-title">
                 <h3>@Model.WebNovelContent.Name</h3>
-                <small>
-                    Edit chapter @Model.Number – @Model.Title
-                </small>
+                <small>@string.Format(Localizer["HeaderDescription"].Value, Model.Number, Model.Title)</small>
             </div>
         </div>
         <hr>
@@ -36,38 +34,38 @@
                     @if (Model.WebNovel.UsesVolumes)
                     {
                         <div class="form-group">
-                            <label>Volume</label>
-                            <input type="number" asp-for="Volume" class="form-control" placeholder="Volume" readonly="readonly">
+                            <label>@Localizer["Volume"]</label>
+                            <input type="number" asp-for="Volume" class="form-control" placeholder="@Localizer["Volume"]" readonly="readonly">
                             <span class="help-block small">
                                 <span asp-validation-for="Volume" class="text-danger"></span>
                             </span>
                         </div>
                     }
                     <div class="form-group">
-                        <label>Chapter Number</label>
-                        <input type="number" asp-for="Number" class="form-control" placeholder="Chapter Number" readonly="readonly">
+                        <label>@Localizer["ChapterNumber"]</label>
+                        <input type="number" asp-for="Number" class="form-control" placeholder="@Localizer["ChapterNumber"]" readonly="readonly">
                         <span class="help-block small">
                             <span asp-validation-for="Number" class="text-danger"></span>
                         </span>
                     </div>
                     <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" asp-for="Title" class="form-control" placeholder="Chapter Title">
+                        <label>@Localizer["Title"]</label>
+                        <input type="text" asp-for="Title" class="form-control" placeholder="@Localizer["Title"]">
                         <span class="help-block small">
-                            <div>Chapter title (3-64 chars)</div>
+                            <div>@Localizer["Title_Description"]</div>
                             <span asp-validation-for="Title" class="text-danger"></span>
                         </span>
                     </div>
                     <div class="form-group">
-                        <label>Language</label>
+                        <label>@Localizer["Language"]</label>
                         <select class="select2 form-control" asp-for="LanguageId" asp-items="@(new SelectList(Model.Languages, "Id", "LocalName"))"></select>
                         <span class="help-block small">
-                            <div>Text language</div>
+                            <div>@Localizer["Language_Description"]</div>
                             <span asp-validation-for="LanguageId" class="text-danger"></span>
                         </span>
                     </div>
                     <div class="form-group">
-                        <label>Body</label>
+                        <label>@Localizer["Body"]</label>
                         <textarea type="text" asp-for="Text" class="form-control summernote"></textarea>
                         <span class="help-block small">
                             <span asp-validation-for="Text" class="text-danger"></span>
@@ -76,26 +74,28 @@
                     <div class="form-group">
                         <div class="checkbox">
                             <input type="checkbox" asp-for="IsAdultContent">
-                            <label asp-for="IsAdultContent">Is 18+</label>
+                            <label asp-for="IsAdultContent">@Localizer["Is18Plus"]</label>
                         </div>
                         <span class="help-block small">
-                            <div>Please, check this if web novel contains lots of erotic and/or pornographic material</div>
+                            <div>@Localizer["Is18Plus_Description"]</div>
                             <span asp-validation-for="IsAdultContent" class="text-danger"></span>
                         </span>
                     </div>
                     <div class="form-group">
-                        <label>Free To Access Date</label>
-                        <input type="text" id="freeToAccessDateInput" asp-for="FreeToAccessDate" class="form-control" placeholder="Free To Access Date">
+                        <label>@Localizer["FreeToAccessDate"]</label>
+                        <input type="text" id="freeToAccessDateInput" asp-for="FreeToAccessDate" class="form-control" placeholder="@Localizer["FreeToAccessDate"]">
                         <span class="help-block small">
-                            <div>Date when this chapter becomes free</div>
+                            <div>@Localizer["FreeToAccessDate_Description"]</div>
                             <span asp-validation-for="FreeToAccessDate" class="text-danger"></span>
                         </span>
                     </div>
-                    <button type="submit" class="btn btn-accent">
-                        Update Chapter
-                    </button>
-                    <a class="btn btn-default" asp-action="Read" asp-route-webNovelUrl="@Model.WebNovel.UrlName" asp-route-chapterNumber="@Model.Number" asp-route-languageCode="@Model.WebNovelContent.Language.Code">
-                        Cancel
+                    <button type="submit" class="btn btn-accent">@Localizer["SubmitButton"]</button>
+                    <a class="btn btn-default"
+                       asp-action="Read"
+                       asp-route-webNovelUrl="@Model.WebNovel.UrlName"
+                       asp-route-chapterNumber="@Model.Number"
+                       asp-route-languageCode="@Model.WebNovelContent.Language.Code">
+                        @Localizer["CancelButton"]
                     </a>
                 </form>
             </div>
