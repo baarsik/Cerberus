@@ -2,24 +2,11 @@
 
 @{
     ViewBag.Title = Model.User.DisplayName;
-    var profileRouteData = new Dictionary<string, string>
-    {
-        {"name", Model.User.DisplayName}
-    };
 }
 
 <div class="flex-column">
     <div class="flex-row m-b">
-        <div class="avatar m-r">
-            @if (Model.User.Avatar == "noavatar")
-            {
-                <i class="fas fa-user"></i>
-            }
-            else
-            {
-                <img src="@Model.User.GetAvatarUrl()" alt="Avatar"/>
-            }
-        </div>
+        <avatar user="@Model.User" class="avatar m-r"/>
         <div class="flex-column">
             <div class="profile-name">
                 <div>@Model.User.DisplayName</div>

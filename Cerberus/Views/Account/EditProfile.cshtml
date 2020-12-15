@@ -32,16 +32,7 @@
             <div class="form-group">
                 <label>Avatar</label>
                 <div class="flex-row">
-                    <div class="avatar m-r">
-                        @if (Model.User.Avatar == "noavatar")
-                        {
-                            <i class="fas fa-user"></i>
-                        }
-                        else
-                        {
-                            <img src="@Model.User.GetAvatarUrl()" alt="Avatar"/>
-                        }
-                    </div>
+                    <avatar user="@Model.User" class="avatar m-r"/>
                     <div>
                         <input type="file" asp-for="Avatar"/>
                         <span class="help-block small">
