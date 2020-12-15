@@ -7,7 +7,6 @@ namespace Cerberus.Models.ViewModels
     {
         public WebNovelInfo WebNovelInfo { get; set; }
         public ReaderUserData ReaderData { get; set; }
-        public bool IsValid { get; set; }
 
         public class ReaderUserData
         {

@@ -18,16 +18,19 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
+    <data name="PageTitle" xml:space="preserve">
+        <value>404 - Not Found</value>
+    </data>
     <data name="Header_Title" xml:space="preserve">
-        <value>Управление уведомлениями</value>
+        <value>404</value>
     </data>
     <data name="Header_Description" xml:space="preserve">
-        <value>Список всех источников уведомлений</value>
+        <value>Page Not Found</value>
     </data>
-    <data name="PageTitle" xml:space="preserve">
-        <value>Управление уведомлениями</value>
+    <data name="Text" xml:space="preserve">
+        <value>Sorry, but we couldn't find this page:(</value>
     </data>
-    <data name="NoItemsMessage" xml:space="preserve">
-        <value>Подписок на уведомления не обнаружено</value>
+    <data name="HomeButton" xml:space="preserve">
+        <value>Go home</value>
     </data>
 </root>

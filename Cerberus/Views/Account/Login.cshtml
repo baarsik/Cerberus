@@ -2,7 +2,7 @@
 @using reCAPTCHA.AspNetCore.Templates
 @model LoginViewModel
 @{
-    ViewBag.Title = "Login";
+    ViewBag.Title = Localizer["PageTitle"];
     ViewBag.Settings = new LayoutSettings
     {
         IsContainerCentered = true,
@@ -15,10 +15,8 @@
         <i class="fal fa-lock-alt" data-fa-transform="shrink-4"></i>
     </div>
     <div class="header-title">
-        <h3>Login</h3>
-        <small>
-            Please enter your credentials to log in
-        </small>
+        <h3>@Localizer["Header_Title"]</h3>
+        <small>@Localizer["Header_Description"]</small>
     </div>
 </div>
 
@@ -28,27 +26,27 @@
         {
             <div asp-validation-summary="All" class="alert alert-danger"></div>
             <div class="form-group">
-                <label class="control-label" asp-for="Email">E-Mail</label>
-                <input type="text" asp-for="Email" placeholder="E-Mail" class="form-control">
+                <label class="control-label" asp-for="Email">@Localizer["Data_Email"]</label>
+                <input type="text" asp-for="Email" placeholder="@Localizer["Data_Email"]" class="form-control">
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label" asp-for="Password">Password</label>
-                <input type="password" asp-for="Password" placeholder="Password" class="form-control">
+                <label class="control-label" asp-for="Password">@Localizer["Data_Password"]</label>
+                <input type="password" asp-for="Password" placeholder="@Localizer["Data_Password"]" class="form-control">
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <div class="checkbox">
                     <input type="checkbox" asp-for="RememberMe">
-                    <label asp-for="RememberMe">Remember Me</label>
+                    <label asp-for="RememberMe">@Localizer["Data_RememberMe"]</label>
                 </div>
             </div>
             <div class="form-group">
                 @(Html.Recaptcha<RecaptchaV2Checkbox>(RecaptchaSettings?.Value))
             </div>
             <div>
-                <button type="submit" class="btn btn-accent">Login</button>
-                <a class="btn btn-unimportant" asp-action="Register">Register</a>
+                <button type="submit" class="btn btn-accent">@Localizer["SubmitButton"]</button>
+                <a class="btn btn-unimportant" asp-action="Register">@Localizer["RegisterButton"]</a>
             </div>
         }
     </div>

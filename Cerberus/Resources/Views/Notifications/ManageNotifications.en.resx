@@ -24,4 +24,10 @@
     <data name="Header_Description" xml:space="preserve">
         <value>List of all notification sources</value>
     </data>
+    <data name="PageTitle" xml:space="preserve">
+        <value>Manage Notifications</value>
+    </data>
+    <data name="NoItemsMessage" xml:space="preserve">
+        <value>No notification subscriptions detected</value>
+    </data>
 </root>

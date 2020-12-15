@@ -135,6 +135,9 @@ namespace Cerberus.Controllers.Services
                     .ThenInclude(c => c.Language)
                 .SingleOrDefaultAsync(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture));
 
+            if (webNovel == null)
+                return null;
+
             var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
             var readerData = webNovel?.ReaderData
                 .Where(c => user != null && c.User.Id == user.Id)
@@ -156,8 +159,7 @@ namespace Cerberus.Controllers.Services
             var model = new WebNovelDetailsViewModel
             {
                 WebNovelInfo = GetWebNovelInfo(webNovel, languages),
-                ReaderData = readerData ?? new WebNovelDetailsViewModel.ReaderUserData(),
-                IsValid = webNovel != null
+                ReaderData = readerData ?? new WebNovelDetailsViewModel.ReaderUserData()
             };
             
             return model;

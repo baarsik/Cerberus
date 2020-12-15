@@ -68,6 +68,22 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ManageNotifications.ru.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views\Account\Login.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Login.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views\Account\Login.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Login.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views\Page\NotFound.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>NotFound.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views\Page\NotFound.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>NotFound.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\Views\WebNovel\EditChapterTranslation.ru.Designer.cs">
@@ -109,6 +125,26 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ManageNotifications.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Views\Account\Login.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Login.en.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Views\Account\Login.ru.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Login.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Views\Page\NotFound.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>NotFound.en.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Views\Page\NotFound.ru.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>NotFound.ru.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

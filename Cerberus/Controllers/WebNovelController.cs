@@ -31,6 +31,10 @@ namespace Cerberus.Controllers
         {
             var user = await _webNovelService.GetUserAsync(User);
             var model = await _webNovelService.GetWebNovelDetailsViewModelAsync(user, webNovelUrl);
+
+            if (model == null)
+                return RedirectToNotFound();
+            
             return View(model);
         }
         

@@ -18,16 +18,28 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
+    <data name="PageTitle" xml:space="preserve">
+        <value>Вход</value>
+    </data>
     <data name="Header_Title" xml:space="preserve">
-        <value>Управление уведомлениями</value>
+        <value>Вход</value>
     </data>
     <data name="Header_Description" xml:space="preserve">
-        <value>Список всех источников уведомлений</value>
+        <value>Введите свои данные для входа</value>
     </data>
-    <data name="PageTitle" xml:space="preserve">
-        <value>Управление уведомлениями</value>
+    <data name="Data_Email" xml:space="preserve">
+        <value>E-Mail</value>
     </data>
-    <data name="NoItemsMessage" xml:space="preserve">
-        <value>Подписок на уведомления не обнаружено</value>
+    <data name="Data_Password" xml:space="preserve">
+        <value>Пароль</value>
+    </data>
+    <data name="Data_RememberMe" xml:space="preserve">
+        <value>Запомнить меня на этом компьютере</value>
+    </data>
+    <data name="SubmitButton" xml:space="preserve">
+        <value>Войти</value>
+    </data>
+    <data name="RegisterButton" xml:space="preserve">
+        <value>Зарегистрироваться</value>
     </data>
 </root>

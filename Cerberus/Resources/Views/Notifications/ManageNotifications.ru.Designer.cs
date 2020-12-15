@@ -56,5 +56,17 @@ namespace Cerberus.Resources.Views.Notifications {
                 return ResourceManager.GetString("Header_Description", resourceCulture);
             }
         }
+        
+        internal static string PageTitle {
+            get {
+                return ResourceManager.GetString("PageTitle", resourceCulture);
+            }
+        }
+        
+        internal static string NoItemsMessage {
+            get {
+                return ResourceManager.GetString("NoItemsMessage", resourceCulture);
+            }
+        }
     }
 }

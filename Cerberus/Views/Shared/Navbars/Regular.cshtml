@@ -19,7 +19,7 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav cerberus-nav flex-row align-center">
-                @if (User.Identity.IsAuthenticated)
+                @if (User?.Identity?.IsAuthenticated == true)
                 {
                     <li class="@ViewContext.FillClassIfActive("Notifications")">
                         <a asp-area="" asp-controller="Notifications" asp-action="Index">

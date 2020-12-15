@@ -1,5 +1,5 @@
 @{
-    ViewBag.Title = "Not Found - 404";
+    ViewBag.Title = Localizer["PageTitle"];
 }
 
 <div class="view-header">
@@ -7,16 +7,14 @@
         <i class="fal fa-times-circle fa-sm"></i>
     </div>
     <div class="header-title">
-        <h3>404</h3>
-        <small>
-            Page Not Found
-        </small>
+        <h3>@Localizer["Header_Title"]</h3>
+        <small>@Localizer["Header_Description"]</small>
     </div>
 </div>
 
 <div class="panel panel-filled">
     <div class="panel-body">
-        <p class="m-t-xs">Sorry, but the page you are looking for is not found</p>
-        <p class="m-b-none"><a asp-controller="Home" asp-action="Index">Go home</a></p>
+        <p class="m-t-xs">@Localizer["Text"]</p>
+        <p class="m-b-none"><a asp-controller="Home" asp-action="Index">@Localizer["HomeButton"]</a></p>
     </div>
 </div>
