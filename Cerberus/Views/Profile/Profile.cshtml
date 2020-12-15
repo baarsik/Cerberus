@@ -17,7 +17,7 @@
             }
             else
             {
-                <img src="~/images/avatars/@Model.User.Avatar" alt="Avatar"/>
+                <img src="@Model.User.GetAvatarUrl()" alt="Avatar"/>
             }
         </div>
         <div class="flex-column">

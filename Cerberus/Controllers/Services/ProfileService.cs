@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Cerberus.Models.ViewModels;
 using DataContext;
@@ -16,8 +15,7 @@ namespace Cerberus.Controllers.Services
             UserManager<ApplicationUser> userManager,
             IConfiguration configuration)
         : base(context, userManager, configuration)
-        {
-        }
+        {}
         
         public async Task<ProfileStatistics> GetUserStatisticsAsync(ApplicationUser user)
         {

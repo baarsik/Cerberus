@@ -14,6 +14,11 @@ namespace Cerberus
             public const string User = "user";
         }
 
+        public static class Profile
+        {
+            public const int AvatarSize = 256;
+        }
+
         public static class Permissions
         {
             public const string WebNovelEdit = Roles.Admin + "," + Roles.GlobalModerator + "," + Roles.WebNovelEditor;

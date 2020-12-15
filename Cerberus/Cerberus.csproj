@@ -21,6 +21,7 @@
     <PackageReference Include="React.AspNet" Version="5.2.11" />
     <PackageReference Include="React.Router" Version="5.2.11" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="3.0.10" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataContextDataInserter\DataContextDataInserter.csproj" />
@@ -30,6 +31,7 @@
     <Folder Include="Controllers\Services\" />
     <Folder Include="Models\Services\" />
     <Folder Include="Views\Account\" />
+    <Folder Include="wwwroot\avatars" />
     <Folder Include="wwwroot\images\avatars" />
     <Folder Include="wwwroot\images\webnovel" />
   </ItemGroup>

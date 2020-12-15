@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -12,23 +13,28 @@ using Cerberus.Models.Services;
 using Cerberus.Models.ViewModels;
 using DataContext;
 using DataContext.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace Cerberus.Controllers.Services
 {
     public sealed class AuthService : BaseService
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration,
-            ApplicationContext context)
+            ApplicationContext context, IWebHostEnvironment webHostEnvironment)
         : base(context, userManager, configuration)
         {
             _signInManager = signInManager;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         /// <summary>
@@ -185,6 +191,17 @@ namespace Cerberus.Controllers.Services
             
                 Db.UserLanguages.AddRange(userLanguages);
             }
+
+            if (!string.IsNullOrEmpty(model.Avatar?.FileName) && model.Avatar.ContentType.StartsWith("image"))
+            {
+                if (!string.IsNullOrEmpty(model.User.Avatar) &&
+                    File.Exists($"{_webHostEnvironment.WebRootPath}/avatars/{model.User.Avatar}.png"))
+                {
+                    File.Delete($"{_webHostEnvironment.WebRootPath}/avatars/{model.User.Avatar}.png");
+                }
+                model.User.Avatar = $"{model.User.Id}_{Guid.NewGuid()}"; // avoid caching
+                await UploadAvatarAsync(model.Avatar, model.User.Avatar);
+            }
             
             await Db.SaveChangesAsync();
         }
@@ -246,7 +263,7 @@ namespace Cerberus.Controllers.Services
             
             var email = user.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
             var apiKey = user.FindFirst(ClaimTypes.SerialNumber)?.Value;
-            var ip = httpContext.Connection.RemoteIpAddress.ToString();
+            var ip = httpContext.Connection.RemoteIpAddress?.ToString();
             return await IsApiBindedIpValidAsync(tokenId, email, apiKey, ip);
         }
 
@@ -297,6 +314,21 @@ namespace Cerberus.Controllers.Services
             }
 
             return languages;
+        }
+        
+        private async Task UploadAvatarAsync(IFormFile formFile, string fileName)
+        {
+            if (!formFile.ContentType.StartsWith("image"))
+                return;
+            
+            using var image = await Image.LoadAsync(formFile.OpenReadStream());
+            var shortestSize = image.Width > image.Height ? image.Height : image.Width;
+            var cropRectangle = new Rectangle((image.Width - shortestSize) / 2, (image.Height - shortestSize) / 2, shortestSize, shortestSize);
+            image.Mutate(x => x
+                .Crop(cropRectangle)
+                .Resize(Constants.Profile.AvatarSize, Constants.Profile.AvatarSize));
+            Directory.CreateDirectory($"{_webHostEnvironment.WebRootPath}/avatars/");
+            await image.SaveAsPngAsync($"{_webHostEnvironment.WebRootPath}/avatars/{fileName}.png");
         }
     }
 }

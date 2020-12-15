@@ -34,5 +34,7 @@ namespace Cerberus.Models.Extensions
                 .Where(c => defaultLanguageCodes.Contains(c.Code)).ToList()
                 .OrderBy(c => defaultLanguageCodes.IndexOf(c.Code)).ToList();
         }
+
+        public static string GetAvatarUrl(this ApplicationUser user) => $"/avatars/{user.Avatar}.png";
     }
 }
