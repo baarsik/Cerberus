@@ -124,11 +124,12 @@ namespace Cerberus
                 .AddDataAnnotationsLocalization();
             
             services.AddSingleton(Configuration);
-            services.AddScoped<AuthService>();
-            services.AddScoped<NotificationsService>();
-            services.AddScoped<ProfileService>();
-            services.AddScoped<SettingsService>();
-            services.AddScoped<WebNovelService>();
+            
+            var autoRegisterBaseClasses = new List<Type> { typeof(BaseService) };
+            var autoRegisterClasses = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(x => x.IsClass && autoRegisterBaseClasses.Contains(x.BaseType) && !x.IsAbstract)
+                .ToList();
+            autoRegisterClasses.ForEach(x => services.AddScoped(x));
             
             services.AddScoped<DataHelper>();
         }

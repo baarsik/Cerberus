@@ -17,7 +17,7 @@ namespace Cerberus.Models.TagHelpers
             output.SuppressOutput();
             var avatarHtml = User.Avatar == "noavatar"
                 ? "<i class=\"fas fa-user\"></i>"
-                : $"<img src=\"{User.GetAvatarUrl()}\" alt=\"Avatar\"/>";
+                : $"<img src=\"/avatars/{User.Avatar}.png\" alt=\"Avatar\"/>";
             output.Content.AppendHtmlLine($"<div class=\"{Class}\">{avatarHtml}</div>");
         }
     }

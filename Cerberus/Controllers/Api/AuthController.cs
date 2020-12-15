@@ -17,7 +17,7 @@ namespace Cerberus.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> Login(string email, string apiKey)
         {
-            var ip = HttpContext.Connection.RemoteIpAddress.ToString();
+            var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
             var result = await _authService.GenerateJwtAsync(email, apiKey, ip);
             
             if (!result.Success)

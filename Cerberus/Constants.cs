@@ -32,6 +32,11 @@ namespace Cerberus
         public static class WebNovel
         {
             public const int ItemsPerIndexPage = 10;
+
+            public static class Comments
+            {
+                public const int ItemsPerPage = 15;
+            }
         }
 
         public static class Misc

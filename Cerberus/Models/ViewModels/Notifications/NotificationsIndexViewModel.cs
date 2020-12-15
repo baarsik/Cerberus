@@ -4,7 +4,7 @@ using Cerberus.Interfaces;
 
 namespace Cerberus.Models.ViewModels.Notifications
 {
-    public class NotificationsIndexViewModel : IPageableViewModel<NotificationsIndexViewModelItem>
+    public class NotificationsIndexViewModel : IPageableModel<NotificationsIndexViewModelItem>
     {
         public IEnumerable<NotificationsIndexViewModelItem> Items { get; set; }
         public int Page { get; set; }

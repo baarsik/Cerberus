@@ -44,6 +44,8 @@ namespace DataContext.Models
         
         public virtual ICollection<ApplicationUserNotifications> Notifications { get; set; }
 
+        public virtual ICollection<Comment> Comments { get; set; }
+
         public override string ToString()
         {
             return DisplayName;

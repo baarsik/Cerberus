@@ -10,6 +10,7 @@ namespace DataContext
             : base(options)
         { }
         
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<Forum> Forums { get; set; }
         public DbSet<ForumThread> ForumThreads { get; set; }
         public DbSet<ForumThreadReply> ForumThreadReplies { get; set; }
@@ -122,11 +123,19 @@ namespace DataContext
                 .OnDelete(DeleteBehavior.Cascade);
             
             builder.Entity<ApplicationUser>()
+                .HasMany(c => c.Comments)
+                .WithOne(c => c.Author)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.Entity<ApplicationUser>()
                 .HasMany(c => c.Notifications)
                 .WithOne(c => c.User)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<ApplicationUserNotifications>()
+                .HasQueryFilter(c => !c.IsDeleted);
+            
+            builder.Entity<Comment>()
                 .HasQueryFilter(c => !c.IsDeleted);
             
             base.OnModelCreating(builder);

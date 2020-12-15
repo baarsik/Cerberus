@@ -5,7 +5,7 @@ using DataContext.Models;
 
 namespace Cerberus.Models.ViewModels.Notifications
 {
-    public class ManageNotificationsViewModel : IPageableViewModel<ManageNotificationsViewModelItem>
+    public class ManageNotificationsViewModel : IPageableModel<ManageNotificationsViewModelItem>
     {
         public IEnumerable<ManageNotificationsViewModelItem> Items { get; set; }
         public int Page { get; set; }

@@ -3,7 +3,7 @@ using Cerberus.Interfaces;
 
 namespace Cerberus.Models.ViewModels
 {
-    public class WebNovelIndexViewModel : IPageableViewModel<WebNovelInfo>
+    public class WebNovelIndexViewModel : IPageableModel<WebNovelInfo>
     {
         public IEnumerable<WebNovelInfo> Items { get; set; }
         public int Page { get; set; }

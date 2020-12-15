@@ -18,7 +18,7 @@ namespace Cerberus.Models.TagHelpers
             _urlHelperFactory = urlHelperFactory;
         }
         
-        public IPageableViewModel Model { get; set; }
+        public IPageableModel Model { get; set; }
         public string AspAction { get; set; }
         public string AspController { get; set; }
         public int PagesDisplayed { get; set; } = 9;

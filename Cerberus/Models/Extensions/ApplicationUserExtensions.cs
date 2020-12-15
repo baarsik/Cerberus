@@ -35,6 +35,9 @@ namespace Cerberus.Models.Extensions
                 .OrderBy(c => defaultLanguageCodes.IndexOf(c.Code)).ToList();
         }
 
-        public static string GetAvatarUrl(this ApplicationUser user) => $"/avatars/{user.Avatar}.png";
+        public static bool HasWriteAccess(this ApplicationUser user)
+        {
+            return user != null && !user.LockoutEnabled;
+        }
     }
 }
