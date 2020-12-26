@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Cerberus.Controllers.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cerberus.Controllers.Api
@@ -15,11 +16,13 @@ namespace Cerberus.Controllers.Api
             _commentsService = commentsService;
         }
         
-        public async Task<IActionResult> GetWebNovelComments(Guid webNovelId, int? page = 1)
+        public async Task<IActionResult> GetComments(Guid entityId, int? page = 1)
         {
-            return new JsonResult(await _commentsService.GetCommentsAsync(webNovelId, Constants.WebNovel.Comments.ItemsPerPage, page ?? 1));
+            return new JsonResult(await _commentsService.GetCommentsAsync(entityId, page ?? 1));
         }
 
+        [Authorize]
+        [HttpPost]
         public async Task<IActionResult> PostComment(Guid entityId, string content)
         {
             var user = await _commentsService.GetUserAsync(User);

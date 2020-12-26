@@ -7,6 +7,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Cerberus</title>
+    
+    <base href="~/" />
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -14,10 +16,11 @@
         {
             <link rel="stylesheet" href="@path"/>
         }
+        <link rel="stylesheet" href="~/lib/summernote/dist/summernote.css"/>
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/font-awesome-pro/css/all.css" />
         <script src="~/lib/jquery/dist/jquery.js"></script>
-        @*<script defer src="~/lib/font-awesome-pro/js/all.js"></script>*@
+        <script src="~/lib/summernote/dist/summernote.js"></script>
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -25,11 +28,15 @@
         {
             <link rel="stylesheet" href="@path"/>
         }
+        <link rel="stylesheet" href="~/lib/summernote/dist/summernote.min.css"/>
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/font-awesome-pro/css/all.min.css" />
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        @*<script defer src="~/lib/font-awesome-pro/js/all.min.js"></script>*@
+        <script src="~/lib/summernote/dist/summernote.min.js"></script>
     </environment>
+    
+    <script src="~/js/summernote.js"></script>
+    <script src="/_framework/blazor.server.js"></script>
     
     <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.0/umd/react.development.js"></script>
     <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.0/umd/react-dom.development.js"></script>

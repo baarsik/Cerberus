@@ -3203,7 +3203,7 @@ div.dt-button-info {
 }
 
 .note-editor.panel-default .note-editing-area .note-editable {
-    background-color: transparent;
+    background-color: rgba(68, 70, 79, 0.5);
     color: #949ba2
 }
 

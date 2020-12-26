@@ -1,0 +1,85 @@
+@using System.Net.Http
+@using System.Net.Http.Json
+@using Cerberus.Components.Models
+@using Cerberus.Models.Api.Comments
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Components.Forms
+
+@inject HttpClient Http
+@inject NavigationManager NavigationManager;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+<div data-entityId="@EntityId">
+    <h3>Comments</h3>
+    
+    @foreach (var comment in Model.Items)
+    {
+        <Comment params-Model="@comment"/>
+    }
+
+    @if (!Model.Items.Any())
+    {
+        <div class="panel panel-filled">
+            <div class="panel-body">
+                No comments
+            </div>
+        </div>
+    }
+
+    <h3>New comment</h3>
+
+    @if (IsAuthenticated)
+    {
+        <EditForm Model="@NewComment" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <InputTextArea class="summernote" @bind-Value="NewComment.Text"/>
+            <input type="submit" class="btn btn-accent" value="Send"/>
+            <ValidationSummary />
+        </EditForm>
+    }
+    else
+    {
+        <div class="panel panel-filled panel-c-warning">
+            <div class="panel-body">
+                Please <a href="/account/login">Sign In</a> or <a href="/account/register">Sign Up</a> in order to be able to comment
+            </div>
+        </div>
+    }
+</div>
+
+@code
+{
+    [Parameter]
+    public Guid EntityId { get; set; }
+
+    [Parameter]
+    public int Page { get; set; } = 1;
+
+    private NewComment NewComment { get; set; } = new();
+
+    private CommentsPageable Model { get; set; } = new();
+
+    private bool IsAuthenticated => HttpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated == true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (EntityId == default)
+        {
+            throw new ArgumentNullException(nameof(EntityId));
+        }
+        
+        Http.BaseAddress = new Uri(NavigationManager.BaseUri);
+        Model = await Http.GetFromJsonAsync<CommentsPageable>($"/api/comments/getcomments?entityId={EntityId}&page={Page}");
+    }
+    
+    protected async Task HandleValidSubmit()
+    {
+        await Http.PostAsJsonAsync("/api/comments/postcomment", new
+        {
+            EntityId = EntityId,
+            Content = NewComment.Text
+        });
+        Page = 1;
+        await InvokeAsync(StateHasChanged);
+    }
+}

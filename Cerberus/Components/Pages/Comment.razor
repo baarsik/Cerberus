@@ -1,0 +1,29 @@
+<h3>Comment</h3>
+
+@code {
+    [Parameter]
+    public DataContext.Models.Comment Model { get; set; }
+}
+
+<div class="panel panel-filled">
+    <div class="panel-body flex-row">
+        <div>
+            <a href="/profile/@Model.Author.DisplayName">
+                <div class="avatar">
+                    @if (Model.Author.Avatar == "noavatar")
+                    {
+                        <i class="fas fa-user"></i>
+                    }
+                    else
+                    {
+                        <img src="/avatars/{@Model.Author.Avatar}.png" alt="Avatar"/>
+                    }
+                </div>
+                <div>
+                    @Model.Author.DisplayName
+                </div>
+            </a>
+        </div>
+        <div>@Model.Content</div>
+    </div>
+</div>

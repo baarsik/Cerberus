@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
@@ -111,11 +112,13 @@ namespace Cerberus
             services.AddTransient<IRecaptchaService, RecaptchaService>();
             
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddHttpClient();
+            
             services.AddReact();
-
             services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
                 .AddChakraCore();
-            
+
+            services.AddServerSideBlazor();
             services.AddControllersWithViews();
             services.AddRazorPages();
             
@@ -162,6 +165,7 @@ namespace Cerberus
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapBlazorHub();
             });
             
             app.UseStatusCodePages();

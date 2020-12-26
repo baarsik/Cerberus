@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Cerberus.Interfaces;
-using Cerberus.Models.Api;
 using Cerberus.Models.Api.Comments;
 using Cerberus.Models.Extensions;
 using DataContext;
@@ -20,10 +19,10 @@ namespace Cerberus.Controllers.Services
         {
         }
 
-        public async Task<IPageableModel<Comment>> GetCommentsAsync(Guid relatedEntityId, int itemsPerPage, int page)
+        public async Task<IPageableModel<Comment>> GetCommentsAsync(Guid relatedEntityId, int page)
         {
             var totalComments = await Db.Comments.CountAsync(x => x.RelatedEntityId == relatedEntityId);
-            var totalPages = (int) Math.Ceiling(totalComments / (double) itemsPerPage);
+            var totalPages = (int) Math.Ceiling(totalComments / (double) Constants.Comments.ItemsPerPage);
             if (totalPages == 0)
             {
                 totalPages = 1;
@@ -42,8 +41,8 @@ namespace Cerberus.Controllers.Services
             model.Items = await Db.Comments
                 .Where(x => x.RelatedEntityId == relatedEntityId)
                 .Include(x => x.Author)
-                .Skip(itemsPerPage * (model.Page - 1))
-                .Take(itemsPerPage)
+                .Skip(Constants.Comments.ItemsPerPage * (model.Page - 1))
+                .Take(Constants.Comments.ItemsPerPage)
                 .ToListAsync();
 
             return model;

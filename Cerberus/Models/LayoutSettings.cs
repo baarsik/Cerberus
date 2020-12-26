@@ -21,14 +21,6 @@
                 .AddJsMin("/lib/select2/dist/js/select2.full.min.js")
                 .AddCss("/lib/select2/dist/css/select2.css")
                 .AddCssMin("/lib/select2/dist/css/select2.min.css");
-            
-            LibraryManager.Library(Constants.Libraries.Summernote)
-                .AddJs("/lib/summernote/dist/summernote.js")
-                .AddJsMin("/lib/summernote/dist/summernote.min.js")
-                .AddJs("/js/summernote.js")
-                .AddJsMin("/js/summernote.js")
-                .AddCss("/lib/summernote/dist/summernote.css")
-                .AddCssMin("/lib/summernote/dist/summernote.min.css");
         }
 
         public void ActivateLibrary(string name)
@@ -39,7 +31,7 @@
         public bool IsContainerCentered { get; set; }
         public bool IsFooterVisible { get; set; } = true;
         public NavbarType NavbarType { get; set; } = NavbarType.Regular;
-        public LibraryManager LibraryManager { get; } = new LibraryManager();
+        public LibraryManager LibraryManager { get; } = new();
     }
 
     public enum NavbarType
