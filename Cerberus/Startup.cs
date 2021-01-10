@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Net.Http;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
@@ -13,8 +12,6 @@ using Cerberus.Models.Helpers;
 using DataContext;
 using DataContext.Models;
 using DataContextDataFiller;
-using JavaScriptEngineSwitcher.ChakraCore;
-using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -28,7 +25,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using React.AspNet;
 using reCAPTCHA.AspNetCore;
 
 namespace Cerberus
@@ -113,10 +109,6 @@ namespace Cerberus
             
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHttpClient();
-            
-            services.AddReact();
-            services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
-                .AddChakraCore();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -151,8 +143,6 @@ namespace Cerberus
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
-            app.UseReact(config => { config.AddScript("~/components/footer.jsx"); });
             
             app.UseStaticFiles();
             

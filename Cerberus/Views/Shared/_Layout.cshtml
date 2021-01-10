@@ -36,9 +36,6 @@
     </environment>
     
     <script src="~/js/summernote.js"></script>
-    
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.0/umd/react.development.js"></script>
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.0/umd/react-dom.development.js"></script>
 </head>
 <body class="pace-done">
     @switch (settings.NavbarType)
@@ -56,7 +53,7 @@
 
     @if (settings.IsFooterVisible)
     {
-        @Html.React("Footer", new {}, serverOnly: true)
+        <component type="typeof(Footer)" render-mode="Static"/>
     }
 
     <environment include="Development">
@@ -82,6 +79,5 @@
 
     @RenderSection("Scripts", false)
     <script src="/_framework/blazor.server.js"></script>
-    @Html.ReactInitJavaScript()
 </body>
 </html>

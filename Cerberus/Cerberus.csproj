@@ -4,13 +4,8 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="AdvancedStringBuilder" Version="0.1.0" />
     <PackageReference Include="HtmlSanitizer" Version="5.0.372" />
-    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="3.9.1" />
-    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.linux-x64" Version="3.9.1" />
-    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.osx-x64" Version="3.9.1" />
-    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.win-x64" Version="3.9.1" />
-    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.win-x86" Version="3.9.1" />
-    <PackageReference Include="JavaScriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
@@ -21,8 +16,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="React.AspNet" Version="5.2.11" />
-    <PackageReference Include="React.Router" Version="5.2.11" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="3.0.10" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.2" />
   </ItemGroup>
@@ -87,6 +80,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>NotFound.ru.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Pages\Comments.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Comments.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Pages\Comments.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Comments.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\Views\WebNovel\EditChapterTranslation.ru.Designer.cs">
@@ -148,6 +149,16 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>NotFound.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Components\Pages\Comments.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Comments.en.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Components\Pages\Comments.ru.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Comments.ru.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

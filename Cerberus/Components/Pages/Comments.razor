@@ -2,8 +2,10 @@
 @using Cerberus.Components.Models
 @using Cerberus.Controllers.Services
 @using Cerberus.Models.Api.Comments
+@using Cerberus.Models.Extensions
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Localization
 @using Microsoft.JSInterop
 
 @implements IDisposable
@@ -12,9 +14,10 @@
 @inject NavigationManager NavigationManager;
 @inject IHttpContextAccessor HttpContextAccessor;
 @inject IJSRuntime JsRuntime
+@inject IStringLocalizer<Comments> L;
 
 <div data-entityId="@EntityId">
-    <h3>Comments</h3>
+    <h3>@L["Comments_Header"]</h3>
     
     @foreach (var comment in Model.Items)
     {
@@ -25,27 +28,27 @@
     {
         <div class="panel panel-filled">
             <div class="panel-body">
-                No comments
+                @L["Comments_NoComments"]
             </div>
         </div>
     }
 
-    <h3>New comment</h3>
+    <h3>@L["NewComment_Header"]</h3>
 
     @if (IsAuthenticated)
     {
         <EditForm Model="NewComment" OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator />
             <textarea class="summernote summernote-comments blazor" @bind-value="NewComment.Text" @bind-value:event="oninput"></textarea>
+            <input type="submit" class="btn btn-accent" value="@L["NewComment_SubmitButton"]" />
             <ValidationSummary />
-            <input type="submit" class="btn btn-accent" value="Send" @onclick="HandleValidSubmit"/>
         </EditForm>
     }
     else
     {
         <div class="panel panel-filled panel-c-warning">
             <div class="panel-body">
-                Please <a href="/account/login">Sign In</a> or <a href="/account/register">Sign Up</a> in order to be able to comment
+                @L["AuthorizationRequired"].Value.AsMarkupString()
             </div>
         </div>
     }
