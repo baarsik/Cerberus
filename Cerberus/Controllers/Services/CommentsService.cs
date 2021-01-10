@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Cerberus.Interfaces;
 using Cerberus.Models.Api.Comments;
 using Cerberus.Models.Extensions;
+using Cerberus.SafeModels;
 using DataContext;
 using DataContext.Models;
 using Microsoft.AspNetCore.Identity;
@@ -19,7 +19,7 @@ namespace Cerberus.Controllers.Services
         {
         }
 
-        public async Task<IPageableModel<Comment>> GetCommentsAsync(Guid relatedEntityId, int page)
+        public async Task<CommentsPageable> GetCommentsAsync(Guid relatedEntityId, int page)
         {
             var totalComments = await Db.Comments.CountAsync(x => x.RelatedEntityId == relatedEntityId);
             var totalPages = (int) Math.Ceiling(totalComments / (double) Constants.Comments.ItemsPerPage);
@@ -27,25 +27,26 @@ namespace Cerberus.Controllers.Services
             {
                 totalPages = 1;
             }
-
-            var model = new CommentsPageable
-            {
-                Page = page < 1
-                    ? 1
-                    : page > totalPages
-                        ? totalPages
-                        : page,
-                TotalPages = totalPages
-            };
             
-            model.Items = await Db.Comments
+            var currentPage = page < 1
+                ? 1
+                : page > totalPages
+                    ? totalPages
+                    : page;
+            
+            var comments = await Db.Comments
                 .Where(x => x.RelatedEntityId == relatedEntityId)
                 .Include(x => x.Author)
-                .Skip(Constants.Comments.ItemsPerPage * (model.Page - 1))
+                .Skip(Constants.Comments.ItemsPerPage * (currentPage - 1))
                 .Take(Constants.Comments.ItemsPerPage)
                 .ToListAsync();
 
-            return model;
+            return new CommentsPageable
+            {
+                Items = comments.Select(CommentSafe.Convert).ToList(),
+                Page = currentPage,
+                TotalPages = totalPages
+            };
         }
 
         public async Task<Comment> AddCommentAsync(ApplicationUser user, Guid entityId, string content)

@@ -9,7 +9,8 @@
     <title>@ViewData["Title"] - Cerberus</title>
     
     <base href="~/" />
-
+    <script src="/_framework/blazor.server.js"></script>
+    
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         @foreach (var path in settings.LibraryManager.GetCssFiles())
@@ -36,7 +37,6 @@
     </environment>
     
     <script src="~/js/summernote.js"></script>
-    <script src="/_framework/blazor.server.js"></script>
     
     <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.0/umd/react.development.js"></script>
     <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.0/umd/react-dom.development.js"></script>

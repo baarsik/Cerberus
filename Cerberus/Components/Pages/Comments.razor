@@ -14,7 +14,7 @@
     
     @foreach (var comment in Model.Items)
     {
-        <Comment params-Model="@comment"/>
+        <Comment Model="@comment"/>
     }
 
     @if (!Model.Items.Any())

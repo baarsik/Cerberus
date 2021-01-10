@@ -1,29 +1,33 @@
-<h3>Comment</h3>
+@using Cerberus.Models.Extensions
+@using Cerberus.SafeModels
 
 @code {
     [Parameter]
-    public DataContext.Models.Comment Model { get; set; }
+    public CommentSafe Model { get; set; }
 }
 
 <div class="panel panel-filled">
     <div class="panel-body flex-row">
-        <div>
+        <div class="avatar avatar-mini m-r">
             <a href="/profile/@Model.Author.DisplayName">
-                <div class="avatar">
-                    @if (Model.Author.Avatar == "noavatar")
-                    {
-                        <i class="fas fa-user"></i>
-                    }
-                    else
-                    {
-                        <img src="/avatars/{@Model.Author.Avatar}.png" alt="Avatar"/>
-                    }
-                </div>
-                <div>
-                    @Model.Author.DisplayName
-                </div>
+                @if (Model.Author.Avatar == "noavatar")
+                {
+                    <i class="fas fa-user"></i>
+                }
+                else
+                {
+                    <img src="/avatars/@(Model.Author.Avatar).png" alt="Avatar"/>
+                }
             </a>
         </div>
-        <div>@Model.Content</div>
+        <div>
+            <div>
+                <a href="/profile/@Model.Author.DisplayName">@Model.Author.DisplayName</a>
+                @Model.CreateDate.ToFormattedString()
+            </div>
+            <div>
+                @Model.Content
+            </div>
+        </div>
     </div>
 </div>

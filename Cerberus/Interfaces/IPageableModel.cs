@@ -4,7 +4,7 @@ namespace Cerberus.Interfaces
 {
     public interface IPageableModel<T> : IPageableModel
     {
-        IEnumerable<T> Items { get; set; }
+        IList<T> Items { get; set; }
     }
 
     public interface IPageableModel

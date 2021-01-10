@@ -118,9 +118,9 @@ namespace Cerberus
             services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
                 .AddChakraCore();
 
-            services.AddServerSideBlazor();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddServerSideBlazor();
             
             services.AddMvc()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)

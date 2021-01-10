@@ -7,7 +7,7 @@ namespace Cerberus.Models.ViewModels.Notifications
 {
     public class ManageNotificationsViewModel : IPageableModel<ManageNotificationsViewModelItem>
     {
-        public IEnumerable<ManageNotificationsViewModelItem> Items { get; set; }
+        public IList<ManageNotificationsViewModelItem> Items { get; set; }
         public int Page { get; set; }
         public int TotalPages { get; set; }
     }

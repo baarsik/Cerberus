@@ -3544,9 +3544,14 @@ div.dt-button-info {
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
 }
-.avatar > img {
-    height: 96px;
-    width: 96px;
+.avatar.avatar-mini {
+    height: 64px;
+    width: 64px;
+}
+.avatar > img,
+.avatar > a > img {
+    height: 100%;
+    width: 100%;
 }
 .profile-name {
     font-size: 32px;
