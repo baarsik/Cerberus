@@ -4,10 +4,14 @@
 @using Cerberus.Models.Api.Comments
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.JSInterop
+
+@implements IDisposable
 
 @inject CommentsService CommentsService;
 @inject NavigationManager NavigationManager;
 @inject IHttpContextAccessor HttpContextAccessor;
+@inject IJSRuntime JsRuntime
 
 <div data-entityId="@EntityId">
     <h3>Comments</h3>
@@ -32,9 +36,9 @@
     {
         <EditForm Model="NewComment" OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator />
-            <textarea class="summernote" @bind-value="NewComment.Text" @bind-value:event="oninput"></textarea>
-            <input type="submit" class="btn btn-accent" value="Send" @onclick="HandleValidSubmit"/>
+            <textarea class="summernote summernote-comments blazor" @bind-value="NewComment.Text" @bind-value:event="oninput"></textarea>
             <ValidationSummary />
+            <input type="submit" class="btn btn-accent" value="Send" @onclick="HandleValidSubmit"/>
         </EditForm>
     }
     else
@@ -61,6 +65,8 @@
 
     private ClaimsPrincipal User => HttpContextAccessor.HttpContext?.User;
     private bool IsAuthenticated => HttpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated == true;
+    
+    private DotNetObjectReference<Comments> _objRef;
 
     protected override async Task OnInitializedAsync()
     {
@@ -72,6 +78,23 @@
         Model = await CommentsService.GetCommentsAsync(EntityId, Page);
     }
     
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _objRef = DotNetObjectReference.Create(this);
+        }
+        
+        await JsRuntime.InvokeVoidAsync("activateBasicSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor");
+        await JsRuntime.InvokeVoidAsync("attachBlazorToSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor", _objRef);
+    }
+
+    [JSInvokable]
+    public void OnTextChange(string contents)
+    {
+        NewComment.Text = contents;
+    }
+    
     private async Task HandleValidSubmit()
     {
         if (!IsAuthenticated)
@@ -81,8 +104,17 @@
 
         var user = await CommentsService.GetUserAsync(User);
         await CommentsService.AddCommentAsync(user, EntityId, NewComment.Text);
+        
         Page = Model.TotalPages;
         Model = await CommentsService.GetCommentsAsync(EntityId, Page);
+        NewComment.Text = string.Empty;
+        await JsRuntime.InvokeVoidAsync("resetSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor");
+        
         await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        _objRef?.Dispose();
     }
 }

@@ -37,6 +37,7 @@ namespace Cerberus.Controllers.Services
             var comments = await Db.Comments
                 .Where(x => x.RelatedEntityId == relatedEntityId)
                 .Include(x => x.Author)
+                .OrderByDescending(x => x.CreateDate)
                 .Skip(Constants.Comments.ItemsPerPage * (currentPage - 1))
                 .Take(Constants.Comments.ItemsPerPage)
                 .ToListAsync();
@@ -57,7 +58,7 @@ namespace Cerberus.Controllers.Services
             var comment = new Comment
             {
                 RelatedEntityId = entityId,
-                Content = content.RemoveHTML(),
+                Content = content.SanitizeStrictHTML(),
                 Author = user
             };
             Db.Add(comment);

@@ -1,10 +1,10 @@
-var PanelAccentFilled = function (context) {
+const PanelAccentFilled = (context) => {
     let ui = $.summernote.ui;
     let button = ui.button({
         contents: '<i class="fas c-accent fa-info-square"/>',
         tooltip: 'Insert info panel (accent)',
-        click: function () {
-            var selectedText = context.invoke('editor.createRange').toString();
+        click: () => {
+            let selectedText = context.invoke('editor.createRange').toString();
             if (selectedText.trim().length === 0) {
                 selectedText = "Insert your text here";
             }
@@ -14,12 +14,12 @@ var PanelAccentFilled = function (context) {
     return button.render();
 };
 
-var PanelInfoFilled = function (context) {
+const PanelInfoFilled = function (context) {
     let ui = $.summernote.ui;
     let button = ui.button({
         contents: '<i class="fas c-info fa-info-square"/>',
         tooltip: 'Insert info panel (info)',
-        click: function () {
+        click: () => {
             let selectedText = context.invoke('editor.createRange').toString();
             if (selectedText.trim().length === 0) {
                 selectedText = "Insert your text here";
@@ -30,12 +30,12 @@ var PanelInfoFilled = function (context) {
     return button.render();
 };
 
-var PanelSpeech = function (context) {
+const PanelSpeech = (context) => {
     let ui = $.summernote.ui;
     let button = ui.button({
         contents: '<i class="fas fa-quote-left"/>',
         tooltip: 'Insert speech panel',
-        click: function () {
+        click: () => {
             let selectedText = context.invoke('editor.createRange').toString();
             if (selectedText.trim().length === 0) {
                 selectedText = "Insert your text here";
@@ -46,10 +46,34 @@ var PanelSpeech = function (context) {
     return button.render();
 };
 
-$(document).ready(function() {
-    $('.summernote').summernote({
+function activateBasicSummernote(selector) {
+    $(selector).summernote({
         callbacks: {
-            onPaste: function(e) {
+            onPaste: (e) => {
+                // Paste plain text with no duplicated line breaks
+                let bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData)
+                    .getData('Text')
+                    .replace(/\n\s*\n/g, '\n');
+                e.preventDefault();
+                document.execCommand('insertText', false, bufferText);
+            }
+        },
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']]
+        ]
+    });
+}
+
+function attachBlazorToSummernote(selector, dotNetComponent) {
+    $(selector).on('summernote.change', (we, contents, $editable) => {
+        dotNetComponent.invokeMethodAsync('OnTextChange', contents);
+    });
+}
+
+function activateRichSummernote(selector) {
+    $(selector).summernote({
+        callbacks: {
+            onPaste: (e) => {
                 // Paste plain text with no duplicated line breaks
                 let bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData)
                     .getData('Text')
@@ -71,4 +95,13 @@ $(document).ready(function() {
             panelSpeech: PanelSpeech
         }
     });
+}
+
+function resetSummernote(selector) {
+    $(selector).summernote('reset');
+}
+
+$(document).ready(function() {
+    activateRichSummernote('.summernote:not(.blazor)');
+    activateBasicSummernote('.summernote.summernote-comments.blazor');
 });

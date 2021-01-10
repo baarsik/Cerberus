@@ -1,5 +1,7 @@
-﻿using System.Web;
+﻿using System.Linq;
+using System.Web;
 using Ganss.XSS;
+using Microsoft.AspNetCore.Components;
 
 namespace Cerberus.Models.Extensions
 {
@@ -31,6 +33,25 @@ namespace Cerberus.Models.Extensions
         }
 
         /// <summary>
+        /// Removes all HTML tags except bold, italics, underscore and paragraph
+        /// </summary>
+        /// <param name="value">Source string</param>
+        /// <returns></returns>
+        public static string SanitizeStrictHTML(this string value)
+        {
+            var htmlSanitizer = new HtmlSanitizer
+            {
+                KeepChildNodes = true
+            };
+            htmlSanitizer.AllowedTags.Clear();
+            htmlSanitizer.AllowedTags.Add("b");
+            htmlSanitizer.AllowedTags.Add("i");
+            htmlSanitizer.AllowedTags.Add("u");
+            htmlSanitizer.AllowedTags.Add("p");
+            return htmlSanitizer.Sanitize(value);
+        }
+        
+        /// <summary>
         /// Completely removes all HTML tags while saving all inner content
         /// </summary>
         /// <param name="value">Source string</param>
@@ -53,6 +74,16 @@ namespace Cerberus.Models.Extensions
         public static int GetPureTextLength(this string value)
         {
             return HttpUtility.HtmlDecode(value.RemoveHTML()).Length;
+        }
+
+        /// <summary>
+        /// Converts string to MarkupString
+        /// </summary>
+        /// <param name="value">Source string</param>
+        /// <returns></returns>
+        public static MarkupString AsMarkupString(this string value)
+        {
+            return new MarkupString(value);
         }
     }
 }

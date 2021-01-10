@@ -1,5 +1,6 @@
 @using Cerberus.Models.Extensions
 @using Cerberus.SafeModels
+@using Microsoft.AspNetCore.Html
 
 @code {
     [Parameter]
@@ -26,7 +27,7 @@
                 @Model.CreateDate.ToFormattedString()
             </div>
             <div>
-                @Model.Content
+                @Model.Content.AsMarkupString()
             </div>
         </div>
     </div>
