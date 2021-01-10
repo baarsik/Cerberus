@@ -57,7 +57,8 @@ namespace Cerberus.Controllers.Services
             var comment = new Comment
             {
                 RelatedEntityId = entityId,
-                Content = content.RemoveHTML()
+                Content = content.RemoveHTML(),
+                Author = user
             };
             Db.Add(comment);
             await Db.SaveChangesAsync();

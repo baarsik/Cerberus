@@ -1,11 +1,11 @@
-@using System.Net.Http
-@using System.Net.Http.Json
+@using System.Security.Claims
 @using Cerberus.Components.Models
+@using Cerberus.Controllers.Services
 @using Cerberus.Models.Api.Comments
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Components.Forms
 
-@inject HttpClient Http
+@inject CommentsService CommentsService;
 @inject NavigationManager NavigationManager;
 @inject IHttpContextAccessor HttpContextAccessor;
 
@@ -30,10 +30,10 @@
 
     @if (IsAuthenticated)
     {
-        <EditForm Model="@NewComment" OnValidSubmit="HandleValidSubmit">
+        <EditForm Model="NewComment" OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator />
-            <InputTextArea class="summernote" @bind-Value="NewComment.Text"/>
-            <input type="submit" class="btn btn-accent" value="Send"/>
+            <textarea class="summernote" @bind-value="NewComment.Text" @bind-value:event="oninput"></textarea>
+            <input type="submit" class="btn btn-accent" value="Send" @onclick="HandleValidSubmit"/>
             <ValidationSummary />
         </EditForm>
     }
@@ -59,6 +59,7 @@
 
     private CommentsPageable Model { get; set; } = new();
 
+    private ClaimsPrincipal User => HttpContextAccessor.HttpContext?.User;
     private bool IsAuthenticated => HttpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated == true;
 
     protected override async Task OnInitializedAsync()
@@ -68,18 +69,20 @@
             throw new ArgumentNullException(nameof(EntityId));
         }
         
-        Http.BaseAddress = new Uri(NavigationManager.BaseUri);
-        Model = await Http.GetFromJsonAsync<CommentsPageable>($"/api/comments/getcomments?entityId={EntityId}&page={Page}");
+        Model = await CommentsService.GetCommentsAsync(EntityId, Page);
     }
     
-    protected async Task HandleValidSubmit()
+    private async Task HandleValidSubmit()
     {
-        await Http.PostAsJsonAsync("/api/comments/postcomment", new
+        if (!IsAuthenticated)
         {
-            EntityId = EntityId,
-            Content = NewComment.Text
-        });
-        Page = 1;
+            return;
+        }
+
+        var user = await CommentsService.GetUserAsync(User);
+        await CommentsService.AddCommentAsync(user, EntityId, NewComment.Text);
+        Page = Model.TotalPages;
+        Model = await CommentsService.GetCommentsAsync(EntityId, Page);
         await InvokeAsync(StateHasChanged);
     }
 }

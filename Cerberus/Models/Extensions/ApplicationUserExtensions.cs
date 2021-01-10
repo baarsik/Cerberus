@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DataContext;
@@ -37,7 +38,7 @@ namespace Cerberus.Models.Extensions
 
         public static bool HasWriteAccess(this ApplicationUser user)
         {
-            return user != null && !user.LockoutEnabled;
+            return user != null && (!user.LockoutEnd.HasValue || user.LockoutEnd.Value > DateTimeOffset.Now);
         }
     }
 }

@@ -9,7 +9,6 @@
     <title>@ViewData["Title"] - Cerberus</title>
     
     <base href="~/" />
-    <script src="/_framework/blazor.server.js"></script>
     
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -82,6 +81,7 @@
     </environment>
 
     @RenderSection("Scripts", false)
+    <script src="/_framework/blazor.server.js"></script>
     @Html.ReactInitJavaScript()
 </body>
 </html>
