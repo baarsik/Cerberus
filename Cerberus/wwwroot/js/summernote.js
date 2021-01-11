@@ -64,9 +64,9 @@ function activateBasicSummernote(selector) {
     });
 }
 
-function attachBlazorToSummernote(selector, dotNetComponent) {
+function attachBlazorToSummernote(selector, dotNetComponent, methodName) {
     $(selector).on('summernote.change', (we, contents, $editable) => {
-        dotNetComponent.invokeMethodAsync('OnTextChange', contents);
+        dotNetComponent.invokeMethodAsync(methodName, contents);
     });
 }
 

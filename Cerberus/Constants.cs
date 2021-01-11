@@ -36,7 +36,7 @@ namespace Cerberus
         
         public static class Comments
         {
-            public const int ItemsPerPage = 15;
+            public const int ItemsPerPage = 10;
         }
 
         public static class Misc

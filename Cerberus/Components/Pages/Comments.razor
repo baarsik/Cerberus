@@ -32,6 +32,10 @@
             </div>
         </div>
     }
+    else
+    {
+        <Paginator Page="@Model.Page" TotalPages="@Model.TotalPages" OnPageChange="@ReloadPage"/>
+    }
 
     <h3>@L["NewComment_Header"]</h3>
 
@@ -79,6 +83,7 @@
         }
         
         Model = await CommentsService.GetCommentsAsync(EntityId, Page);
+        StateHasChanged();
     }
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -89,7 +94,7 @@
         }
         
         await JsRuntime.InvokeVoidAsync("activateBasicSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor");
-        await JsRuntime.InvokeVoidAsync("attachBlazorToSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor", _objRef);
+        await JsRuntime.InvokeVoidAsync("attachBlazorToSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor", _objRef, nameof(OnTextChange));
     }
 
     [JSInvokable]
@@ -107,13 +112,16 @@
 
         var user = await CommentsService.GetUserAsync(User);
         await CommentsService.AddCommentAsync(user, EntityId, NewComment.Text);
-        
-        Page = Model.TotalPages;
+        await ReloadPage(1);
+    }
+
+    private async Task ReloadPage(int page)
+    {
+        Page = page;
         Model = await CommentsService.GetCommentsAsync(EntityId, Page);
         NewComment.Text = string.Empty;
         await JsRuntime.InvokeVoidAsync("resetSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor");
-        
-        await InvokeAsync(StateHasChanged);
+        StateHasChanged();
     }
 
     public void Dispose()

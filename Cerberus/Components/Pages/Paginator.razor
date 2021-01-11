@@ -1,0 +1,114 @@
+@using Microsoft.AspNetCore.Components.Web
+
+<div class="btn-group m-t flex-row justify-center">
+    @if (Page <= 1)
+    {
+        <a class="btn btn-default disabled"><i class="fas fa-chevron-left"></i></a>
+    }
+    else
+    {
+        <a class="btn btn-default" @onclick="@(() => SetPage(Page - 1))"><i class="fas fa-chevron-left"></i></a>
+        if (_shouldDisplayDotsLeft)
+        {
+            <a class="btn btn-default" @onclick="@(() => SetPage(1))">1</a>
+            <a class="btn btn-default disabled">...</a>
+        }
+    }
+    
+    @for (var pageNumber = Page - _takePagesFromLeft; pageNumber <= Page + _takePagesFromRight; pageNumber++)
+    {
+        var localPageNumber = pageNumber;
+        if (localPageNumber == Page)
+        {
+            <a class="btn btn-default text-accent font-bold">@localPageNumber</a>
+        }
+        else
+        {
+            <a class="btn btn-default" @onclick="@(() => SetPage(localPageNumber))">@localPageNumber</a>
+        }
+    }
+    
+    @if (Page >= TotalPages)
+    {
+        <a class="btn btn-default disabled"><i class="fas fa-chevron-right"></i></a>
+    }
+    else
+    {
+        if (_shouldDisplayDotsRight)
+        {
+            <a class="btn btn-default disabled">...</a>
+            <a class="btn btn-default" @onclick="@(() => SetPage(TotalPages))">@TotalPages</a>
+        }
+        <a class="btn btn-default" @onclick="@(() => SetPage(Page + 1))"><i class="fas fa-chevron-right"></i></a>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int Page { get; set; }
+
+    [Parameter]
+    public int TotalPages { get; set; }
+
+    [Parameter]
+    public int PagesDisplayed { get; set; } = 9;
+
+    [Parameter]
+    public EventCallback<int> OnPageChange { get; set; }
+
+    private bool _shouldDisplayDotsLeft;
+    private bool _shouldDisplayDotsRight;
+    private int _takePagesFromLeft;
+    private int _takePagesFromRight;
+
+    protected override void OnInitialized()
+    {
+        RecalculateDisplayedPages();
+    }
+
+    private async Task SetPage(int page)
+    {
+        await OnPageChange.InvokeAsync(page);
+        Page = page;
+        RecalculateDisplayedPages();
+    }
+
+    private void RecalculateDisplayedPages()
+    {
+        var maxPagesPerSide = PagesDisplayed / 2;
+        var availableLeftPages = Page - 1;
+        var availableRightPages = TotalPages - Page;
+        _shouldDisplayDotsLeft = availableLeftPages > maxPagesPerSide;
+        _shouldDisplayDotsRight = availableRightPages > maxPagesPerSide;
+        _takePagesFromLeft = _shouldDisplayDotsLeft
+            ? maxPagesPerSide - 2
+            : availableLeftPages;
+        _takePagesFromRight = _shouldDisplayDotsRight
+            ? maxPagesPerSide - 2
+            : availableRightPages;
+        var totalDisplayedFromLeft = (_shouldDisplayDotsLeft ? 2 : 0) + _takePagesFromLeft;
+        var totalDisplayedFromRight = (_shouldDisplayDotsRight ? 2 : 0) + _takePagesFromRight;
+        var totalDisplayedPages = totalDisplayedFromLeft + totalDisplayedFromRight + 1;
+        
+        while (totalDisplayedPages < PagesDisplayed && totalDisplayedPages < TotalPages)
+        {
+            if (totalDisplayedFromLeft < maxPagesPerSide)
+            {
+                _takePagesFromRight++;
+                totalDisplayedFromRight++;
+            }
+            else if (totalDisplayedFromRight < maxPagesPerSide)
+            {
+                _takePagesFromLeft++;
+                totalDisplayedFromLeft++;
+            }
+            else
+            {
+                break;
+            }
+            totalDisplayedPages = totalDisplayedFromLeft + totalDisplayedFromRight + 1;
+        }
+        
+        StateHasChanged();
+    }
+}
