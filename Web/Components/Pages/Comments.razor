@@ -1,4 +1,5 @@
 @using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
 @using Web.Components.Models
 @using Web.Controllers.Services
 @using Web.Models.Api.Comments
@@ -11,8 +12,7 @@
 @implements IDisposable
 
 @inject CommentsService CommentsService;
-@inject NavigationManager NavigationManager;
-@inject IHttpContextAccessor HttpContextAccessor;
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IJSRuntime JsRuntime
 @inject IStringLocalizer<Comments> L;
 
@@ -70,9 +70,8 @@
 
     private CommentsPageable Model { get; set; } = new();
 
-    private ClaimsPrincipal User => HttpContextAccessor.HttpContext?.User;
-    private bool IsAuthenticated => HttpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated == true;
-    
+    private bool IsAuthenticated { get; set; }
+
     private DotNetObjectReference<Comments> _objRef;
 
     protected override async Task OnInitializedAsync()
@@ -83,6 +82,7 @@
         }
         
         Model = await CommentsService.GetCommentsAsync(EntityId, Page);
+        IsAuthenticated = (await GetClaimsPrincipalAsync())?.Identity?.IsAuthenticated == true;
         StateHasChanged();
     }
     
@@ -91,6 +91,8 @@
         if (firstRender)
         {
             _objRef = DotNetObjectReference.Create(this);
+            IsAuthenticated = (await GetClaimsPrincipalAsync())?.Identity?.IsAuthenticated == true;
+            StateHasChanged();
         }
         
         await JsRuntime.InvokeVoidAsync("activateBasicSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor");
@@ -110,9 +112,15 @@
             return;
         }
 
-        var user = await CommentsService.GetUserAsync(User);
+        var user = await CommentsService.GetUserAsync(await GetClaimsPrincipalAsync());
         await CommentsService.AddCommentAsync(user, EntityId, NewComment.Text);
         await ReloadPage(1);
+    }
+
+    private async Task<ClaimsPrincipal> GetClaimsPrincipalAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        return authState?.User;
     }
 
     private async Task ReloadPage(int page)
