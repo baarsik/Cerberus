@@ -1,0 +1,34 @@
+@using Web.Models.Extensions
+@using Web.SafeModels
+@using Microsoft.AspNetCore.Html
+
+@code {
+    [Parameter]
+    public CommentSafe Model { get; set; }
+}
+
+<div class="panel panel-filled">
+    <div class="panel-body flex-row">
+        <div class="avatar avatar-mini m-r">
+            <a href="/profile/@Model.Author.DisplayName">
+                @if (Model.Author.Avatar == "noavatar")
+                {
+                    <i class="fas fa-user"></i>
+                }
+                else
+                {
+                    <img src="/avatars/@(Model.Author.Avatar).png" alt="Avatar"/>
+                }
+            </a>
+        </div>
+        <div>
+            <div>
+                <a href="/profile/@Model.Author.DisplayName">@Model.Author.DisplayName</a>
+                @Model.CreateDate.ToFormattedString()
+            </div>
+            <div>
+                @Model.Content.AsMarkupString()
+            </div>
+        </div>
+    </div>
+</div>

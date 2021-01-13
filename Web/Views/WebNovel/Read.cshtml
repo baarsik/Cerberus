@@ -1,0 +1,101 @@
+@using System.Web
+@using Web.Models.Helpers
+@model WebNovelReadViewModel
+
+@{
+    var title = $"{Localizer["Chapter"].Value} {Model.Translation.Chapter.Number}";
+    if (!string.IsNullOrEmpty(Model.Translation.Title))
+    {
+        title += HttpUtility.HtmlDecode($" – {Model.Translation.Title}");
+    }
+
+    ViewBag.Title = HttpUtility.HtmlDecode($"{Model.WebNovelContent.Name} - {title}");
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="view-header">
+            <div class="header-icon">
+                <i class="fal fa-book fa-sm"></i>
+            </div>
+            <div class="pull-right text-right">
+                @if (User.HasWebNovelEditorAccess())
+                {
+                    <a class="btn btn-lg btn-default" asp-action="EditChapterTranslation" asp-route-webNovelChapterContentId="@Model.Translation.Id">
+                        <i class="far fa-pen"></i>
+                        @Localizer["EditButton"]
+                    </a>
+                    <a class="btn btn-lg btn-default" asp-action="AddChapterTranslation" asp-route-webNovelChapterContentId="@Model.Translation.Id">
+                        <i class="far fa-pen"></i>
+                        @Localizer["AddTranslationButton"]
+                    </a>
+                }
+            </div>
+            <div class="header-title">
+                <h3>
+                    @title
+                    @if (Model.Translation.Chapter.IsAdultContent)
+                    {
+                        <small class="text-accent">(18+)</small>
+                    }
+                </h3>
+                <small>
+                    @StringHelpers.GetCommaSpaceSeparatedString(
+                        Model.WebNovelContent.Name,
+                        Model.Translation.Chapter.WebNovel.Author,
+                        Model.Translation.CreationDate.ToFormattedString())
+                </small>
+            </div>
+        </div>
+        <hr>
+    </div>
+</div>
+
+@if (User?.Identity?.IsAuthenticated != true)
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-c-danger panel-filled">
+                <div class="panel-heading">
+                    @Localizer["Unauthorized_Heading"]
+                </div>
+                <div class="panel-body">
+                    <p>@Localizer["Unauthorized_L1_Please"], <a asp-area="" asp-controller="Account" asp-action="Login">@Localizer["Unauthorized_L1_SignIn"]</a> @Localizer["Unauthorized_L1_Or"] <a asp-area="" asp-controller="Account" asp-action="Register">@Localizer["Unauthorized_L1_SignUp"]</a></p>
+                    <p>@Localizer["Unauthorized_L2_DetailedInfo"]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="m-b">
+                    <partial name="_ChapterMiniPaginator" model="@Model"/>
+                </div>
+                @Html.Raw(Model.Translation.Text)
+            </div>
+            <div class="panel-footer">
+                <partial name="_ChapterMiniPaginator" model="@Model"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<component type="typeof(Comments)" render-mode="ServerPrerendered" param-EntityId="@Model.Translation.Id"/>
+
+<script>
+    const readPageScriptLoadTime = $.now();
+    $(document).keydown(function(e) {
+        if ($.now() - readPageScriptLoadTime < 400) // 0.4s multiple redirect prevention
+            return;
+        
+        if (e.which == 37) {
+            $(location).attr('href', $('a#readPrev').attr('href'));
+        } else if (e.which == 39) {
+            $(location).attr('href', $('a#readNext').attr('href'));
+        }
+    });
+</script>

@@ -1,0 +1,131 @@
+@using System.Security.Claims
+@using Web.Components.Models
+@using Web.Controllers.Services
+@using Web.Models.Api.Comments
+@using Web.Models.Extensions
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Localization
+@using Microsoft.JSInterop
+
+@implements IDisposable
+
+@inject CommentsService CommentsService;
+@inject NavigationManager NavigationManager;
+@inject IHttpContextAccessor HttpContextAccessor;
+@inject IJSRuntime JsRuntime
+@inject IStringLocalizer<Comments> L;
+
+<div data-entityId="@EntityId">
+    <h3>@L["Comments_Header"]</h3>
+    
+    @foreach (var comment in Model.Items)
+    {
+        <Comment Model="@comment"/>
+    }
+
+    @if (!Model.Items.Any())
+    {
+        <div class="panel panel-filled">
+            <div class="panel-body">
+                @L["Comments_NoComments"]
+            </div>
+        </div>
+    }
+    else
+    {
+        <Paginator Page="@Model.Page" TotalPages="@Model.TotalPages" OnPageChange="@ReloadPage"/>
+    }
+
+    <h3>@L["NewComment_Header"]</h3>
+
+    @if (IsAuthenticated)
+    {
+        <EditForm Model="NewComment" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <textarea class="summernote summernote-comments blazor" @bind-value="NewComment.Text" @bind-value:event="oninput"></textarea>
+            <input type="submit" class="btn btn-accent" value="@L["NewComment_SubmitButton"]" />
+            <ValidationSummary />
+        </EditForm>
+    }
+    else
+    {
+        <div class="panel panel-filled panel-c-warning">
+            <div class="panel-body">
+                @L["AuthorizationRequired"].Value.AsMarkupString()
+            </div>
+        </div>
+    }
+</div>
+
+@code
+{
+    [Parameter]
+    public Guid EntityId { get; set; }
+
+    [Parameter]
+    public int Page { get; set; } = 1;
+
+    private NewComment NewComment { get; set; } = new();
+
+    private CommentsPageable Model { get; set; } = new();
+
+    private ClaimsPrincipal User => HttpContextAccessor.HttpContext?.User;
+    private bool IsAuthenticated => HttpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated == true;
+    
+    private DotNetObjectReference<Comments> _objRef;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (EntityId == default)
+        {
+            throw new ArgumentNullException(nameof(EntityId));
+        }
+        
+        Model = await CommentsService.GetCommentsAsync(EntityId, Page);
+        StateHasChanged();
+    }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _objRef = DotNetObjectReference.Create(this);
+        }
+        
+        await JsRuntime.InvokeVoidAsync("activateBasicSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor");
+        await JsRuntime.InvokeVoidAsync("attachBlazorToSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor", _objRef, nameof(OnTextChange));
+    }
+
+    [JSInvokable]
+    public void OnTextChange(string contents)
+    {
+        NewComment.Text = contents;
+    }
+    
+    private async Task HandleValidSubmit()
+    {
+        if (!IsAuthenticated)
+        {
+            return;
+        }
+
+        var user = await CommentsService.GetUserAsync(User);
+        await CommentsService.AddCommentAsync(user, EntityId, NewComment.Text);
+        await ReloadPage(1);
+    }
+
+    private async Task ReloadPage(int page)
+    {
+        Page = page;
+        Model = await CommentsService.GetCommentsAsync(EntityId, Page);
+        NewComment.Text = string.Empty;
+        await JsRuntime.InvokeVoidAsync("resetSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor");
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        _objRef?.Dispose();
+    }
+}

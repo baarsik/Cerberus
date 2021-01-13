@@ -1,0 +1,167 @@
+@using System.Web
+@using Web.Models.Helpers
+@using DataContext.EnumDataTypes
+@model WebNovelDetailsViewModel
+
+@{
+    var webNovel = Model.WebNovelInfo.WebNovel;
+    var webNovelContent = Model.WebNovelInfo.WebNovelContent;
+    var isAuthenticated = User?.Identity?.IsAuthenticated == true;
+    ViewBag.Title = $"{HttpUtility.HtmlDecode(webNovelContent.Name)} – {Localizer["PageTitle"].Value}";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="view-header">
+            <div class="header-icon">
+                <i class="fal fa-book fa-sm"></i>
+            </div>
+            <div class="pull-right text-right">
+                @if (User?.Identity?.IsAuthenticated == true)
+                {
+                    if (User.HasWebNovelEditorAccess() && !webNovel.IsComplete)
+                    {
+                        <a class="btn btn-lg btn-default" asp-action="AddWebNovelTranslation" asp-route-webNovelUrl="@webNovel.UrlName">
+                            @Localizer["AddWebNovelTranslation"]
+                        </a>
+                        <a class="btn btn-lg btn-default" asp-action="AddChapter" asp-route-webNovelId="@webNovel.Id">
+                            <i class="far fa-plus"></i>
+                            @Localizer["AddChapter"]
+                        </a>
+                        <div class="btn-group">
+                            <button class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown">
+                                <i class="far fa-pen"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                @foreach (var translation in Model.WebNovelInfo.WebNovel.Translations)
+                                {
+                                    <li><a class="dropdown-item" asp-action="EditWebNovelTranslation" asp-route-translationId="@translation.Id">@translation.Language.LocalName</a></li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="header-title">
+                <h3>
+                    @HttpUtility.HtmlDecode(webNovelContent.Name)
+                    @if (webNovel.IsAdultContent)
+                    {
+                        <small class="text-accent">(18+)</small>
+                    }
+                </h3>
+                <span class="badge">
+                    <i class="far fa-pen"></i> @webNovelContent.Symbols.ToStringDisplayFormat()
+                </span>
+                <small>
+                    @StringHelpers.GetCommaSpaceSeparatedString(webNovel.OriginalName, webNovel.Author)
+                </small>
+            </div>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="panel panel-filled">
+                    <div class="panel-heading">@Localizer["Description"]</div>
+                    <div class="panel-body">@Html.Raw(webNovelContent.Description)</div>
+                    @if (webNovel.Translations.Count > 1)
+                    {
+                        <div class="panel-heading">@Localizer["AlternativeNames"]</div>
+                        <div class="panel-body">@StringHelpers.GetCommaSpaceSeparatedString(webNovel.Translations.Select(c => c.Name))</div>
+                    }
+                    @if (isAuthenticated)
+                    {
+                        <div class="panel-body">
+                            @if (Model.ReaderData.LastOpenedChapter != null)
+                            {
+                                var chapterLinkInfo = Model.ReaderData.LastOpenedChapter;
+                                <a class="btn btn-accent"
+                                   asp-action="Read"
+                                   asp-route-webNovelUrl="@Model.WebNovelInfo.WebNovel.UrlName"
+                                   asp-route-volume="@chapterLinkInfo.Volume"
+                                   asp-route-chapterNumber="@chapterLinkInfo.Number"
+                                   asp-route-languageCode="@chapterLinkInfo.LanguageCode">@Localizer["ContinueReadingBtn"]</a>
+                            }
+                            @if (Model.ReaderData.NotificationsEnabled)
+                            {
+                                <a class="btn btn-default" asp-action="DisableNotifications" asp-route-webNovelUrl="@webNovel.UrlName">
+                                    @Localizer["DisableNotifications"]
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-default" asp-action="EnableNotifications" asp-route-webNovelUrl="@webNovel.UrlName">
+                                    @Localizer["EnableNotifications"]
+                                </a>
+                            }
+
+                        </div>
+                    }
+                </div>
+                @if (webNovel.Chapters.Any(c => c.Translations.Any(d => Model.WebNovelInfo.UserLanguages.Contains(d.Language))))
+                {
+                    if (webNovel.UsesVolumes)
+                    {
+                        var volumes = webNovel.Chapters
+                            .Select(c => c.Volume)
+                            .Distinct()
+                            .OrderByDescending(c => c * (Model.ReaderData.SortOrder == SortOrder.FromNewToOld ? 1 : -1));
+                        foreach (var volume in volumes)
+                        {
+                            <div class="panel panel-c-accent panel-filled">
+                                <div class="panel-heading">@Localizer["Volume"] @volume</div>
+                                <div class="panel-body">
+                                    <partial name="_ChapterLinkInDetails"
+                                             model="@(new ChapterLinkInDetailsViewModel
+                                                      {
+                                                          Chapters = webNovel.Chapters
+                                                              .Where(c => c.Volume == volume)
+                                                              .OrderByDescending(c => c.Number * (Model.ReaderData.SortOrder == SortOrder.FromNewToOld ? 1 : -1))
+                                                              .ThenByDescending(c => c.Translations.Select(d => d.CreationDate).OrderByDescending(d => d).FirstOrDefault())
+                                                              .ToList(),
+                                                          WebNovel = webNovel,
+                                                          DisplayedLanguages = Model.WebNovelInfo.UserLanguages,
+                                                          HasEditorAccess = User.HasWebNovelEditorAccess()
+                                                      })"/>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="panel panel-c-accent panel-filled">
+                            <div class="panel-heading">@Localizer["Chapters"]</div>
+                            <div class="panel-body">
+                                <partial name="_ChapterLinkInDetails"
+                                         model="@(new ChapterLinkInDetailsViewModel
+                                                  {
+                                                      Chapters = webNovel.Chapters
+                                                          .OrderByDescending(c => c.Number * (Model.ReaderData.SortOrder == SortOrder.FromNewToOld ? 1 : -1))
+                                                          .ThenByDescending(c => c.Translations.Select(d => d.CreationDate).OrderByDescending(d => d).FirstOrDefault())
+                                                          .ToList(),
+                                                      WebNovel = webNovel,
+                                                      DisplayedLanguages = Model.WebNovelInfo.UserLanguages,
+                                                      HasEditorAccess = User.HasWebNovelEditorAccess()
+                                                  })"/>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="panel panel-c-accent panel-filled">
+                        <div class="panel-heading">@Localizer["Chapters"]</div>
+                        <div class="panel-body">@Localizer["Chapters_NoChapters"]</div>
+                    </div>
+                }
+                
+                <component type="typeof(Comments)" render-mode="ServerPrerendered" param-EntityId="@Model.WebNovelInfo.WebNovel.Id"/>
+            </div>
+        </div>
+    </div>
+</div>

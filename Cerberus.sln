@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cerberus", "Cerberus\Cerberus.csproj", "{79881B0A-EA8A-46E4-BE57-5D8F940AF4D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{79881B0A-EA8A-46E4-BE57-5D8F940AF4D3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataContext", "DataContext\DataContext.csproj", "{4B8DBD41-9A2A-44D0-95B4-22342D054596}"
 EndProject

@@ -1,0 +1,28 @@
+﻿@using Web.Controllers
+<partial name="Navbars/Regular"/>
+<aside class="navigation">
+    <nav class="navbar-side">
+        <ul class="nav cerberus-nav">
+            <li class="nav-category">Main</li>
+            <li class="@ViewContext.FillClassIfActive(nameof(SettingsController.Index), "Settings")">
+                <a asp-controller="Settings" asp-action="Index">Dashboard</a>
+            </li>
+            
+            <li class="nav-category">Manageable Data</li>
+            @*<li class="@ViewContext.FillClassIfActive("Users", "Settings")">
+                <a asp-controller="Settings" asp-action="Users">User List</a>
+            </li>*@
+            <li class="@ViewContext.FillClassIfActive(new List<string>
+                       {
+                           nameof(SettingsController.Forums),
+                           nameof(SettingsController.CreateForum)
+                       }, "Settings")">
+                <a asp-controller="Settings" asp-action="Forums">Forums</a>
+            </li>
+            
+            <li class="nav-info">
+                Admin panel may contain privileged information. Please make sure not to release this info to the general public.
+            </li>
+        </ul>
+    </nav>
+</aside>

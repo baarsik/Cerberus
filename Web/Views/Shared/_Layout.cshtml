@@ -1,0 +1,83 @@
+﻿@{
+    LayoutSettings settings = ViewBag.Settings ?? new LayoutSettings();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Web</title>
+    
+    <base href="~/" />
+    
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        @foreach (var path in settings.LibraryManager.GetCssFiles())
+        {
+            <link rel="stylesheet" href="@path"/>
+        }
+        <link rel="stylesheet" href="~/lib/summernote/dist/summernote.css"/>
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/font-awesome-pro/css/all.css" />
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/summernote/dist/summernote.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        @foreach (var path in settings.LibraryManager.GetCssFilesMinimized())
+        {
+            <link rel="stylesheet" href="@path"/>
+        }
+        <link rel="stylesheet" href="~/lib/summernote/dist/summernote.min.css"/>
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/font-awesome-pro/css/all.min.css" />
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/summernote/dist/summernote.min.js"></script>
+    </environment>
+    
+    <script src="~/js/summernote.js"></script>
+</head>
+<body class="pace-done">
+    @switch (settings.NavbarType)
+    {
+        case NavbarType.Regular:
+            <partial name="Navbars/Regular"/>
+            break;
+        case NavbarType.Admin:
+            <partial name="Navbars/Admin"/>
+            break;
+    }
+    <div class="container @(settings.IsContainerCentered ? "container-center" : "") body-content">
+        @RenderBody()
+    </div>
+
+    @if (settings.IsFooterVisible)
+    {
+        <component type="typeof(Footer)" render-mode="Static"/>
+    }
+
+    <environment include="Development">
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        @foreach (var path in settings.LibraryManager.GetJsFiles())
+        {
+            <script src="@path"></script>
+        }
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        @foreach (var path in settings.LibraryManager.GetJsFilesMinimized())
+        {
+            <script src="@path"></script>
+        }
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("Scripts", false)
+    <script src="/_framework/blazor.server.js"></script>
+</body>
+</html>

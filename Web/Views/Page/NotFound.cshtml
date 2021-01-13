@@ -1,0 +1,20 @@
+@{
+    ViewBag.Title = Localizer["PageTitle"];
+}
+
+<div class="view-header">
+    <div class="header-icon">
+        <i class="fal fa-times-circle fa-sm"></i>
+    </div>
+    <div class="header-title">
+        <h3>@Localizer["Header_Title"]</h3>
+        <small>@Localizer["Header_Description"]</small>
+    </div>
+</div>
+
+<div class="panel panel-filled">
+    <div class="panel-body">
+        <p class="m-t-xs">@Localizer["Text"]</p>
+        <p class="m-b-none"><a asp-controller="WebNovel" asp-action="Index">@Localizer["HomeButton"]</a></p>
+    </div>
+</div>
