@@ -21,6 +21,7 @@ namespace Web
 
         public static class Permissions
         {
+            public const string Moderate = Roles.Admin + "," + Roles.GlobalModerator;
             public const string WebNovelEdit = Roles.Admin + "," + Roles.GlobalModerator + "," + Roles.WebNovelEditor;
         }
 

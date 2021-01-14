@@ -1,13 +1,12 @@
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Localization
+@using Microsoft.JSInterop
 @using Web.Components.Models
 @using Web.Controllers.Services
 @using Web.Models.Api.Comments
 @using Web.Models.Extensions
-@using Microsoft.AspNetCore.Http
-@using Microsoft.AspNetCore.Components.Forms
-@using Microsoft.Extensions.Localization
-@using Microsoft.JSInterop
 
 @implements IDisposable
 
@@ -34,7 +33,7 @@
     }
     else
     {
-        <Paginator Page="@Model.Page" TotalPages="@Model.TotalPages" OnPageChange="@ReloadPage"/>
+        <Paginator Page="@Model.Page" TotalPages="@Model.TotalPages" OnPageChange="@ReloadPageAsync"/>
     }
 
     <h3>@L["NewComment_Header"]</h3>
@@ -114,7 +113,7 @@
 
         var user = await CommentsService.GetUserAsync(await GetClaimsPrincipalAsync());
         await CommentsService.AddCommentAsync(user, EntityId, NewComment.Text);
-        await ReloadPage(1);
+        await ReloadPageAsync(1);
     }
 
     private async Task<ClaimsPrincipal> GetClaimsPrincipalAsync()
@@ -123,7 +122,7 @@
         return authState?.User;
     }
 
-    private async Task ReloadPage(int page)
+    private async Task ReloadPageAsync(int page)
     {
         Page = page;
         Model = await CommentsService.GetCommentsAsync(EntityId, Page);

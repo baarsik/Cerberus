@@ -5,6 +5,8 @@ namespace Web.SafeModels
 {
     public class CommentSafe
     {
+        public Guid Id { get; set; }
+        
         public Guid RelatedEntityId { get; set; }
         
         public DateTime CreateDate { get; set; }
@@ -18,6 +20,7 @@ namespace Web.SafeModels
         public static CommentSafe Convert(Comment comment) =>
             new()
             {
+                Id = comment.Id,
                 RelatedEntityId = comment.RelatedEntityId,
                 CreateDate = comment.CreateDate,
                 LastEditDate = comment.LastEditDate,

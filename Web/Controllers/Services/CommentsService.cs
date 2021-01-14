@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AngleSharp.Text;
 using Web.Models.Api.Comments;
 using Web.Models.Extensions;
 using Web.SafeModels;
@@ -65,6 +66,25 @@ namespace Web.Controllers.Services
             await Db.SaveChangesAsync();
 
             return comment;
+        }
+
+        public async Task DeleteCommentAsync(ApplicationUser user, Guid id)
+        {
+            var hasModerateAccess = false;
+            foreach (var role in Constants.Permissions.Moderate.SplitCommas())
+            {
+                hasModerateAccess |= await UserManager.IsInRoleAsync(user, role);
+            }
+
+            if (!hasModerateAccess)
+            {
+                return;
+            }
+
+            var comment = await Db.Comments.FindAsync(id);
+            comment.IsDeleted = true;
+            Db.Update(comment);
+            await Db.SaveChangesAsync();
         }
     }
 }
