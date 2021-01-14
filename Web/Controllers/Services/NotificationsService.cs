@@ -46,7 +46,7 @@ namespace Web.Controllers.Services
                     ? $"<b>{webNovelName}</b> Vol. {webNovelChapterContent.Chapter.Volume} Chapter {webNovelChapterContent.Chapter.Number}"
                     : $"<b>{webNovelName}</b> Chapter {webNovelChapterContent.Chapter.Number}";
 
-                var link = $"<a href=\"/wn/{nameof(WebNovelController.Read)}/{webNovelChapterContent.Language.Code}/{webNovelChapterContent.Chapter.WebNovel.UrlName}/{webNovelChapterContent.Chapter.Number}/\">{linkText}</a>";
+                var link = $"<a href=\"/{nameof(WebNovelController.Read).ToLower()}/{webNovelChapterContent.Language.Code}/{webNovelChapterContent.Chapter.WebNovel.UrlName}/{webNovelChapterContent.Chapter.Number}/\">{linkText}</a>";
                 notifications.Add(new ApplicationUserNotifications
                 {
                     Body = $"New Release: {link}",
@@ -138,7 +138,7 @@ namespace Web.Controllers.Services
                 {
                     Id = x.ReaderData.Id,
                     WebNovelContent = x.WebNovelContent,
-                    WebNovelURL = $"/wn/{nameof(WebNovelController.Details)}/{x.ReaderData.WebNovel.UrlName}/"
+                    WebNovelURL = $"/{nameof(WebNovelController.Details).ToLower()}/{x.ReaderData.WebNovel.UrlName}/"
                 })
                 .Skip(Constants.Notifications.ItemsPerIndexPage * (model.Page - 1))
                 .Take(Constants.Notifications.ItemsPerIndexPage)
