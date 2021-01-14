@@ -36,7 +36,7 @@
                                     <a asp-action="Delete" asp-route-notificationId="@item.Id" asp-route-page="@Model.Page"><i class="far fa-trash"></i></a>
                                 </div>
                                 <div class="c-white">@Html.Raw(item.Body)</div>
-                                <div><small>@(item.NotificationDate.ToFormattedString())</small></div>
+                                <div><small>@(item.NotificationDate.ToFormattedDateTimeString())</small></div>
                             </div>
                         </div>
                     }

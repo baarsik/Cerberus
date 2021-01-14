@@ -10,7 +10,7 @@ namespace Web.Models.Extensions
             var sb = new StringBuilder();
             while (value > 0)
             {
-                sb.Insert(0, $" {value % 1000}");
+                sb.Insert(0, value < 1000 ? $" {value % 1000}" : $" {value % 1000:000}");
                 value /= 1000;
             }
             return sb.TrimStart().ToString();

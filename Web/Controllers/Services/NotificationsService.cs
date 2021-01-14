@@ -46,6 +46,11 @@ namespace Web.Controllers.Services
                     ? $"<b>{webNovelName}</b> Vol. {webNovelChapterContent.Chapter.Volume} Chapter {webNovelChapterContent.Chapter.Number}"
                     : $"<b>{webNovelName}</b> Chapter {webNovelChapterContent.Chapter.Number}";
 
+                if (!string.IsNullOrEmpty(webNovelChapterContent.Title))
+                {
+                    linkText = $"{linkText} – {webNovelChapterContent.Title}";
+                }
+
                 var link = $"<a href=\"/{nameof(WebNovelController.Read).ToLower()}/{webNovelChapterContent.Language.Code}/{webNovelChapterContent.Chapter.WebNovel.UrlName}/{webNovelChapterContent.Chapter.Number}/\">{linkText}</a>";
                 notifications.Add(new ApplicationUserNotifications
                 {
