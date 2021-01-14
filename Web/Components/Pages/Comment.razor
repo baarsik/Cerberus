@@ -1,10 +1,17 @@
 @using Web.Models.Extensions
 @using Web.SafeModels
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Html
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 @code {
     [Parameter]
     public CommentSafe Model { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> OnDeleteClicked { get; set; }
 }
 
 <div class="panel panel-filled">
@@ -21,7 +28,13 @@
                 }
             </a>
         </div>
-        <div>
+        <div style="width: 100%">
+            @if (HasModerateAccess)
+            {
+                <div class="pull-right">
+                    <a class="btn btn-xs btn-default" @onclick="OnDeleteClick"><i class="far fa-trash"></i></a>
+                </div>
+            }
             <div>
                 <a href="/profile/@Model.Author.DisplayName">@Model.Author.DisplayName</a>
                 @Model.CreateDate.ToFormattedString()
@@ -32,3 +45,19 @@
         </div>
     </div>
 </div>
+
+@code {
+    private bool HasModerateAccess { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        HasModerateAccess = authState.User?.HasModerateAccess() == true;
+        StateHasChanged();
+    }
+    
+    private async Task OnDeleteClick()
+    {
+        await OnDeleteClicked.InvokeAsync(Model.Id);
+    }
+}

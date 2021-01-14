@@ -20,7 +20,7 @@
     
     @foreach (var comment in Model.Items)
     {
-        <Comment Model="@comment"/>
+        <Comment Model="@comment" OnDeleteClicked="@DeleteCommentAsync"/>
     }
 
     @if (!Model.Items.Any())
@@ -129,6 +129,20 @@
         NewComment.Text = string.Empty;
         await JsRuntime.InvokeVoidAsync("resetSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor");
         StateHasChanged();
+    }
+
+    private async Task DeleteCommentAsync(Guid id)
+    {
+        if (!IsAuthenticated)
+        {
+            return;
+        }
+        
+        var user = await CommentsService.GetUserAsync(await GetClaimsPrincipalAsync());
+        await CommentsService.DeleteCommentAsync(user, id);
+        StateHasChanged();
+        
+        await ReloadPageAsync(Page);
     }
 
     public void Dispose()
