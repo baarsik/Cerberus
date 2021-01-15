@@ -28,5 +28,6 @@ namespace Web.Models.ViewModels
     {
         public int TotalWebNovels { get; set; }
         public int TotalChapters { get; set; }
+        public int TotalComments { get; set; }
     }
 }

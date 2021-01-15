@@ -51,4 +51,7 @@
     <data name="WNStats_TotalChapters" xml:space="preserve">
         <value>Total chapters</value>
     </data>
+    <data name="WNStats_TotalComments" xml:space="preserve">
+        <value>Total comments</value>
+    </data>
 </root>

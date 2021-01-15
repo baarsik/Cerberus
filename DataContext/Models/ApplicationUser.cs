@@ -21,8 +21,7 @@ namespace DataContext.Models
 
         public Guid LastApiTokenId { get; set; }
 
-        [MaxLength(100)]
-        public string LockoutReason { get; set; }
+        public DateTime? ReadOnlyEnd { get; set; }
 
         [Required]
         public DateTime RegisterDate { get; set; } = DateTime.Now;
@@ -32,6 +31,8 @@ namespace DataContext.Models
 
         [MaxLength(8)]
         public string Culture { get; set; }
+
+        public int CoinsBalance { get; set; } = 0;
         
         [Required]
         public bool IsAdultContentConsentGiven { get; set; } = false;
@@ -45,6 +46,8 @@ namespace DataContext.Models
         public virtual ICollection<ApplicationUserNotifications> Notifications { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
+
+        public virtual ICollection<ApplicationUserCoinUpdate> CoinUpdates { get; set; }
 
         public override string ToString()
         {

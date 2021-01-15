@@ -51,4 +51,7 @@
     <data name="WNStats_TotalChapters" xml:space="preserve">
         <value>Всего глав</value>
     </data>
+    <data name="WNStats_TotalComments" xml:space="preserve">
+        <value>Всего комментариев</value>
+    </data>
 </root>

@@ -131,6 +131,11 @@ namespace DataContext
                 .HasMany(c => c.Notifications)
                 .WithOne(c => c.User)
                 .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.Entity<ApplicationUser>()
+                .HasMany(c => c.CoinUpdates)
+                .WithOne(c => c.User)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<ApplicationUserNotifications>()
                 .HasQueryFilter(c => !c.IsDeleted);

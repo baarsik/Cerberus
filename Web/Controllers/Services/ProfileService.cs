@@ -35,7 +35,8 @@ namespace Web.Controllers.Services
                         .CountAsync(c => c.Chapters.Any(x => x.Translations.Any(z => z.Uploader == user))),
                     TotalChapters = await Db.WebNovelChapters
                         .Include(c => c.Translations)
-                        .CountAsync(c => c.Translations.Any(x => x.Uploader == user))
+                        .CountAsync(c => c.Translations.Any(x => x.Uploader == user)),
+                    TotalComments = await Db.Comments.CountAsync(x => x.Author == user)
                 }
             };
             return statistics;

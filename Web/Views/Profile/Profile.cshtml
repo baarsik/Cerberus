@@ -27,17 +27,6 @@
         @*<div class="col-lg-6">
             <div class="panel panel-filled panel-c-warning">
                 <div class="panel-heading">
-                    News statistics
-                </div>
-                <div class="panel-body">
-                    <div>Total news: @Model.Statistics.News.TotalNews</div>
-                    <div>Total comments: @Model.Statistics.News.TotalComments</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="panel panel-filled panel-c-warning">
-                <div class="panel-heading">
                     Forum statistics
                 </div>
                 <div class="panel-body">
@@ -54,6 +43,7 @@
                 <div class="panel-body">
                     <div><b>@Localizer["WNStats_TotalWNs"]:</b> @Model.Statistics.WebNovel.TotalWebNovels</div>
                     <div><b>@Localizer["WNStats_TotalChapters"]:</b> @Model.Statistics.WebNovel.TotalChapters</div>
+                    <div><b>@Localizer["WNStats_TotalComments"]:</b> @Model.Statistics.WebNovel.TotalComments</div>
                 </div>
             </div>
         </div>

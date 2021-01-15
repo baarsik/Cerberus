@@ -38,7 +38,9 @@ namespace Web.Models.Extensions
 
         public static bool HasWriteAccess(this ApplicationUser user)
         {
-            return user != null && (!user.LockoutEnd.HasValue || user.LockoutEnd.Value > DateTimeOffset.Now);
+            return user != null &&
+                   (!user.LockoutEnd.HasValue || user.LockoutEnd.Value > DateTimeOffset.Now) &&
+                   (!user.ReadOnlyEnd.HasValue || user.ReadOnlyEnd.Value > DateTime.Now);
         }
     }
 }
