@@ -3547,6 +3547,7 @@ div.dt-button-info {
 .avatar.avatar-mini {
     height: 64px;
     width: 64px;
+    font-size: 32px;
 }
 .avatar > img,
 .avatar > a > img {

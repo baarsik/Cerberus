@@ -9,6 +9,7 @@ namespace Web.Models.ViewModels
     public class RegisterViewModel
     {
         [Required]
+        [RegularExpression("/^[A-Za-z][A-Za-z0-9]*$/", ErrorMessage = "Only english and numeric chracters allowed")]
         [MaxLength(64)]
         public string DisplayName { get; set; }
 
