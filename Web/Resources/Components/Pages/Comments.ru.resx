@@ -33,4 +33,7 @@
     <data name="AuthorizationRequired" xml:space="preserve">
         <value>Пожалуйста, &lt;a href="/account/login"&gt;войдите&lt;/a&gt; или &lt;a href="/account/register"&gt;зарегистрируйтесь&lt;/a&gt;, чтобы писать комментарии</value>
     </data>
+    <data name="Error_ReadOnlyMode" xml:space="preserve">
+        <value>Ваша учетная запись переведена в &lt;b class="text-danger"&gt;режим чтения&lt;/b&gt; до &lt;b&gt;{0}&lt;/b&gt;</value>
+    </data>
 </root>

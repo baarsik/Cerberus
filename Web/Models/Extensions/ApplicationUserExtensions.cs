@@ -40,7 +40,12 @@ namespace Web.Models.Extensions
         {
             return user != null &&
                    (!user.LockoutEnd.HasValue || user.LockoutEnd.Value > DateTimeOffset.Now) &&
-                   (!user.ReadOnlyEnd.HasValue || user.ReadOnlyEnd.Value > DateTime.Now);
+                   !user.IsReadOnly();
+        }
+        
+        public static bool IsReadOnly(this ApplicationUser user)
+        {
+            return user?.ReadOnlyEnd != null && user.ReadOnlyEnd.Value > DateTime.Now;
         }
     }
 }

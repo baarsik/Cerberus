@@ -74,5 +74,11 @@ namespace Web.Resources.Components.Pages {
                 return ResourceManager.GetString("AuthorizationRequired", resourceCulture);
             }
         }
+        
+        internal static string Error_ReadOnlyMode {
+            get {
+                return ResourceManager.GetString("Error_ReadOnlyMode", resourceCulture);
+            }
+        }
     }
 }

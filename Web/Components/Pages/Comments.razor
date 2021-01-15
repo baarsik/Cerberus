@@ -1,4 +1,5 @@
 @using System.Security.Claims
+@using DataContext.Models
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.Extensions.Localization
@@ -14,6 +15,15 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IJSRuntime JsRuntime
 @inject IStringLocalizer<Comments> L;
+
+@code
+{
+    [Parameter]
+    public Guid EntityId { get; set; }
+
+    [Parameter]
+    public int Page { get; set; } = 1;
+}
 
 <div data-entityId="@EntityId">
     <h3>@L["Comments_Header"]</h3>
@@ -38,7 +48,23 @@
 
     <h3>@L["NewComment_Header"]</h3>
 
-    @if (IsAuthenticated)
+    @if (!IsAuthenticated)
+    {
+        <div class="panel panel-filled panel-c-warning">
+            <div class="panel-body">
+                @L["Error_AuthorizationRequired"].Value.AsMarkupString()
+            </div>
+        </div>
+    }
+    else if (User.IsReadOnly())
+    {
+        <div class="panel panel-filled panel-c-warning">
+            <div class="panel-body">
+                @string.Format(L["Error_ReadOnlyMode"].Value, User.ReadOnlyEnd.Value.ToFormattedDateTimeString()).AsMarkupString()
+            </div>
+        </div>
+    }
+    else
     {
         <EditForm Model="NewComment" OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator />
@@ -47,29 +73,17 @@
             <ValidationSummary />
         </EditForm>
     }
-    else
-    {
-        <div class="panel panel-filled panel-c-warning">
-            <div class="panel-body">
-                @L["AuthorizationRequired"].Value.AsMarkupString()
-            </div>
-        </div>
-    }
 </div>
 
 @code
 {
-    [Parameter]
-    public Guid EntityId { get; set; }
-
-    [Parameter]
-    public int Page { get; set; } = 1;
-
     private NewComment NewComment { get; set; } = new();
 
     private CommentsPageable Model { get; set; } = new();
 
     private bool IsAuthenticated { get; set; }
+    
+    private ApplicationUser User { get; set; }
 
     private DotNetObjectReference<Comments> _objRef;
 
@@ -81,7 +95,11 @@
         }
         
         Model = await CommentsService.GetCommentsAsync(EntityId, Page);
-        IsAuthenticated = (await GetClaimsPrincipalAsync())?.Identity?.IsAuthenticated == true;
+
+        var claimsPrincipal = await GetClaimsPrincipalAsync();
+        IsAuthenticated = claimsPrincipal?.Identity?.IsAuthenticated == true;
+        User = await CommentsService.GetUserAsync(claimsPrincipal);
+        
         StateHasChanged();
     }
     
@@ -90,8 +108,6 @@
         if (firstRender)
         {
             _objRef = DotNetObjectReference.Create(this);
-            IsAuthenticated = (await GetClaimsPrincipalAsync())?.Identity?.IsAuthenticated == true;
-            StateHasChanged();
         }
         
         await JsRuntime.InvokeVoidAsync("activateBasicSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor");
@@ -111,8 +127,7 @@
             return;
         }
 
-        var user = await CommentsService.GetUserAsync(await GetClaimsPrincipalAsync());
-        await CommentsService.AddCommentAsync(user, EntityId, NewComment.Text);
+        await CommentsService.AddCommentAsync(User, EntityId, NewComment.Text);
         await ReloadPageAsync(1);
     }
 
@@ -138,8 +153,7 @@
             return;
         }
         
-        var user = await CommentsService.GetUserAsync(await GetClaimsPrincipalAsync());
-        await CommentsService.DeleteCommentAsync(user, id);
+        await CommentsService.DeleteCommentAsync(User, id);
         StateHasChanged();
         
         await ReloadPageAsync(Page);
