@@ -121,6 +121,19 @@ namespace Web.Controllers.Services
 
         public async Task<WebNovelDetailsViewModel> GetWebNovelDetailsViewModelAsync(ApplicationUser user, string webNovelUrl)
         {
+            var webNovelId = await Db.WebNovels
+                .Where(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture))
+                .Select(c => c.Id)
+                .SingleOrDefaultAsync();
+
+            if (webNovelId == default)
+                return null;
+
+            return await GetWebNovelDetailsViewModelAsync(user, webNovelId);
+        }
+        
+        public async Task<WebNovelDetailsViewModel> GetWebNovelDetailsViewModelAsync(ApplicationUser user, Guid webNovelId)
+        {
             var webNovel = await Db.WebNovels
                 .Include(c => c.Chapters)
                     .ThenInclude(c => c.Translations)
@@ -133,7 +146,7 @@ namespace Web.Controllers.Services
                     .ThenInclude(c => c.LastOpenedChapter)
                     .ThenInclude(c => c.Translations)
                     .ThenInclude(c => c.Language)
-                .SingleOrDefaultAsync(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture));
+                .SingleOrDefaultAsync(c => c.Id == webNovelId);
 
             if (webNovel == null)
                 return null;

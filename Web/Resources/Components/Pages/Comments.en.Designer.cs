@@ -69,9 +69,9 @@ namespace Web.Resources.Components.Pages {
             }
         }
         
-        internal static string AuthorizationRequired {
+        internal static string Error_AuthorizationRequired {
             get {
-                return ResourceManager.GetString("AuthorizationRequired", resourceCulture);
+                return ResourceManager.GetString("Error_AuthorizationRequired", resourceCulture);
             }
         }
         

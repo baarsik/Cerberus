@@ -1,10 +1,5 @@
 @using Web.Models.Extensions
 @using Web.SafeModels
-@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.AspNetCore.Components.Web
-@using Microsoft.AspNetCore.Html
-
-@inject AuthenticationStateProvider AuthenticationStateProvider
 
 @code {
     [Parameter]
@@ -14,7 +9,7 @@
     public EventCallback<Guid> OnDeleteClicked { get; set; }
 }
 
-<div class="panel panel-filled">
+<div class="panel panel-filled panel-c-white">
     <div class="panel-body flex-row">
         <div class="avatar avatar-mini m-r">
             <a href="/profile/@Model.Author.DisplayName">

@@ -30,7 +30,7 @@
     <data name="NewComment_SubmitButton" xml:space="preserve">
         <value>Send</value>
     </data>
-    <data name="AuthorizationRequired" xml:space="preserve">
+    <data name="Error_AuthorizationRequired" xml:space="preserve">
         <value>Please &lt;a href="/account/login"&gt;Sign In&lt;/a&gt; or &lt;a href="/account/register"&gt;Sign Up&lt;/a&gt; in order to be able to comment</value>
     </data>
     <data name="Error_ReadOnlyMode" xml:space="preserve">

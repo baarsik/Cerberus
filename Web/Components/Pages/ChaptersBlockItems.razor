@@ -1,0 +1,99 @@
+@using Web.Models.ViewModels
+@using DataContext.EnumDataTypes
+@using System.Security.Claims
+@using DataContext.Models
+@using Microsoft.Extensions.Localization
+@using Web.Controllers
+@using Web.Models.Extensions
+
+@inject IStringLocalizer<ChaptersBlock> L;
+
+@code
+{
+    [Parameter]
+    public WebNovelDetailsViewModel Model { get; set; }
+    
+    [Parameter]
+    public int? Volume { get; set; }
+}
+
+@foreach (var chapter in InternalModel.Chapters)
+{   
+    foreach (var translation in chapter.Translations
+        .Where(c => InternalModel.DisplayedLanguages.Contains(c.Language))
+        .OrderByDescending(c => InternalModel.DisplayedLanguages.IndexOf(c.Language))
+    )
+    {
+        var chapterTitle = $" <b>{L["Chapter"].Value} {chapter.Number}</b>";
+        if (!string.IsNullOrEmpty(translation.Title))
+        {
+            chapterTitle += $" - {translation.Title}";
+        }
+
+        <div class="flex-row justify-between align-center m-b-xs">
+            <div>
+                <img src="/images/flags/@(translation.Language.CountryFlagIconName).png" width="20" alt="@translation.Language.GlobalName"/>
+                <a class="c-white" href="@GetChapterUrl(translation.Language.Code, chapter)">
+                    @(new MarkupString(chapterTitle))
+                </a>
+                @if (translation.Chapter.IsAdultContent)
+                {
+                    <span class="text-accent">(18+)</span>
+                }
+                <br/>
+                <small>
+                    <i class="far fa-calendar-alt"></i> @translation.CreationDate.ToFormattedString()
+                </small>
+            </div>
+            <div class="flex-row align-center">
+                <div style="padding-right: 1em">
+                    <i class="far fa-pen"></i> @translation.Symbols.ToStringDisplayFormat()
+                </div>
+                <div>
+                    <a class="btn btn-accent text-uppercase font-bold c-white" href="@GetChapterUrl(translation.Language.Code, chapter)">
+                        @L["ReadButton"] <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        // Only one best translation match per chapter for authorized users or users with no editor access
+        if (ClaimsPrincipal?.Identity?.IsAuthenticated == true && !InternalModel.HasEditorAccess)
+        {
+            break;
+        }
+    }
+}
+
+@code
+{
+    private ChapterLinkInDetailsViewModel InternalModel { get; set; }
+    
+    private ClaimsPrincipal ClaimsPrincipal { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        ClaimsPrincipal = authState?.User;
+        
+        var webNovel = Model.WebNovelInfo.WebNovel;
+        InternalModel = new ChapterLinkInDetailsViewModel
+        {
+            Chapters = webNovel.Chapters
+                .Where(c => !Volume.HasValue || c.Volume == Volume)
+                .OrderByDescending(c => c.Number * (Model.ReaderData.SortOrder == SortOrder.FromNewToOld ? 1 : -1))
+                .ThenByDescending(c => c.Translations.Select(d => d.CreationDate).OrderByDescending(d => d).FirstOrDefault())
+                .ToList(),
+            WebNovel = webNovel,
+            DisplayedLanguages = Model.WebNovelInfo.UserLanguages,
+            HasEditorAccess = ClaimsPrincipal.HasWebNovelEditorAccess()
+        };
+    }
+
+    private string GetChapterUrl(string languageCode, WebNovelChapter chapter)
+    {
+        return InternalModel.WebNovel.UsesVolumes
+            ? $"/{nameof(WebNovelController.Read).ToLower()}/{languageCode}/{InternalModel.WebNovel.UrlName}/{chapter.Volume}/{chapter.Number}"
+            : $"/{nameof(WebNovelController.Read).ToLower()}/{languageCode}/{InternalModel.WebNovel.UrlName}/{chapter.Number}";
+    }
+}

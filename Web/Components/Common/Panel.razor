@@ -1,0 +1,26 @@
+@code {
+    [Parameter]
+    public string Class { get; set; }
+    
+    [Parameter]
+    public RenderFragment Header { get; set; }
+
+    [Parameter]
+    public RenderFragment Body { get; set; }
+
+    [Parameter]
+    public RenderFragment Footer { get; set; }
+
+}
+
+<div class="panel panel-filled @Class">
+    @if (Header != null)
+    {
+        <div class="panel-heading">@Header</div>
+    }
+    <div class="panel-body">@Body</div>
+    @if (Footer != null)
+    {
+        <div class="panel-footer">@Footer</div>
+    }
+</div>

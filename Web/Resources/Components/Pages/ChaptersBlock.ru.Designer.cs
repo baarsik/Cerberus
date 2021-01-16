@@ -14,21 +14,21 @@ namespace Web.Resources.Components.Pages {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Comments_ru {
+    internal class ChaptersBlock_ru {
         
         private static System.Resources.ResourceManager resourceMan;
         
         private static System.Globalization.CultureInfo resourceCulture;
         
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Comments_ru() {
+        internal ChaptersBlock_ru() {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("Web.Resources.Components.Pages.Comments_ru", typeof(Comments_ru).Assembly);
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("Web.Resources.Components.Pages.ChaptersBlock_ru", typeof(ChaptersBlock_ru).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -45,39 +45,39 @@ namespace Web.Resources.Components.Pages {
             }
         }
         
-        internal static string Comments_Header {
+        internal static string Volume {
             get {
-                return ResourceManager.GetString("Comments_Header", resourceCulture);
+                return ResourceManager.GetString("Volume", resourceCulture);
             }
         }
         
-        internal static string Comments_NoComments {
+        internal static string Chapters {
             get {
-                return ResourceManager.GetString("Comments_NoComments", resourceCulture);
+                return ResourceManager.GetString("Chapters", resourceCulture);
             }
         }
         
-        internal static string NewComment_Header {
+        internal static string Chapters_NoChapters {
             get {
-                return ResourceManager.GetString("NewComment_Header", resourceCulture);
+                return ResourceManager.GetString("Chapters_NoChapters", resourceCulture);
             }
         }
         
-        internal static string NewComment_SubmitButton {
+        internal static string Loading_Body {
             get {
-                return ResourceManager.GetString("NewComment_SubmitButton", resourceCulture);
+                return ResourceManager.GetString("Loading_Body", resourceCulture);
             }
         }
         
-        internal static string Error_ReadOnlyMode {
+        internal static string Chapter {
             get {
-                return ResourceManager.GetString("Error_ReadOnlyMode", resourceCulture);
+                return ResourceManager.GetString("Chapter", resourceCulture);
             }
         }
         
-        internal static string Error_AuthorizationRequired {
+        internal static string ReadButton {
             get {
-                return ResourceManager.GetString("Error_AuthorizationRequired", resourceCulture);
+                return ResourceManager.GetString("ReadButton", resourceCulture);
             }
         }
     }

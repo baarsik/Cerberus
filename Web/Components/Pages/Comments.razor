@@ -1,9 +1,6 @@
 @using System.Security.Claims
 @using DataContext.Models
-@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.Extensions.Localization
-@using Microsoft.JSInterop
 @using Web.Components.Models
 @using Web.Controllers.Services
 @using Web.Models.Api.Comments
@@ -12,8 +9,6 @@
 @implements IDisposable
 
 @inject CommentsService CommentsService;
-@inject AuthenticationStateProvider AuthenticationStateProvider
-@inject IJSRuntime JsRuntime
 @inject IStringLocalizer<Comments> L;
 
 @code
@@ -35,11 +30,9 @@
 
     @if (!Model.Items.Any())
     {
-        <div class="panel panel-filled">
-            <div class="panel-body">
-                @L["Comments_NoComments"]
-            </div>
-        </div>
+        <Panel>
+            <Body>@L["Comments_NoComments"]</Body>
+        </Panel>
     }
     else
     {
@@ -50,19 +43,15 @@
 
     @if (!IsAuthenticated)
     {
-        <div class="panel panel-filled panel-c-warning">
-            <div class="panel-body">
-                @L["Error_AuthorizationRequired"].Value.AsMarkupString()
-            </div>
-        </div>
+        <Panel Class="panel-c-warning">
+            <Body>@L["Error_AuthorizationRequired"].Value.AsMarkupString()</Body>
+        </Panel>
     }
     else if (User.IsReadOnly())
     {
-        <div class="panel panel-filled panel-c-warning">
-            <div class="panel-body">
-                @string.Format(L["Error_ReadOnlyMode"].Value, User.ReadOnlyEnd.Value.ToFormattedDateTimeString()).AsMarkupString()
-            </div>
-        </div>
+        <Panel Class="panel-c-warning">
+            <Body>@string.Format(L["Error_ReadOnlyMode"].Value, User.ReadOnlyEnd.Value.ToFormattedDateTimeString()).AsMarkupString()</Body>
+        </Panel>
     }
     else
     {

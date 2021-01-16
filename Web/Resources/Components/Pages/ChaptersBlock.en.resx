@@ -18,10 +18,22 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="Chapter" xml:space="preserve">
-        <value>Глава</value>
+    <data name="Volume" xml:space="preserve">
+        <value>Volume</value>
     </data>
-    <data name="Read" xml:space="preserve">
-        <value>Читать</value>
+    <data name="Chapters" xml:space="preserve">
+        <value>Chapters</value>
+    </data>
+    <data name="Chapters_NoChapters" xml:space="preserve">
+        <value>Sorry, there are currently no chapters available</value>
+    </data>
+    <data name="Loading_Body" xml:space="preserve">
+        <value>Please wait until chapters are loaded</value>
+    </data>
+    <data name="Chapter" xml:space="preserve">
+        <value>Chapter</value>
+    </data>
+    <data name="ReadButton" xml:space="preserve">
+        <value>Read</value>
     </data>
 </root>
