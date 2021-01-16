@@ -26,6 +26,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using reCAPTCHA.AspNetCore;
+using Web.Services.Implementations;
+using Web.Services.Interfaces;
 
 namespace Web
 {
@@ -122,13 +124,14 @@ namespace Web
             
             services.AddSingleton(Configuration);
             
+            services.AddScoped<IViewRenderService, ViewRenderService>();
+            services.AddScoped<DataHelper>();
+            
             var autoRegisterBaseClasses = new List<Type> { typeof(BaseService) };
             var autoRegisterClasses = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(x => x.IsClass && autoRegisterBaseClasses.Contains(x.BaseType) && !x.IsAbstract)
                 .ToList();
             autoRegisterClasses.ForEach(x => services.AddScoped(x));
-            
-            services.AddScoped<DataHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
