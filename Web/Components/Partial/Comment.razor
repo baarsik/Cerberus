@@ -11,18 +11,7 @@
 
 <div class="panel panel-filled panel-c-white">
     <div class="panel-body flex-row">
-        <div class="avatar avatar-mini m-r">
-            <a href="/profile/@Model.Author.DisplayName">
-                @if (Model.Author.Avatar == "noavatar")
-                {
-                    <i class="fas fa-user"></i>
-                }
-                else
-                {
-                    <img src="/avatars/@(Model.Author.Avatar).png" alt="Avatar"/>
-                }
-            </a>
-        </div>
+        <Avatar UserName="@Model.Author.DisplayName" AvatarName="@Model.Author.Avatar" Mini="@true" Class="m-r"/>
         <div style="width: 100%">
             @if (HasModerateAccess)
             {

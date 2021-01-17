@@ -1,0 +1,33 @@
+@code
+{
+    [Parameter]
+    public string AvatarName { get; set; }
+
+    [Parameter]
+    public string UserName { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public bool Mini { get; set; }
+}
+
+<div class="@CalculatedClass">
+    <a href="/profile/@UserName">
+        @if (AvatarName == "noavatar")
+        {
+            <i class="fas fa-user"></i>
+        }
+        else
+        {
+            <img src="/images/avatars/@(AvatarName).png" alt="Avatar"/>
+        }
+    </a>
+</div>
+
+@code
+{
+    private string CalculatedClass =>
+        $"avatar {(Mini ? "avatar-mini" : string.Empty)} {Class}".TrimEnd();
+}

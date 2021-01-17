@@ -28,9 +28,9 @@
                     <i class="fal fa-book fa-sm"></i>
                 </div>
                 <div class="pull-right text-right">
-                    @if (IsAuthenticated)
+                    @if (IsAuthenticated && ClaimsPrincipal.HasWebNovelEditorAccess())
                     {
-                        if (ClaimsPrincipal.HasWebNovelEditorAccess() && !WebNovel.IsComplete)
+                        if (!WebNovel.IsComplete)
                         {
                             <a class="btn btn-lg btn-default" href="/@nameof(WebNovelController.AddWebNovelTranslation)/@WebNovel.UrlName">
                                 @L["AddWebNovelTranslationButton"].Value.AsMarkupString()
@@ -38,18 +38,18 @@
                             <a class="btn btn-lg btn-default" href="/@nameof(WebNovelController.AddChapter).ToLower()/@WebNovel.Id">
                                 @L["AddChapterButton"].Value.AsMarkupString()
                             </a>
-                            <div class="btn-group">
-                                <button class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown">
-                                    <i class="far fa-pen"></i>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    @foreach (var translation in Model.WebNovelInfo.WebNovel.Translations)
-                                    {
-                                        <li><a class="dropdown-item" href="/@nameof(WebNovelController.EditWebNovelTranslation).ToLower()/@translation.Id">@translation.Language.LocalName</a></li>
-                                    }
-                                </ul>
-                            </div>
                         }
+                        <div class="btn-group">
+                            <button class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown">
+                                <i class="far fa-pen"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                @foreach (var translation in Model.WebNovelInfo.WebNovel.Translations)
+                                {
+                                    <li><a class="dropdown-item" href="/@nameof(WebNovelController.EditWebNovelTranslation).ToLower()/@translation.Id">@translation.Language.LocalName</a></li>
+                                }
+                            </ul>
+                        </div>
                     }
                 </div>
                 <div class="header-title">

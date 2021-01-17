@@ -195,9 +195,9 @@ namespace Web.Controllers.Services
             if (!string.IsNullOrEmpty(model.Avatar?.FileName) && model.Avatar.ContentType.StartsWith("image"))
             {
                 if (!string.IsNullOrEmpty(model.User.Avatar) &&
-                    File.Exists($"{_webHostEnvironment.WebRootPath}/avatars/{model.User.Avatar}.png"))
+                    File.Exists($"{_webHostEnvironment.WebRootPath}/images/avatars/{model.User.Avatar}.png"))
                 {
-                    File.Delete($"{_webHostEnvironment.WebRootPath}/avatars/{model.User.Avatar}.png");
+                    File.Delete($"{_webHostEnvironment.WebRootPath}/images/avatars/{model.User.Avatar}.png");
                 }
                 model.User.Avatar = $"{model.User.Id}_{Guid.NewGuid()}"; // avoid caching
                 await UploadAvatarAsync(model.Avatar, model.User.Avatar);
@@ -328,8 +328,8 @@ namespace Web.Controllers.Services
             image.Mutate(x => x
                 .Crop(cropRectangle)
                 .Resize(Constants.Profile.AvatarSize, Constants.Profile.AvatarSize));
-            Directory.CreateDirectory($"{_webHostEnvironment.WebRootPath}/avatars/");
-            await image.SaveAsPngAsync($"{_webHostEnvironment.WebRootPath}/avatars/{fileName}.png");
+            Directory.CreateDirectory($"{_webHostEnvironment.WebRootPath}/images/avatars/");
+            await image.SaveAsPngAsync($"{_webHostEnvironment.WebRootPath}/images/avatars/{fileName}.png");
         }
     }
 }

@@ -29,8 +29,6 @@
     <Folder Include="EmailTemplates\Account\Resources" />
     <Folder Include="Models\Services\" />
     <Folder Include="Views\Account\" />
-    <Folder Include="wwwroot\avatars" />
-    <Folder Include="wwwroot\images\avatars" />
     <Folder Include="wwwroot\images\webnovel" />
   </ItemGroup>
   <ItemGroup>

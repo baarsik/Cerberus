@@ -17,7 +17,7 @@ namespace Web.Models.TagHelpers
             output.SuppressOutput();
             var avatarHtml = User.Avatar == "noavatar"
                 ? "<i class=\"fas fa-user\"></i>"
-                : $"<img src=\"/avatars/{User.Avatar}.png\" alt=\"Avatar\"/>";
+                : $"<img src=\"/images/avatars/{User.Avatar}.png\" alt=\"Avatar\"/>";
             output.Content.AppendHtmlLine($"<div class=\"{Class}\">{avatarHtml}</div>");
         }
     }
