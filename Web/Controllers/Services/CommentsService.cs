@@ -22,7 +22,8 @@ namespace Web.Controllers.Services
 
         public async Task<CommentsPageable> GetCommentsAsync(Guid relatedEntityId, int page)
         {
-            var totalComments = await Db.Comments.CountAsync(x => x.RelatedEntityId == relatedEntityId);
+            await using var context = DbContextFactory.CreateDbContext();
+            var totalComments = await context.Comments.CountAsync(x => x.RelatedEntityId == relatedEntityId);
             var totalPages = (int) Math.Ceiling(totalComments / (double) Constants.Comments.ItemsPerPage);
             if (totalPages == 0)
             {
@@ -35,7 +36,7 @@ namespace Web.Controllers.Services
                     ? totalPages
                     : page;
             
-            var comments = await Db.Comments
+            var comments = await context.Comments
                 .Where(x => x.RelatedEntityId == relatedEntityId)
                 .Include(x => x.Author)
                 .OrderByDescending(x => x.CreateDate)
@@ -56,14 +57,17 @@ namespace Web.Controllers.Services
             if (!user.HasWriteAccess())
                 return null;
 
+            var context = DbContextFactory.CreateDbContext();
             var comment = new Comment
             {
                 RelatedEntityId = entityId,
                 Content = content.SanitizeStrictHTML(),
                 Author = user
             };
-            Db.Add(comment);
-            await Db.SaveChangesAsync();
+            context.Add(comment);
+            context.Entry(user).State = EntityState.Unchanged;
+            await context.SaveChangesAsync();
+            await context.DisposeAsync();
 
             return comment;
         }
@@ -81,10 +85,11 @@ namespace Web.Controllers.Services
                 return;
             }
 
-            var comment = await Db.Comments.FindAsync(id);
+            await using var context = DbContextFactory.CreateDbContext();
+            var comment = await context.Comments.FindAsync(id);
             comment.IsDeleted = true;
-            Db.Update(comment);
-            await Db.SaveChangesAsync();
+            context.Update(comment);
+            await context.SaveChangesAsync();
         }
     }
 }

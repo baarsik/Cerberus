@@ -28,6 +28,7 @@ namespace Web.Controllers.Services
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly ApplicationContext _context;
 
         public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration,
             IDbContextFactory<ApplicationContext> dbContextFactory, IWebHostEnvironment webHostEnvironment)
@@ -35,6 +36,7 @@ namespace Web.Controllers.Services
         {
             _signInManager = signInManager;
             _webHostEnvironment = webHostEnvironment;
+            _context = DbContextFactory.CreateDbContext();
         }
 
         /// <summary>
@@ -145,8 +147,8 @@ namespace Web.Controllers.Services
                 User = user
             });
             
-            Db.UserLanguages.AddRange(userLanguages);
-            await Db.SaveChangesAsync();
+            _context.UserLanguages.AddRange(userLanguages);
+            await _context.SaveChangesAsync();
             
             return new RegisterResult(RegisterStatus.Success);
         }
@@ -157,7 +159,7 @@ namespace Web.Controllers.Services
             {
                 User = user,
                 Languages = await GetLanguagesForEditProfileViewModel(user),
-                SelectedLanguages = await Db.UserLanguages
+                SelectedLanguages = await _context.UserLanguages
                     .Where(c => c.User == user)
                     .Select(c => c.Language.Id)
                     .ToListAsync()
@@ -168,10 +170,10 @@ namespace Web.Controllers.Services
         
         public async Task UpdateProfile(EditProfileViewModel model)
         {
-            var currentLanguages = await Db.UserLanguages
+            var currentLanguages = await _context.UserLanguages
                 .Where(c => c.User == model.User)
                 .ToListAsync();
-            Db.UserLanguages.RemoveRange(currentLanguages);
+            _context.UserLanguages.RemoveRange(currentLanguages);
 
             if (model.SelectedLanguages != null)
             {
@@ -189,7 +191,7 @@ namespace Web.Controllers.Services
                     User = model.User
                 });
             
-                Db.UserLanguages.AddRange(userLanguages);
+                _context.UserLanguages.AddRange(userLanguages);
             }
 
             if (!string.IsNullOrEmpty(model.Avatar?.FileName) && model.Avatar.ContentType.StartsWith("image"))
@@ -203,7 +205,7 @@ namespace Web.Controllers.Services
                 await UploadAvatarAsync(model.Avatar, model.User.Avatar);
             }
             
-            await Db.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task SignOutAsync()
@@ -242,11 +244,11 @@ namespace Web.Controllers.Services
             );
             
             // Update user token binding
-            var userFromDb = await Db.Users.FirstAsync(c => c.Id == user.Id);
+            var userFromDb = await _context.Users.FirstAsync(c => c.Id == user.Id);
             userFromDb.ApiBindedIp = ip;
             userFromDb.LastApiTokenId = tokenId;
-            Db.Entry(userFromDb).State = EntityState.Modified;
-            await Db.SaveChangesAsync();
+            _context.Entry(userFromDb).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
             
             var token = new JwtSecurityTokenHandler().WriteToken(jwt);
             return new GenerateJwtResult(user, token);
@@ -277,7 +279,7 @@ namespace Web.Controllers.Services
         /// <returns>Is valid user</returns>
         public async Task<bool> IsApiBindedIpValidAsync(Guid tokenId, string email, string apiKey, string ip)
         {
-            return await Db.Users.AnyAsync(c => c.Email == email && c.ApiKey == apiKey && c.ApiBindedIp == ip && c.LastApiTokenId == tokenId);
+            return await _context.Users.AnyAsync(c => c.Email == email && c.ApiKey == apiKey && c.ApiBindedIp == ip && c.LastApiTokenId == tokenId);
         }
 
         /// <summary>
@@ -299,8 +301,8 @@ namespace Web.Controllers.Services
         public async Task RegenerateApiKey(ApplicationUser user)
         {
             user.ApiKey = StringHelpers.GenerateRandomString(64);
-            Db.Entry(user).State = EntityState.Modified;
-            await Db.SaveChangesAsync();
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IList<Language>> GetLanguagesForEditProfileViewModel(ApplicationUser user)
@@ -308,8 +310,8 @@ namespace Web.Controllers.Services
             if (user == null)
                 return await GetLanguagesAsync();
 
-            var languages = user.GetUserLanguages(Db);
-            foreach (var language in await Db.Languages.Where(dbLang => languages.All(userLang => !Equals(userLang, dbLang))).ToListAsync())
+            var languages = user.GetUserLanguages(_context);
+            foreach (var language in await _context.Languages.Where(dbLang => languages.All(userLang => !Equals(userLang, dbLang))).ToListAsync())
             {
                 languages.Add(language);
             }

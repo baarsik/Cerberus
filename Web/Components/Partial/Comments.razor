@@ -19,64 +19,67 @@
     public int Page { get; set; } = 1;
 }
 
-<div data-entityId="@EntityId">
-    <h3>@L["Comments_Header"]</h3>
-    
-    @foreach (var comment in Model.Items)
-    {
-        <Comment Model="@comment" OnDeleteClicked="@DeleteCommentAsync"/>
-    }
+<Loading IsLoaded="@IsLoaded">
+    <div data-entityId="@EntityId">
+        <h3>@L["Comments_Header"]</h3>
+        
+        @foreach (var comment in Model.Items)
+        {
+            <Comment Model="@comment" OnDeleteClicked="@DeleteCommentAsync"/>
+        }
 
-    @if (!Model.Items.Any())
-    {
-        <Panel>
-            <Body>@L["Comments_NoComments"]</Body>
-        </Panel>
-    }
-    else
-    {
-        <Paginator Page="@Model.Page" TotalPages="@Model.TotalPages" OnPageChange="@ReloadPageAsync"/>
-    }
+        @if (!Model.Items.Any())
+        {
+            <Panel>
+                <Body>@L["Comments_NoComments"]</Body>
+            </Panel>
+        }
+        else
+        {
+            <Paginator Page="@Model.Page" TotalPages="@Model.TotalPages" OnPageChange="@ReloadPageAsync"/>
+        }
 
-    <h3>@L["NewComment_Header"]</h3>
+        <h3>@L["NewComment_Header"]</h3>
 
-    @if (!IsAuthenticated)
-    {
-        <Panel Class="panel-c-warning">
-            <Body>@L["Error_AuthorizationRequired"].Value.AsMarkupString()</Body>
-        </Panel>
-    }
-    else if (User.IsReadOnly())
-    {
-        <Panel Class="panel-c-warning">
-            <Body>@string.Format(L["Error_ReadOnlyMode"].Value, User.ReadOnlyEnd.Value.ToFormattedDateTimeString()).AsMarkupString()</Body>
-        </Panel>
-    }
-    else
-    {
-        <EditForm Model="NewComment" OnValidSubmit="HandleValidSubmit">
-            <DataAnnotationsValidator />
-            <textarea class="summernote summernote-comments blazor" @bind-value="NewComment.Text" @bind-value:event="oninput"></textarea>
-            <input type="submit" class="btn btn-accent" value="@L["NewComment_SubmitButton"]" />
-            <ValidationSummary />
-        </EditForm>
-    }
-</div>
+        @if (!IsAuthenticated)
+        {
+            <Panel Class="panel-c-warning">
+                <Body>@L["Error_AuthorizationRequired"].Value.AsMarkupString()</Body>
+            </Panel>
+        }
+        else if (User.IsReadOnly())
+        {
+            <Panel Class="panel-c-warning">
+                <Body>@string.Format(L["Error_ReadOnlyMode"].Value, User.ReadOnlyEnd.Value.ToFormattedDateTimeString()).AsMarkupString()</Body>
+            </Panel>
+        }
+        else
+        {
+            <EditForm Model="NewComment" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <textarea class="summernote summernote-comments blazor" @bind-value="NewComment.Text" @bind-value:event="oninput"></textarea>
+                <input type="submit" class="btn btn-accent" value="@L["NewComment_SubmitButton"]" />
+                <ValidationSummary />
+            </EditForm>
+        }
+    </div>
+</Loading>
 
 @code
 {
     private NewComment NewComment { get; set; } = new();
-
     private CommentsPageable Model { get; set; } = new();
+    private bool IsLoaded { get; set; }
 
-    private bool IsAuthenticated { get; set; }
-    
+    private ClaimsPrincipal ClaimsPrincipal { get; set; }
     private ApplicationUser User { get; set; }
+    private bool IsAuthenticated => ClaimsPrincipal?.Identity?.IsAuthenticated == true;
 
     private DotNetObjectReference<Comments> _objRef;
 
     protected override async Task OnInitializedAsync()
     {
+        IsLoaded = false;
         if (EntityId == default)
         {
             throw new ArgumentNullException(nameof(EntityId));
@@ -84,11 +87,9 @@
         
         Model = await CommentsService.GetCommentsAsync(EntityId, Page);
 
-        var claimsPrincipal = await GetClaimsPrincipalAsync();
-        IsAuthenticated = claimsPrincipal?.Identity?.IsAuthenticated == true;
-        User = await CommentsService.GetUserAsync(claimsPrincipal);
-        
-        StateHasChanged();
+        ClaimsPrincipal = await GetClaimsPrincipalAsync();
+        User = await CommentsService.GetUserAsync(ClaimsPrincipal);
+        IsLoaded = true;
     }
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -97,9 +98,11 @@
         {
             _objRef = DotNetObjectReference.Create(this);
         }
-        
+
+        IsLoaded = false;
         await JsRuntime.InvokeVoidAsync("activateBasicSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor");
         await JsRuntime.InvokeVoidAsync("attachBlazorToSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor", _objRef, nameof(OnTextChange));
+        IsLoaded = true;
     }
 
     [JSInvokable]
@@ -115,8 +118,10 @@
             return;
         }
 
+        IsLoaded = false;
         await CommentsService.AddCommentAsync(User, EntityId, NewComment.Text);
         await ReloadPageAsync(1);
+        IsLoaded = true;
     }
 
     private async Task<ClaimsPrincipal> GetClaimsPrincipalAsync()
@@ -131,7 +136,6 @@
         Model = await CommentsService.GetCommentsAsync(EntityId, Page);
         NewComment.Text = string.Empty;
         await JsRuntime.InvokeVoidAsync("resetSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor");
-        StateHasChanged();
     }
 
     private async Task DeleteCommentAsync(Guid id)
@@ -140,11 +144,11 @@
         {
             return;
         }
-        
+
+        IsLoaded = false;
         await CommentsService.DeleteCommentAsync(User, id);
-        StateHasChanged();
-        
         await ReloadPageAsync(Page);
+        IsLoaded = true;
     }
 
     public void Dispose()

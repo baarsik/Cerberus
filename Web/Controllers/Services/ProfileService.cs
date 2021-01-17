@@ -19,24 +19,25 @@ namespace Web.Controllers.Services
         
         public async Task<ProfileStatistics> GetUserStatisticsAsync(ApplicationUser user)
         {
+            await using var context = DbContextFactory.CreateDbContext();
             var statistics = new ProfileStatistics
             {
                 Forum = new ProfileForumStatistics
                 {
-                    TotalStartedThreads = await Db.ForumThreads.CountAsync(c => c.Author == user),
-                    TotalReplies = await Db.ForumThreadReplies.CountAsync(c => c.Author == user)
+                    TotalStartedThreads = await context.ForumThreads.CountAsync(c => c.Author == user),
+                    TotalReplies = await context.ForumThreadReplies.CountAsync(c => c.Author == user)
                 },
                 WebNovel = new ProfileWebNovelStatistics
                 {
-                    TotalWebNovels = await Db.WebNovels
+                    TotalWebNovels = await context.WebNovels
                         .Include(c => c.Chapters)
                             .ThenInclude(c => c.Translations)
                             .ThenInclude(c => c.Uploader)
                         .CountAsync(c => c.Chapters.Any(x => x.Translations.Any(z => z.Uploader == user))),
-                    TotalChapters = await Db.WebNovelChapters
+                    TotalChapters = await context.WebNovelChapters
                         .Include(c => c.Translations)
                         .CountAsync(c => c.Translations.Any(x => x.Uploader == user)),
-                    TotalComments = await Db.Comments.CountAsync(x => x.Author == user)
+                    TotalComments = await context.Comments.CountAsync(x => x.Author == user)
                 }
             };
             return statistics;

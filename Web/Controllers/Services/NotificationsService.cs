@@ -21,9 +21,9 @@ namespace Web.Controllers.Services
         {
         }
 
-        public async Task AddNewWebNovelChapterNotificationAsync(WebNovelChapterContent webNovelChapterContent)
+        public async Task AddNewWebNovelChapterNotificationAsync(WebNovelChapterContent webNovelChapterContent, ApplicationContext context)
         {
-            var applicableUsers = await Db.WebNovelReaderData
+            var applicableUsers = await context.WebNovelReaderData
                 .Where(x => x.NotificationsEnabled &&
                             x.WebNovel.Id == webNovelChapterContent.Chapter.WebNovel.Id)
                 .Select(x => x.User)
@@ -32,11 +32,11 @@ namespace Web.Controllers.Services
             var notifications = new List<ApplicationUserNotifications>();
             foreach (var user in applicableUsers)
             {
-                var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
+                var languages = user.GetUserOrDefaultLanguages(context, Configuration);
                 if (languages.All(language => language.Id != webNovelChapterContent.Language.Id))
                     continue;
 
-                var webNovelName = await Db.WebNovelContent
+                var webNovelName = await context.WebNovelContent
                     .Where(x => x.WebNovel.Id == webNovelChapterContent.Chapter.WebNovel.Id &&
                                 x.Language.Id == webNovelChapterContent.Language.Id)
                     .Select(x => x.Name)
@@ -51,7 +51,7 @@ namespace Web.Controllers.Services
                     linkText = $"{linkText} – {webNovelChapterContent.Title}";
                 }
 
-                var link = $"<a href=\"/read/{webNovelChapterContent.Language.Code}/{webNovelChapterContent.Chapter.WebNovel.UrlName}/{webNovelChapterContent.Chapter.Number}/\">{linkText}</a>";
+                var link = $"<a href=\"/read/{webNovelChapterContent.Language.Code}/{webNovelChapterContent.Chapter.WebNovel.UrlName}/{webNovelChapterContent.Chapter.Volume}/{webNovelChapterContent.Chapter.Number}/\">{linkText}</a>";
                 notifications.Add(new ApplicationUserNotifications
                 {
                     Body = $"New Release: {link}",
@@ -59,14 +59,15 @@ namespace Web.Controllers.Services
                 });
             }
 
-            Db.AddRange(notifications);
-            await Db.SaveChangesAsync();
+            context.AddRange(notifications);
+            await context.SaveChangesAsync();
 
         }
         
         public async Task<NotificationsIndexViewModel> GetNotificationsIndexViewModelAsync(ApplicationUser user, int page)
         {
-            var itemsToDisplayCount = await Db.ApplicationUserNotifications.CountAsync(c => c.User == user);
+            await using var context = DbContextFactory.CreateDbContext();
+            var itemsToDisplayCount = await context.ApplicationUserNotifications.CountAsync(c => c.User == user);
             var totalPages = (int) Math.Ceiling(itemsToDisplayCount / (double) Constants.Notifications.ItemsPerIndexPage);
             if (totalPages == 0)
             {
@@ -83,7 +84,7 @@ namespace Web.Controllers.Services
                 TotalPages = totalPages,
             };
 
-            model.Items = await Db.ApplicationUserNotifications
+            model.Items = await context.ApplicationUserNotifications
                 .Where(c => c.User == user)
                 .OrderByDescending(c => c.NotificationDate)
                 .Skip(Constants.Notifications.ItemsPerIndexPage * (model.Page - 1))
@@ -99,7 +100,7 @@ namespace Web.Controllers.Services
 
             if (model.Items.Any(c => !c.IsRead))
             {
-                await MarkAsRead(user, page);
+                await MarkAsRead(user, page, context);
             }
 
             return model;
@@ -107,9 +108,10 @@ namespace Web.Controllers.Services
 
         public async Task<ManageNotificationsViewModel> GetManageNotificationsViewModelAsync(ApplicationUser user, int page)
         {
-            var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
+            await using var context = DbContextFactory.CreateDbContext();
+            var languages = user.GetUserOrDefaultLanguages(context, Configuration);
             
-            var itemsToDisplayCount = await Db.WebNovelReaderData
+            var itemsToDisplayCount = await context.WebNovelReaderData
                 .CountAsync(c =>
                     c.User.Id == user.Id &&
                     c.NotificationsEnabled);
@@ -129,7 +131,7 @@ namespace Web.Controllers.Services
                 TotalPages = totalPages,
             };
 
-            model.Items = await Db.WebNovelReaderData
+            model.Items = await context.WebNovelReaderData
                 .Include(x => x.WebNovel)
                 .ThenInclude(x => x.Translations)
                     .ThenInclude(x => x.Language)
@@ -154,7 +156,8 @@ namespace Web.Controllers.Services
 
         public async Task DeleteNotificationAsync(ApplicationUser user, Guid notificationId)
         {
-            var notification = await Db.ApplicationUserNotifications
+            await using var context = DbContextFactory.CreateDbContext();
+            var notification = await context.ApplicationUserNotifications
                 .FirstOrDefaultAsync(x => x.User.Id == user.Id && x.Id == notificationId);
 
             if (notification == null)
@@ -162,13 +165,13 @@ namespace Web.Controllers.Services
 
             notification.IsRead = true;
             notification.IsDeleted = true;
-            Db.Update(notification);
-            await Db.SaveChangesAsync();
+            context.Update(notification);
+            await context.SaveChangesAsync();
         }
 
-        private async Task MarkAsRead(ApplicationUser user, int page)
+        private async Task MarkAsRead(ApplicationUser user, int page, ApplicationContext context)
         {
-            var notifications = Db.ApplicationUserNotifications
+            var notifications = context.ApplicationUserNotifications
                 .Where(c => c.User == user)
                 .OrderByDescending(c => c.NotificationDate)
                 .Take(Constants.Notifications.ItemsPerIndexPage)
@@ -179,8 +182,8 @@ namespace Web.Controllers.Services
                 notification.IsRead = true;
             }
 
-            Db.UpdateRange(notifications);
-            await Db.SaveChangesAsync();
+            context.UpdateRange(notifications);
+            await context.SaveChangesAsync();
         }
     }
 }

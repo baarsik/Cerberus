@@ -28,8 +28,7 @@
     public int ChapterNumber { get; set; }
 }
 
-@if (Model != null)
-{
+<NotNullLoading Object="@Model">
     <div class="view-header">
         <div class="header-icon">
             <i class="fal fa-book fa-sm"></i>
@@ -62,12 +61,12 @@
         </div>
     </div>
 
-    if (!IsAuthenticated)
+    @if (!IsAuthenticated)
     {
-        <Panel Class="panel-c-danger">
-            <Header>@L["Unauthorized_Heading"]</Header>
-            <Body>@L["Unauthorized_Description"].Value.AsMarkupString()</Body>
-        </Panel>
+    <Panel Class="panel-c-danger">
+        <Header>@L["Unauthorized_Heading"]</Header>
+        <Body>@L["Unauthorized_Description"].Value.AsMarkupString()</Body>
+    </Panel>
     }
     
     <div class="panel">
@@ -81,7 +80,7 @@
             <ChapterNavigation WebNovel="@Model.WebNovelContent.WebNovel" PreviousChapter="@Model.PrevChapterContent" NextChapter="@Model.NextChapterContent"/>
         </div>
     </div>
-}
+</NotNullLoading>
 
 @code
 {

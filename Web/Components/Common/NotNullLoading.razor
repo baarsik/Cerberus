@@ -1,0 +1,15 @@
+@code
+{
+    [Parameter]
+    public object Object { get; set; }
+    
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}
+
+<Loading IsLoaded="@(Object != null)">
+    @if (Object != null)
+    {
+        @ChildContent
+    }
+</Loading>

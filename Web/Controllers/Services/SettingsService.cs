@@ -24,15 +24,16 @@ namespace Web.Controllers.Services
         
         public ForumSettingsViewModel GetForumSettingsViewModel()
         {
+            using var context = DbContextFactory.CreateDbContext();
             var model = new ForumSettingsViewModel
             {
-                ForumTree = Db.Forums
+                ForumTree = context.Forums
                     .IgnoreQueryFilters()
                     .Include(c => c.Children)
                     .Include(c => c.Threads)
                     .Where(c => c.Parent == null)
                     .OrderBy(c => c.DisplayOrderId)
-                    .Select(ToForumInfo)
+                    .Select(x => ToForumInfo(x, context))
                     .ToList()
             };
             return model;
@@ -40,32 +41,34 @@ namespace Web.Controllers.Services
 
         public async Task CreateForum(CreateForumViewModel model)
         {
+            await using var context = DbContextFactory.CreateDbContext();
             var forum = new Forum
             {
                 Id = Guid.NewGuid(),
-                DisplayOrderId = await Db.Forums.MaxAsync(c => c.DisplayOrderId) + 1,
+                DisplayOrderId = await context.Forums.MaxAsync(c => c.DisplayOrderId) + 1,
                 IsEnabled = false,
                 Title = model.Title.RemoveHTML()
             };
-            Db.Add(forum);
+            context.Add(forum);
             
-            await Db.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
         
         public async Task UpdateForums(IEnumerable<ForumHierarchyJson> forumHierarchy)
         {
+            await using var context = DbContextFactory.CreateDbContext();
             var displayOrderId = 0;
             foreach (var item in forumHierarchy)
             {
-                displayOrderId = await UpdateForum(item, ++displayOrderId, null);
+                displayOrderId = await UpdateForum(item, ++displayOrderId, null, context);
             }
 
-            await Db.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
-        private async Task<int> UpdateForum(ForumHierarchyJson item, int displayOrderId, Guid? parentId)
+        private async Task<int> UpdateForum(ForumHierarchyJson item, int displayOrderId, Guid? parentId, ApplicationContext context)
         {
-            var forum = await Db.Forums.IgnoreQueryFilters().SingleOrDefaultAsync(c => c.Id == item.Id);
+            var forum = await context.Forums.IgnoreQueryFilters().SingleOrDefaultAsync(c => c.Id == item.Id);
             
             if (forum == null)
             {
@@ -75,31 +78,31 @@ namespace Web.Controllers.Services
             forum.IsEnabled = item.Enabled;
             forum.ParentId = parentId;
             forum.DisplayOrderId = displayOrderId;
-            Db.Update(forum);
+            context.Update(forum);
 
             foreach (var child in item.Children)
             {
-                await UpdateForum(child, ++displayOrderId, item.Id);
+                await UpdateForum(child, ++displayOrderId, item.Id, context);
             }
 
             return displayOrderId;
         }
         
-        private ForumInfo ToForumInfo(Forum forum)
+        private ForumInfo ToForumInfo(Forum forum, ApplicationContext context)
         {
             return new ForumInfo
             {
                 Forum = forum,
                 IsEnabled = forum.IsEnabled,
                 ThreadCount = forum.Threads.Count,
-                Children = Db.Forums
+                Children = context.Forums
                     .IgnoreQueryFilters()
                     .Include(c => c.Children)
                     .Include(c => c.Threads)
                     .Where(c => forum.Children.Select(x => x.Id).Contains(c.Id))
                     .OrderBy(c => c.DisplayOrderId)
                     .AsEnumerable()
-                    .Select(ToForumInfo)
+                    .Select(x => ToForumInfo(x, context))
                     .ToList()
             };
         }

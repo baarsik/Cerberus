@@ -1,0 +1,15 @@
+@code
+{
+    [Parameter]
+    public bool IsLoaded { get; set; }
+    
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}
+
+<div class="@(IsLoaded ? string.Empty : "ld-loading")">
+    <div class="loader">
+        <div class="loader-bar"></div>
+    </div>
+    @ChildContent
+</div>

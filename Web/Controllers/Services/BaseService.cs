@@ -21,17 +21,20 @@ namespace Web.Controllers.Services
 {
     public abstract class BaseService
     {
+        protected readonly IDbContextFactory<ApplicationContext> DbContextFactory;
         protected readonly UserManager<ApplicationUser> UserManager;
         protected readonly IConfiguration Configuration;
-        protected readonly ApplicationContext Db;
+        
+        private readonly ApplicationContext _db;
 
         public BaseService(IDbContextFactory<ApplicationContext> dbContextFactory,
             UserManager<ApplicationUser> userManager,
             IConfiguration configuration)
         {
+            DbContextFactory = dbContextFactory;
             UserManager = userManager;
             Configuration = configuration;
-            Db = dbContextFactory.CreateDbContext();
+            _db = dbContextFactory.CreateDbContext();
         }
 
         /// <summary>
@@ -51,7 +54,7 @@ namespace Web.Controllers.Services
         public string GetDefaultUserLanguageCode(ApplicationUser user)
         {
             return user
-                .GetUserOrDefaultLanguages(Db, Configuration)
+                .GetUserOrDefaultLanguages(_db, Configuration)
                 .Select(c => c.Code)
                 .FirstOrDefault();
         }
@@ -62,7 +65,7 @@ namespace Web.Controllers.Services
         /// <returns>List of Language</returns>
         public async Task<IList<Language>> GetLanguagesAsync()
         {
-            return await Db.Languages.ToListAsync();
+            return await _db.Languages.ToListAsync();
         }
         
         /// <summary>
@@ -72,7 +75,7 @@ namespace Web.Controllers.Services
         /// <returns>List of Language</returns>
         public async Task<IEnumerable<Language>> GetLanguagesAsync(IEnumerable<Language> excludedLanguages)
         {
-            return await Db.Languages.Where(c => !excludedLanguages.Contains(c)).ToListAsync();
+            return await _db.Languages.Where(c => !excludedLanguages.Contains(c)).ToListAsync();
         }
 
         /// <summary>
@@ -82,7 +85,7 @@ namespace Web.Controllers.Services
         /// <param name="body">Notification body (HTML enabled)</param>
         public async Task AddNotificationAsync(ApplicationUser user, string body)
         {
-            Db.Add(new ApplicationUserNotifications
+            _db.Add(new ApplicationUserNotifications
             {
                 Id = Guid.NewGuid(),
                 Body = body,
@@ -90,7 +93,7 @@ namespace Web.Controllers.Services
                 User = user
             });
             
-            await Db.SaveChangesAsync();
+            await _db.SaveChangesAsync();
         }
     }
 }
