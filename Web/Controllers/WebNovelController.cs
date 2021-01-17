@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
-    
     public class WebNovelController : BaseController
     {
         private readonly WebNovelService _webNovelService;
@@ -271,24 +270,6 @@ namespace Web.Controllers
 
             await _webNovelService.UpdateChapterContentAsync(user, model);
             return RedirectToAction(nameof(Read), new {webNovelUrl = model.WebNovel.UrlName, languageCode = model.WebNovelContent.Language.Code, volume = model.Volume, chapterNumber = model.Number});
-        }
-
-        [Authorize]
-        [Route("notifications/subscribe/{webNovelUrl}")]
-        public async Task<IActionResult> EnableNotifications(string webNovelUrl)
-        {
-            var user = await _webNovelService.GetUserAsync(User);
-            await _webNovelService.UpdateNotificationStatus(user, webNovelUrl, true);
-            return RedirectToLocal($"/details/{webNovelUrl}");
-        }
-        
-        [Authorize]
-        [Route("notifications/unsubscribe/{webNovelUrl}")]
-        public async Task<IActionResult> DisableNotifications(string webNovelUrl)
-        {
-            var user = await _webNovelService.GetUserAsync(User);
-            await _webNovelService.UpdateNotificationStatus(user, webNovelUrl, false);
-            return RedirectToLocal($"/details/{webNovelUrl}");
         }
     }
 }

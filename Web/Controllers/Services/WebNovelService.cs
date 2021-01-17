@@ -610,12 +610,12 @@ namespace Web.Controllers.Services
             await UpdateWebNovelSymbolCountAsync(chapterContent.Chapter.WebNovel.Id, model.LanguageId);
         }
 
-        public async Task UpdateNotificationStatus(ApplicationUser user, string webNovelUrl, bool notificationsEnabled)
+        public async Task UpdateNotificationStatus(ApplicationUser user, Guid webNovelId, bool notificationsEnabled)
         {
             var webNovel = await Db.WebNovels
                 .Include(x=> x.ReaderData)
                     .ThenInclude(x => x.User)
-                .SingleOrDefaultAsync(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture));
+                .SingleOrDefaultAsync(c => c.Id == webNovelId);
 
             var readerData = webNovel.ReaderData.FirstOrDefault(x => x.User.Id == user.Id);
             if (readerData == null)
