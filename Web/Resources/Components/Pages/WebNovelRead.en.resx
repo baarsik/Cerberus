@@ -18,31 +18,19 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="Chapter" xml:space="preserve">
-        <value>Chapter</value>
+    <data name="EditButton" xml:space="preserve">
+        <value>&lt;i class="far fa-pen"&gt;&lt;/i&gt;</value>
     </data>
     <data name="AddTranslationButton" xml:space="preserve">
-        <value>Add translation</value>
-    </data>
-    <data name="EditButton" xml:space="preserve">
-        <value>Edit</value>
+        <value>Add Translation</value>
     </data>
     <data name="Unauthorized_Heading" xml:space="preserve">
         <value>Information</value>
     </data>
-    <data name="Unauthorized_L1_Please" xml:space="preserve">
-        <value>Please</value>
+    <data name="Unauthorized_Description" xml:space="preserve">
+        <value>&lt;p&gt;Please, &lt;a href="/account/login"&gt;Sign In&lt;/a&gt; or &lt;a href="/account/register"&gt;Sign Up&lt;/a&gt;&lt;/p&gt;&lt;p&gt;As an unauthorized user you may experience some language issues as language prioritizing is available only to authorized members&lt;/p&gt;</value>
     </data>
-    <data name="Unauthorized_L1_SignIn" xml:space="preserve">
-        <value>Sign In</value>
-    </data>
-    <data name="Unauthorized_L1_Or" xml:space="preserve">
-        <value>or</value>
-    </data>
-    <data name="Unauthorized_L1_SignUp" xml:space="preserve">
-        <value>Sign Up</value>
-    </data>
-    <data name="Unauthorized_L2_DetailedInfo" xml:space="preserve">
-        <value>As an unauthorized user you may experience some language issues as language prioritizing is available only to authorized members</value>
+    <data name="Chapter" xml:space="preserve">
+        <value>Chapter</value>
     </data>
 </root>

@@ -35,20 +35,13 @@
         {
             if (Model.WebNovel.UsesVolumes)
             {
-                <a class="btn btn-sm btn-default" asp-action="Read"
-                   asp-route-languageCode="@Model.LastChapterTranslation.Language.Code"
-                   asp-route-volume="@Model.LastChapterTranslation.Chapter.Volume"
-                   asp-route-webNovelUrl="@Model.WebNovel.UrlName"
-                   asp-route-chapterNumber="@Model.LastChapterTranslation.Chapter.Number">
+                <a class="btn btn-sm btn-default" href="/read/@Model.LastChapterTranslation.Language.Code/@Model.WebNovel.UrlName/@Model.LastChapterTranslation.Chapter.Volume/@Model.LastChapterTranslation.Chapter.Number">
                     @Localizer["ReadChapterButton"] @Model.LastChapterTranslation.Chapter.Number (@Localizer["ReadChapterButton_Volume"] @Model.LastChapterTranslation.Chapter.Volume)
                 </a>
             }
             else
             {
-                <a class="btn btn-sm btn-default" asp-action="Read"
-                   asp-route-languageCode="@Model.LastChapterTranslation.Language.Code"
-                   asp-route-webNovelUrl="@Model.WebNovel.UrlName"
-                   asp-route-chapterNumber="@Model.LastChapterTranslation.Chapter.Number">
+                <a class="btn btn-sm btn-default" href="/read/@Model.LastChapterTranslation.Language.Code/@Model.WebNovel.UrlName/@Model.LastChapterTranslation.Chapter.Number">
                     @Localizer["ReadChapterButton"] @Model.LastChapterTranslation.Chapter.Number
                 </a>
             }

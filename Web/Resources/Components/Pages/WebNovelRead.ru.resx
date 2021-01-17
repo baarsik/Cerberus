@@ -18,31 +18,19 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="Chapter" xml:space="preserve">
-        <value>Глава</value>
+    <data name="EditButton" xml:space="preserve">
+        <value>&lt;i class="far fa-pen"&gt;&lt;/i&gt;</value>
     </data>
     <data name="AddTranslationButton" xml:space="preserve">
         <value>Добавить перевод</value>
     </data>
-    <data name="EditButton" xml:space="preserve">
-        <value>Редактировать</value>
-    </data>
     <data name="Unauthorized_Heading" xml:space="preserve">
         <value>Информация</value>
     </data>
-    <data name="Unauthorized_L1_Please" xml:space="preserve">
-        <value>Пожалуйста</value>
+    <data name="Unauthorized_Description" xml:space="preserve">
+        <value>&lt;p&gt;Пожалуйста, &lt;a href="/account/login"&gt;войдите&lt;/a&gt; или &lt;a href="/account/register"&gt;зарегистрируйтесь&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Как неавторизованный пользователь, вы можете столкнуться с некорректным выбором перевода глав, поскольку приоритизирование переводов доступно только авторизированным пользователям&lt;/p&gt;</value>
     </data>
-    <data name="Unauthorized_L1_SignIn" xml:space="preserve">
-        <value>войдите</value>
-    </data>
-    <data name="Unauthorized_L1_Or" xml:space="preserve">
-        <value>или</value>
-    </data>
-    <data name="Unauthorized_L1_SignUp" xml:space="preserve">
-        <value>зарегистрируйтесь</value>
-    </data>
-    <data name="Unauthorized_L2_DetailedInfo" xml:space="preserve">
-        <value>Как неавторизованный пользователь, вы можете столкнуться с некорректным выбором перевода глав, поскольку приоритизирование переводов доступно только авторизированным пользователям</value>
+    <data name="Chapter" xml:space="preserve">
+        <value>Глава</value>
     </data>
 </root>

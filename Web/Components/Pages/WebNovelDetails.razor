@@ -85,7 +85,7 @@
                 @if (Model.ReaderData.LastOpenedChapter != null)
                 {
                     var chapterLinkInfo = Model.ReaderData.LastOpenedChapter;
-                    <a class="btn btn-accent m-r-xs" href="/@nameof(WebNovelController.Read).ToLower()/@chapterLinkInfo.LanguageCode/@WebNovel.UrlName/@chapterLinkInfo.Volume/@chapterLinkInfo.Number">
+                    <a class="btn btn-accent m-r-xs" href="/read/@chapterLinkInfo.LanguageCode/@WebNovel.UrlName/@chapterLinkInfo.Volume/@chapterLinkInfo.Number">
                         @L["ContinueReadingButton"].Value.AsMarkupString()
                     </a>
                 }

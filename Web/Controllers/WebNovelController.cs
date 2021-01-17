@@ -24,25 +24,6 @@ namespace Web.Controllers
             var model = await _webNovelService.GetWebNovelIndexViewModelAsync(user, page ?? 1);
             return View(model);
         }
-
-        [Route("[action]/{languageCode}/{webNovelUrl}/{chapterNumber:int}")]
-        public async Task<IActionResult> Read(string webNovelUrl, string languageCode, int chapterNumber)
-        {
-            return await Read(webNovelUrl, languageCode, 1, chapterNumber);
-        }
-        
-        [Route("[action]/{languageCode}/{webNovelUrl}/{volume:int}/{chapterNumber:int}")]
-        public async Task<IActionResult> Read(string webNovelUrl, string languageCode, int volume, int chapterNumber)
-        {
-            var user = await _webNovelService.GetUserAsync(User);
-            var model = await _webNovelService.GetChapterTranslationAsync(user, webNovelUrl, languageCode, volume, chapterNumber);
-            
-            if (model == null)
-                return RedirectToNotFound();
-
-            await _webNovelService.UpdateLastReadChapterAsync(user, model.Translation.Chapter);
-            return View(model);
-        }
         
         [Authorize(Roles = Constants.Permissions.WebNovelEdit)]
         [Route("[action]")]
@@ -269,7 +250,7 @@ namespace Web.Controllers
                 return View(model);
 
             await _webNovelService.UpdateChapterContentAsync(user, model);
-            return RedirectToAction(nameof(Read), new {webNovelUrl = model.WebNovel.UrlName, languageCode = model.WebNovelContent.Language.Code, volume = model.Volume, chapterNumber = model.Number});
+            return RedirectToLocal($"/read/{model.WebNovelContent.Language.Code}/{model.WebNovel.UrlName}/{model.Volume}/{model.Number}");
         }
     }
 }

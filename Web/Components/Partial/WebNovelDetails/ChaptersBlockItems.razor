@@ -92,7 +92,7 @@
     private string GetChapterUrl(string languageCode, WebNovelChapter chapter)
     {
         return InternalModel.WebNovel.UsesVolumes
-            ? $"/{nameof(WebNovelController.Read).ToLower()}/{languageCode}/{InternalModel.WebNovel.UrlName}/{chapter.Volume}/{chapter.Number}"
-            : $"/{nameof(WebNovelController.Read).ToLower()}/{languageCode}/{InternalModel.WebNovel.UrlName}/{chapter.Number}";
+            ? $"/read/{languageCode}/{InternalModel.WebNovel.UrlName}/{chapter.Volume}/{chapter.Number}"
+            : $"/read/{languageCode}/{InternalModel.WebNovel.UrlName}/{chapter.Number}";
     }
 }

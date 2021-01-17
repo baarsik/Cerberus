@@ -89,11 +89,7 @@
                         </span>
                     </div>
                     <button type="submit" class="btn btn-accent">@Localizer["SubmitButton"]</button>
-                    <a class="btn btn-default"
-                       asp-action="Read"
-                       asp-route-webNovelUrl="@Model.WebNovel.UrlName"
-                       asp-route-chapterNumber="@Model.Number"
-                       asp-route-languageCode="@Model.WebNovelContent.Language.Code">
+                    <a class="btn btn-default" href="/read/@Model.WebNovelContent.Language.Code/@Model.WebNovel.UrlName/@Model.Volume/@Model.Number">
                         @Localizer["CancelButton"]
                     </a>
                 </form>

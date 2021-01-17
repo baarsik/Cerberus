@@ -120,6 +120,22 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>WebNovelDetails.ru.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Partial\WebNovelRead\ChapterNavigation.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ChapterNavigation.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Partial\WebNovelRead\ChapterNavigation.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ChapterNavigation.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Pages\WebNovelRead.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebNovelRead.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Pages\WebNovelRead.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebNovelRead.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\Views\WebNovel\EditChapterTranslation.ru.Designer.cs">
@@ -241,6 +257,26 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>WebNovelDetails.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Components\Partial\WebNovelRead\ChapterNavigation.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ChapterNavigation.en.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Components\Partial\WebNovelRead\ChapterNavigation.ru.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ChapterNavigation.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Components\Pages\WebNovelRead.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebNovelRead.en.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Components\Pages\WebNovelRead.ru.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebNovelRead.ru.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

@@ -1,0 +1,46 @@
+@using DataContext.Models
+
+@inject IStringLocalizer<ChapterNavigation> L
+
+@code
+{
+    [Parameter]
+    public WebNovelChapterContent PreviousChapter { get; set; }
+
+    [Parameter]
+    public WebNovel WebNovel { get; set; }
+    
+    [Parameter]
+    public WebNovelChapterContent NextChapter { get; set; }
+}
+
+<div class="btn-group flex-row justify-center">
+    @if (PreviousChapter == null)
+    {
+        <a id="readPrev" class="btn btn-default disabled"><i class="fas fa-chevron-left"></i> @L["PreviousChapterButton"]</a>
+    }
+    else
+    {
+        <a id="readPrev" class="btn btn-default" href="@GetChapterUrl(PreviousChapter)">
+            <i class="fas fa-chevron-left"></i> @L["PreviousChapterButton"]
+        </a>
+    }
+    <a class="btn btn-default" href="/details/@WebNovel.UrlName">@L["BackToWebNovelButton"]</a>
+    @if (NextChapter == null)
+    {
+        <a id="readNext" class="btn btn-default disabled">@L["NextChapterButton"] <i class="fas fa-chevron-right"></i></a>
+    }
+    else
+    {
+        <a id="readNext" class="btn btn-default" href="@GetChapterUrl(NextChapter)">
+            @L["NextChapterButton"] <i class="fas fa-chevron-right"></i>
+        </a>
+    }
+</div>
+
+@code
+{
+    private string GetChapterUrl(WebNovelChapterContent chapterContent) => WebNovel.UsesVolumes
+        ? $"/read/{chapterContent.Language.Code}/{WebNovel.UrlName}/{chapterContent.Chapter.Volume}/{chapterContent.Chapter.Number}"
+        : $"/read/{chapterContent.Language.Code}/{WebNovel.UrlName}/{chapterContent.Chapter.Number}";
+}
