@@ -26,18 +26,6 @@ namespace Web.Controllers
             return View(model);
         }
 
-        [Route("[action]/{webNovelUrl}")]
-        public async Task<IActionResult> Details(string webNovelUrl)
-        {
-            var user = await _webNovelService.GetUserAsync(User);
-            var model = await _webNovelService.GetWebNovelDetailsViewModelAsync(user, webNovelUrl);
-
-            if (model == null)
-                return RedirectToNotFound();
-            
-            return View(model);
-        }
-        
         [Route("[action]/{languageCode}/{webNovelUrl}/{chapterNumber:int}")]
         public async Task<IActionResult> Read(string webNovelUrl, string languageCode, int chapterNumber)
         {
@@ -85,7 +73,7 @@ namespace Web.Controllers
             switch (result)
             {
                 case WebNovelAddWebNovelResult.Success:
-                    return RedirectToAction(nameof(Details), new { webNovelUrl = model.UrlName });
+                    return RedirectToLocal($"/details/{model.UrlName}");
                 case WebNovelAddWebNovelResult.WebNovelUrlExists:
                     ModelState.AddModelError(string.Empty, "Web novel already exists");
                     return View(model);
@@ -130,7 +118,7 @@ namespace Web.Controllers
             switch (result)
             {
                 case WebNovelAddWebNovelTranslationResult.Success:
-                    return RedirectToAction(nameof(Details), new { webNovelUrl = model.UrlName });
+                    return RedirectToLocal($"/details/{model.UrlName}");
                 case WebNovelAddWebNovelTranslationResult.WebNovelNotExists:
                     ModelState.AddModelError(string.Empty, "Parent web novel was not found");
                     return View(model);
@@ -172,7 +160,7 @@ namespace Web.Controllers
             switch (result)
             {
                 case WebNovelEditWebNovelTranslationResult.Success:
-                    return RedirectToAction(nameof(Details), new { webNovelUrl = model.UrlName });
+                    return RedirectToLocal($"/details/{model.UrlName}");
                 case WebNovelEditWebNovelTranslationResult.TranslationNotExists:
                     ModelState.AddModelError(string.Empty, $"Translation for '{model.LanguageName}' language does not exist");
                     return View(model);
@@ -219,7 +207,7 @@ namespace Web.Controllers
             switch (result)
             {
                 case WebNovelAddChapterResult.Success:
-                    return RedirectToAction(nameof(Details), new { webNovelUrl = model.WebNovel.UrlName });
+                    return RedirectToLocal($"/details/{model.WebNovel.UrlName}");
                 case WebNovelAddChapterResult.TranslatedChapterNumberExists:
                     var languageName = model.Languages
                         .Where(c => c.Id == model.LanguageId)
@@ -291,7 +279,7 @@ namespace Web.Controllers
         {
             var user = await _webNovelService.GetUserAsync(User);
             await _webNovelService.UpdateNotificationStatus(user, webNovelUrl, true);
-            return RedirectToAction(nameof(Details), new {webNovelUrl});
+            return RedirectToLocal($"/details/{webNovelUrl}");
         }
         
         [Authorize]
@@ -300,7 +288,7 @@ namespace Web.Controllers
         {
             var user = await _webNovelService.GetUserAsync(User);
             await _webNovelService.UpdateNotificationStatus(user, webNovelUrl, false);
-            return RedirectToAction(nameof(Details), new {webNovelUrl});
+            return RedirectToLocal($"/details/{webNovelUrl}");
         }
     }
 }

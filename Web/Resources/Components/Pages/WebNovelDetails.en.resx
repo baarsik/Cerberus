@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AddChapterButton" xml:space="preserve">
+        <value>&lt;i class="far fa-plus"&gt;&lt;/i&gt; New Chapter</value>
+    </data>
+    <data name="AddWebNovelTranslationButton" xml:space="preserve">
+        <value>Add language</value>
+    </data>
+    <data name="ContinueReadingButton" xml:space="preserve">
+        <value>Continue reading</value>
+    </data>
+    <data name="DisableNotificationsButton" xml:space="preserve">
+        <value>&lt;i class="far fa-eye-slash"&gt;&lt;/i&gt; Unfollow</value>
+    </data>
+    <data name="EnableNotificationsButton" xml:space="preserve">
+        <value>&lt;i class="far fa-eye"&gt;&lt;/i&gt; Follow</value>
+    </data>
+    <data name="Description_Header" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="AlternativeNames_Header" xml:space="preserve">
+        <value>Alternative Names</value>
+    </data>
+</root>

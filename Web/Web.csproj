@@ -90,22 +90,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>NotFound.ru.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Components\Pages\Comments.en.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Comments.en.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Components\Pages\Comments.ru.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Comments.ru.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Components\Pages\ChaptersBlock.en.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ChaptersBlock.en.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Components\Pages\ChaptersBlock.ru.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ChaptersBlock.ru.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Components\Pages\App.en.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>App.en.Designer.cs</LastGenOutput>
@@ -113,6 +97,30 @@
     <EmbeddedResource Update="Resources\Components\Pages\App.ru.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>App.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Partial\Comments.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Comments.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Partial\Comments.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Comments.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Partial\WebNovelDetails\ChaptersBlock.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ChaptersBlock.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Partial\WebNovelDetails\ChaptersBlock.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ChaptersBlock.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Pages\WebNovelDetails.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebNovelDetails.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Pages\WebNovelDetails.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebNovelDetails.ru.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -186,16 +194,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>NotFound.ru.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Components\Pages\Comments.en.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Comments.en.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\Components\Pages\Comments.ru.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Comments.ru.resx</DependentUpon>
-    </Compile>
     <Compile Update="Resources\Views\Notifications\Index.en.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Index.en.resx</DependentUpon>
@@ -206,16 +204,6 @@
       <DependentUpon>Index.ru.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Update="Resources\Components\Pages\ChaptersBlock.en.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ChaptersBlock.en.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\Components\Pages\ChaptersBlock.ru.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ChaptersBlock.ru.resx</DependentUpon>
-    </Compile>
     <Compile Update="Resources\Components\Pages\App.en.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -225,6 +213,36 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>App.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Components\Partial\Comments.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Comments.en.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Components\Partial\Comments.ru.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Comments.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Components\Partial\WebNovelDetails\ChaptersBlock.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ChaptersBlock.en.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Components\Partial\WebNovelDetails\ChaptersBlock.ru.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ChaptersBlock.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Components\Pages\WebNovelDetails.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebNovelDetails.en.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Components\Pages\WebNovelDetails.ru.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebNovelDetails.ru.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

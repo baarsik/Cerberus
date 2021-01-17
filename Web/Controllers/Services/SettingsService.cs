@@ -15,10 +15,10 @@ namespace Web.Controllers.Services
 {
     public sealed class SettingsService : BaseService
     {
-        public SettingsService(ApplicationContext context,
+        public SettingsService(IDbContextFactory<ApplicationContext> dbContextFactory,
             UserManager<ApplicationUser> userManager,
             IConfiguration configuration)
-            : base(context, userManager, configuration)
+            : base(dbContextFactory, userManager, configuration)
         {
         }
         

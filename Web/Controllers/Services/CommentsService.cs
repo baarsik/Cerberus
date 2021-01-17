@@ -15,8 +15,8 @@ namespace Web.Controllers.Services
 {
     public class CommentsService : BaseService
     {
-        public CommentsService(ApplicationContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration)
-            : base(context, userManager, configuration)
+        public CommentsService(IDbContextFactory<ApplicationContext> dbContextFactory, UserManager<ApplicationUser> userManager, IConfiguration configuration)
+            : base(dbContextFactory, userManager, configuration)
         {
         }
 

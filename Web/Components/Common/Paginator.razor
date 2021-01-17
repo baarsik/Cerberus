@@ -1,4 +1,17 @@
-@using Microsoft.AspNetCore.Components.Web
+@code
+{
+    [Parameter]
+    public int Page { get; set; }
+
+    [Parameter]
+    public int TotalPages { get; set; }
+
+    [Parameter]
+    public int PagesDisplayed { get; set; } = 9;
+
+    [Parameter]
+    public EventCallback<int> OnPageChange { get; set; }
+}
 
 <div class="btn-group m-t flex-row justify-center">
     @if (Page <= 1)
@@ -43,19 +56,8 @@
     }
 </div>
 
-@code {
-    [Parameter]
-    public int Page { get; set; }
-
-    [Parameter]
-    public int TotalPages { get; set; }
-
-    [Parameter]
-    public int PagesDisplayed { get; set; } = 9;
-
-    [Parameter]
-    public EventCallback<int> OnPageChange { get; set; }
-
+@code
+{
     private bool _shouldDisplayDotsLeft;
     private bool _shouldDisplayDotsRight;
     private int _takePagesFromLeft;

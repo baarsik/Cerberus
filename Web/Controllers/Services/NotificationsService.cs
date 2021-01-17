@@ -14,10 +14,10 @@ namespace Web.Controllers.Services
 {
     public class NotificationsService : BaseService
     {
-        public NotificationsService(ApplicationContext context,
+        public NotificationsService(IDbContextFactory<ApplicationContext> dbContextFactory,
             UserManager<ApplicationUser> userManager,
             IConfiguration configuration)
-            : base(context, userManager, configuration)
+            : base(dbContextFactory, userManager, configuration)
         {
         }
 
@@ -143,7 +143,7 @@ namespace Web.Controllers.Services
                 {
                     Id = x.ReaderData.Id,
                     WebNovelContent = x.WebNovelContent,
-                    WebNovelURL = $"/{nameof(WebNovelController.Details).ToLower()}/{x.ReaderData.WebNovel.UrlName}/"
+                    WebNovelURL = $"/details/{x.ReaderData.WebNovel.UrlName}/"
                 })
                 .Skip(Constants.Notifications.ItemsPerIndexPage * (model.Page - 1))
                 .Take(Constants.Notifications.ItemsPerIndexPage)

@@ -1,0 +1,47 @@
+@using Web.Controllers.Services
+@using DataContext.Models
+@using System.Security.Claims
+@using DataContext.EnumDataTypes
+@using Web.Models.ViewModels
+
+@inject IStringLocalizer<ChaptersBlock> L;
+
+@code
+{
+    [Parameter]
+    public WebNovelDetailsViewModel Model { get; set; }
+}
+
+@if (WebNovel.Chapters.Any(c => c.Translations.Any(d => Model.WebNovelInfo.UserLanguages.Contains(d.Language))))
+{
+    foreach (var volume in Volumes)
+    {
+        <Panel Class="panel-c-accent">
+            <Header>@GetPanelHeader(volume)</Header>
+            <Body>
+                <ChaptersBlockItems Model="@Model" Volume="@volume"/>
+            </Body>
+        </Panel>
+    }
+}
+else
+{
+    <Panel>
+        <Header>@L["Chapters"]</Header>
+        <Body>@L["Chapters_NoChapters"]</Body>
+    </Panel>
+}
+
+@code
+{
+    private WebNovel WebNovel => Model?.WebNovelInfo?.WebNovel;
+
+    private IOrderedEnumerable<int> Volumes => WebNovel.Chapters
+        .Select(c => c.Volume)
+        .Distinct()
+        .OrderByDescending(c => c * (Model.ReaderData.SortOrder == SortOrder.FromNewToOld ? 1 : -1));
+
+    private MarkupString GetPanelHeader(int volume) => WebNovel.UsesVolumes
+        ? new MarkupString($"{L["Volume"]} {volume}")
+        : new MarkupString(L["Chapters"]);
+}

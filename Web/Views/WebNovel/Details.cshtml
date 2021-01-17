@@ -1,6 +1,6 @@
 @using System.Web
+@using Web.Components.Partial.WebNovelDetails
 @using Web.Models.Helpers
-@using DataContext.EnumDataTypes
 @model WebNovelDetailsViewModel
 
 @{
@@ -104,7 +104,7 @@
                     }
                 </div>
                 
-                <component type="typeof(ChaptersBlock)" render-mode="Static" param-WebNovelId="@Model.WebNovelInfo.WebNovel.Id" />
+                <component type="typeof(ChaptersBlock)" render-mode="Static" param-Model="@Model" />
                 <component type="typeof(Comments)" render-mode="ServerPrerendered" param-EntityId="@Model.WebNovelInfo.WebNovel.Id"/>
             </div>
         </div>

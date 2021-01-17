@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DataContext;
 using DataContext.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Web.Services.Interfaces;
 
@@ -16,9 +17,9 @@ namespace Web.Controllers.Services
         private readonly SmtpClient _smtpClient;
         private readonly MailAddress _fromMailAddress;
         
-        public EmailService(ApplicationContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration,
+        public EmailService(IDbContextFactory<ApplicationContext> dbContextFactory, UserManager<ApplicationUser> userManager, IConfiguration configuration,
             IViewRenderService viewRenderService)
-            : base(context, userManager, configuration)
+            : base(dbContextFactory, userManager, configuration)
         {
             _viewRenderService = viewRenderService;
 

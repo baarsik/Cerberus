@@ -30,8 +30,8 @@ namespace Web.Controllers.Services
         private readonly IWebHostEnvironment _webHostEnvironment;
 
         public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration,
-            ApplicationContext context, IWebHostEnvironment webHostEnvironment)
-        : base(context, userManager, configuration)
+            IDbContextFactory<ApplicationContext> dbContextFactory, IWebHostEnvironment webHostEnvironment)
+        : base(dbContextFactory, userManager, configuration)
         {
             _signInManager = signInManager;
             _webHostEnvironment = webHostEnvironment;

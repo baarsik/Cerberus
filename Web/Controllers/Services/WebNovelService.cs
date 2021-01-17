@@ -18,11 +18,11 @@ namespace Web.Controllers.Services
     {
         private readonly NotificationsService _notificationsService;
 
-        public WebNovelService(ApplicationContext context,
+        public WebNovelService(IDbContextFactory<ApplicationContext> dbContextFactory,
             UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
             NotificationsService notificationsService)
-            : base(context, userManager, configuration)
+            : base(dbContextFactory, userManager, configuration)
         {
             _notificationsService = notificationsService;
         }

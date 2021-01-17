@@ -27,9 +27,7 @@
     {
         <a class="btn btn-default disabled"><i class="fas fa-chevron-left"></i> @Localizer["PreviousChapter"]</a>
     }
-    <a class="btn btn-default"
-       asp-action="Details"
-       asp-route-webNovelUrl="@Model.Translation.Chapter.WebNovel.UrlName">
+    <a class="btn btn-default" href="/details/@Model.Translation.Chapter.WebNovel.UrlName">
         @Localizer["BackToWebNovel"]
     </a>
     @if (Model.NextChapterContent != null)

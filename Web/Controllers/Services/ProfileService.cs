@@ -11,10 +11,10 @@ namespace Web.Controllers.Services
 {
     public sealed class ProfileService : BaseService
     {
-        public ProfileService(ApplicationContext context,
+        public ProfileService(IDbContextFactory<ApplicationContext> dbContextFactory,
             UserManager<ApplicationUser> userManager,
             IConfiguration configuration)
-        : base(context, userManager, configuration)
+        : base(dbContextFactory, userManager, configuration)
         {}
         
         public async Task<ProfileStatistics> GetUserStatisticsAsync(ApplicationUser user)

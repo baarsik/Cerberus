@@ -25,13 +25,13 @@ namespace Web.Controllers.Services
         protected readonly IConfiguration Configuration;
         protected readonly ApplicationContext Db;
 
-        public BaseService(ApplicationContext context,
+        public BaseService(IDbContextFactory<ApplicationContext> dbContextFactory,
             UserManager<ApplicationUser> userManager,
             IConfiguration configuration)
         {
             UserManager = userManager;
             Configuration = configuration;
-            Db = context;
+            Db = dbContextFactory.CreateDbContext();
         }
 
         /// <summary>

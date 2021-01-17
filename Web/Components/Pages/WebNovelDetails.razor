@@ -1,0 +1,139 @@
+@page "/details/{webNovelUrl}"
+
+@using Web.Controllers.Services
+@using System.Security.Claims
+@using System.Web
+@using DataContext.Models
+@using Web.Components.Partial.WebNovelDetails
+@using Web.Controllers
+@using Web.Models.Extensions
+@using Web.Models.Helpers
+@using Web.Models.ViewModels
+
+@inject WebNovelService WebNovelService
+@inject IStringLocalizer<WebNovelDetails> L;
+
+@code
+{
+    [Parameter]
+    public string WebNovelUrl { get; set; }
+}
+
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="view-header">
+                <div class="header-icon">
+                    <i class="fal fa-book fa-sm"></i>
+                </div>
+                <div class="pull-right text-right">
+                    @if (IsAuthenticated)
+                    {
+                        if (ClaimsPrincipal.HasWebNovelEditorAccess() && !WebNovel.IsComplete)
+                        {
+                            <a class="btn btn-lg btn-default" href="/@nameof(WebNovelController.AddWebNovelTranslation)/@WebNovel.UrlName">
+                                @L["AddWebNovelTranslationButton"].Value.AsMarkupString()
+                            </a>
+                            <a class="btn btn-lg btn-default" href="/@nameof(WebNovelController.AddChapter).ToLower()/@WebNovel.Id">
+                                @L["AddChapterButton"].Value.AsMarkupString()
+                            </a>
+                            <div class="btn-group">
+                                <button class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <i class="far fa-pen"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    @foreach (var translation in Model.WebNovelInfo.WebNovel.Translations)
+                                    {
+                                        <li><a class="dropdown-item" href="/@nameof(WebNovelController.EditWebNovelTranslation).ToLower()/@translation.Id">@translation.Language.LocalName</a></li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="header-title">
+                    <h3>
+                        @HttpUtility.HtmlDecode(WebNovelContent.Name)
+                        @if (WebNovel.IsAdultContent)
+                        {
+                            <small class="text-accent">(18+)</small>
+                        }
+                    </h3>
+                    <span class="badge">
+                        <i class="far fa-pen"></i> @WebNovelContent.Symbols.ToStringDisplayFormat()
+                    </span>
+                    <small>
+                        @StringHelpers.GetCommaSpaceSeparatedString(WebNovel.OriginalName, WebNovel.Author)
+                    </small>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="panel panel-filled">
+                        <div class="panel-heading">@L["Description_Header"]</div>
+                        <div class="panel-body">@(new MarkupString(WebNovelContent.Description))</div>
+                        @if (WebNovel.Translations.Count > 1)
+                        {
+                            <div class="panel-heading">@L["AlternativeNames_Header"]</div>
+                            <div class="panel-body">@StringHelpers.GetCommaSpaceSeparatedString(WebNovel.Translations.Select(c => c.Name))</div>
+                        }
+                        @if (IsAuthenticated)
+                        {
+                            <div class="panel-body">
+                                @if (Model.ReaderData.LastOpenedChapter != null)
+                                {
+                                    var chapterLinkInfo = Model.ReaderData.LastOpenedChapter;
+                                    <a class="btn btn-accent" href="/@nameof(WebNovelController.Read).ToLower()/@chapterLinkInfo.LanguageCode/@WebNovel.UrlName/@chapterLinkInfo.Volume/@chapterLinkInfo.Number">
+                                        @L["ContinueReadingButton"].Value.AsMarkupString()
+                                    </a>
+                                }
+                                @if (Model.ReaderData.NotificationsEnabled)
+                                {
+                                    <a class="btn btn-default" href="/notifications/unsubscribe/@WebNovel.UrlName">
+                                        @L["DisableNotificationsButton"].Value.AsMarkupString()
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-default" href="/notifications/subscribe/@WebNovel.UrlName">
+                                        @L["EnableNotificationsButton"].Value.AsMarkupString()
+                                    </a>
+                                }
+
+                            </div>
+                        }
+                    </div>
+                
+                    <ChaptersBlock Model="@Model"/>
+                    <Comments EntityId="@Model.WebNovelInfo.WebNovel.Id"/>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code
+{
+    private WebNovelDetailsViewModel Model { get; set; }
+    private WebNovel WebNovel => Model?.WebNovelInfo.WebNovel;
+    private WebNovelContent WebNovelContent => Model?.WebNovelInfo.WebNovelContent;
+    
+    private ClaimsPrincipal ClaimsPrincipal { get; set; }
+    private ApplicationUser User { get; set; }
+    private bool IsAuthenticated => ClaimsPrincipal?.Identity?.IsAuthenticated == true;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        ClaimsPrincipal = authState?.User;
+        User = await WebNovelService.GetUserAsync(ClaimsPrincipal);
+        Model = await WebNovelService.GetWebNovelDetailsViewModelAsync(User, WebNovelUrl);
+    }
+}

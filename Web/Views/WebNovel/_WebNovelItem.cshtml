@@ -2,7 +2,7 @@
 
 <div class="panel panel-filled panel-c-warning">
     <div class="panel-heading">
-        <a class="no-text-decoration" asp-action="Details" asp-route-webNovelUrl="@Model.WebNovel.UrlName">
+        <a class="no-text-decoration" href="/details/@Model.WebNovel.UrlName">
             <h3>@Model.WebNovelContent.Name</h3>
         </a>
         @if (Model.WebNovel.UsesVolumes)
@@ -30,7 +30,7 @@
         @Html.Raw(Model.WebNovelContent.Description)
     </div>
     <div class="panel-footer">
-        <a class="btn btn-sm btn-default" asp-action="Details" asp-route-webNovelUrl="@Model.WebNovel.UrlName">@Localizer["DetailsButton"]</a>
+        <a class="btn btn-sm btn-default" href="/details/@Model.WebNovel.UrlName">@Localizer["DetailsButton"]</a>
         @if (Model.TotalChapters > 0)
         {
             if (Model.WebNovel.UsesVolumes)
