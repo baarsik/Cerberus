@@ -161,6 +161,7 @@ namespace Web
             {
                 endpoints.MapControllerRoute("default", "{controller=WebNovel}/{action=Index}");
                 endpoints.MapBlazorHub();
+                endpoints.MapFallbackToPage("/_Host");
             });
             
             app.UseStatusCodePages();

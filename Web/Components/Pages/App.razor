@@ -1,0 +1,25 @@
+@inject IStringLocalizer<App> L;
+
+<Router AppAssembly="typeof(Program).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="routeData"/>
+    </Found>
+    <NotFound>
+        <div class="view-header">
+            <div class="header-icon">
+                <i class="fal fa-times-circle fa-sm"></i>
+            </div>
+            <div class="header-title">
+                <h3>@L["NotFound_Header_Title"]</h3>
+                <small>@L["NotFound_Header_Description"]</small>
+            </div>
+        </div>
+        
+        <Panel>
+            <Body>
+                <p class="m-t-xs">@L["NotFound_Text"]</p>
+                <p class="m-b-none"><a href="/">@L["NotFound_HomeButton"]</a></p>
+            </Body>
+        </Panel>
+    </NotFound>
+</Router>
