@@ -18,20 +18,19 @@ namespace Web.Controllers.Services
     {
         private readonly NotificationsService _notificationsService;
 
-        public WebNovelService(IDbContextFactory<ApplicationContext> dbContextFactory,
+        public WebNovelService(ApplicationContext dbContext,
             UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
             NotificationsService notificationsService)
-            : base(dbContextFactory, userManager, configuration)
+            : base(dbContext, userManager, configuration)
         {
             _notificationsService = notificationsService;
         }
 
         public async Task<WebNovelIndexViewModel> GetWebNovelIndexViewModelAsync(ApplicationUser user, int page)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var languages = user.GetUserOrDefaultLanguages(context, Configuration);
-            var webNovelsToDisplayCount = await context.WebNovels.CountAsync(c => c.Translations.Any(d => languages.Any(l => Equals(l, d.Language))));
+            var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
+            var webNovelsToDisplayCount = await Db.WebNovels.CountAsync(c => c.Translations.Any(d => languages.Any(l => Equals(l, d.Language))));
             var totalPages = (int) Math.Ceiling(webNovelsToDisplayCount / (double) Constants.WebNovel.ItemsPerIndexPage);
             if (totalPages == 0)
             {
@@ -48,14 +47,14 @@ namespace Web.Controllers.Services
                 TotalPages = totalPages,
             };
             
-            var webNovels = context.WebNovels
+            var webNovels = await Db.WebNovels
                 .Include(c => c.Chapters)
                     .ThenInclude(c => c.Translations)
                     .ThenInclude(c => c.Language)
                 .Include(c => c.Translations)
                     .ThenInclude(c => c.Language)
                 .Where(c => c.Translations.Any(d => languages.Any(l => Equals(l, d.Language))))
-                .ToList();
+                .ToListAsync();
             
             model.Items = webNovels
                 .Select(webNovel => GetWebNovelInfo(webNovel, languages))
@@ -69,8 +68,7 @@ namespace Web.Controllers.Services
 
         public async Task<AddWebNovelViewModel> GetAddWebNovelViewModelAsync(ApplicationUser user, string webNovelUrl)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var webNovel = await context.WebNovels
+            var webNovel = await Db.WebNovels
                 .Include(c => c.Translations)
                     .ThenInclude(c => c.Language)
                 .SingleOrDefaultAsync(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture));
@@ -78,7 +76,7 @@ namespace Web.Controllers.Services
             if (webNovel == null)
                 return null;
             
-            var languages = user.GetUserOrDefaultLanguages(context, Configuration);
+            var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
             var translation = webNovel.GetTranslation(languages);
 
             if (translation == null)
@@ -99,8 +97,7 @@ namespace Web.Controllers.Services
 
         public async Task<EditWebNovelViewModel> GetEditWebNovelViewModelAsync(Guid translationId)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var translation = await context.WebNovelContent
+            var translation = await Db.WebNovelContent
                 .Include(x => x.WebNovel)
                 .Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.Id == translationId);
@@ -124,8 +121,7 @@ namespace Web.Controllers.Services
 
         public async Task<WebNovelDetailsViewModel> GetWebNovelDetailsViewModelAsync(ApplicationUser user, string webNovelUrl)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var webNovelId = await context.WebNovels
+            var webNovelId = await Db.WebNovels
                 .Where(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture))
                 .Select(c => c.Id)
                 .SingleOrDefaultAsync();
@@ -138,8 +134,7 @@ namespace Web.Controllers.Services
         
         public async Task<WebNovelDetailsViewModel> GetWebNovelDetailsViewModelAsync(ApplicationUser user, Guid webNovelId)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var webNovel = await context.WebNovels
+            var webNovel = await Db.WebNovels
                 .Include(c => c.Chapters)
                     .ThenInclude(c => c.Translations)
                     .ThenInclude(c => c.Language)
@@ -156,7 +151,7 @@ namespace Web.Controllers.Services
             if (webNovel == null)
                 return null;
 
-            var languages = user.GetUserOrDefaultLanguages(context, Configuration);
+            var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
             var readerData = webNovel?.ReaderData
                 .Where(c => user != null && c.User.Id == user.Id)
                 .Select(c => new WebNovelDetailsViewModel.ReaderUserData
@@ -185,14 +180,13 @@ namespace Web.Controllers.Services
         
         public async Task<AddChapterViewModel> GetWebNovelAddChapterViewModelAsync(ApplicationUser user, Guid webNovelId)
         {
-            await using var context = DbContextFactory.CreateDbContext();
             var model = new AddChapterViewModel
             {
                 WebNovelId = webNovelId,
                 IsTranslation = false
             };
 
-            var languages = user.GetUserOrDefaultLanguages(context, Configuration);
+            var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
             model.WebNovel = await GetWebNovelByIdAsync(model.WebNovelId);
             model.WebNovelContent = model.WebNovel.GetTranslation(languages);
             model.Languages = model.WebNovel.Translations.Select(c => c.Language).Distinct().ToList();
@@ -214,8 +208,7 @@ namespace Web.Controllers.Services
         
         public async Task<AddChapterViewModel> GetWebNovelAddChapterTranslationViewModelAsync(ApplicationUser user, Guid webNovelId, int chapterNumber)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var webNovelChapterContentId = await context.WebNovelChapters
+            var webNovelChapterContentId = await Db.WebNovelChapters
                 .Where(c => c.WebNovel.Id == webNovelId && c.Number == chapterNumber)
                 .SelectMany(c => c.Translations)
                 .Select(c => c.Id)
@@ -226,8 +219,7 @@ namespace Web.Controllers.Services
         
         public async Task<AddChapterViewModel> GetWebNovelAddChapterTranslationViewModelAsync(ApplicationUser user, Guid webNovelChapterContentId)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var chapterContent = await context.WebNovelChapterContent
+            var chapterContent = await Db.WebNovelChapterContent
                 .Include(c => c.Chapter)
                     .ThenInclude(c => c.WebNovel)
                     .ThenInclude(c => c.Translations)
@@ -262,8 +254,7 @@ namespace Web.Controllers.Services
 
         public async Task<WebNovel> GetWebNovelByIdAsync(Guid id)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            return await context.WebNovels
+            return await Db.WebNovels
                 .Include(c => c.Chapters)
                     .ThenInclude(c => c.Translations)
                     .ThenInclude(c => c.Language)
@@ -274,12 +265,11 @@ namespace Web.Controllers.Services
 
         public async Task<WebNovelAddWebNovelResult> AddWebNovelAsync(ApplicationUser user, AddWebNovelViewModel model)
         {
-            await using var context = DbContextFactory.CreateDbContext();
             var url = model.UrlName.ToLower();
-            if (await context.WebNovels.AnyAsync(c => c.UrlName.ToLower() == url))
+            if (await Db.WebNovels.AnyAsync(c => c.UrlName.ToLower() == url))
                 return WebNovelAddWebNovelResult.WebNovelUrlExists;
             
-            var language = await context.Languages.FirstOrDefaultAsync(c => c.Id == model.LanguageId);
+            var language = await Db.Languages.FirstOrDefaultAsync(c => c.Id == model.LanguageId);
             if (language == null)
                 return WebNovelAddWebNovelResult.LanguageNotExists;
             
@@ -293,8 +283,8 @@ namespace Web.Controllers.Services
                 Author = model.Author,
                 CreationDate = DateTime.Now
             };
-            context.WebNovels.Add(webNovel);
-            await context.SaveChangesAsync();
+            Db.WebNovels.Add(webNovel);
+            await Db.SaveChangesAsync();
 
             var webNovelContent = new WebNovelContent
             {
@@ -304,17 +294,16 @@ namespace Web.Controllers.Services
                 Language = language,
                 WebNovel = webNovel
             };
-            context.WebNovelContent.Add(webNovelContent);
-            await context.SaveChangesAsync();
+            Db.WebNovelContent.Add(webNovelContent);
+            await Db.SaveChangesAsync();
             
             return WebNovelAddWebNovelResult.Success;
         }
         
         public async Task<WebNovelAddWebNovelTranslationResult> AddWebNovelTranslationAsync(AddWebNovelViewModel model)
         {
-            await using var context = DbContextFactory.CreateDbContext();
             var url = model.UrlName.ToLower();
-            var webNovel = await context.WebNovels
+            var webNovel = await Db.WebNovels
                 .Include(c => c.Translations)
                     .ThenInclude(c => c.Language)
                 .SingleOrDefaultAsync(c => c.UrlName.ToLower() == url);
@@ -322,7 +311,7 @@ namespace Web.Controllers.Services
             if (webNovel == null)
                 return WebNovelAddWebNovelTranslationResult.WebNovelNotExists;
             
-            var language = await context.Languages.FirstOrDefaultAsync(c => c.Id == model.LanguageId);
+            var language = await Db.Languages.FirstOrDefaultAsync(c => c.Id == model.LanguageId);
             if (language == null)
                 return WebNovelAddWebNovelTranslationResult.LanguageNotExists;
 
@@ -337,16 +326,15 @@ namespace Web.Controllers.Services
                 Language = language,
                 WebNovel = webNovel
             };
-            context.WebNovelContent.Add(webNovelContent);
-            await context.SaveChangesAsync();
+            Db.WebNovelContent.Add(webNovelContent);
+            await Db.SaveChangesAsync();
             
             return WebNovelAddWebNovelTranslationResult.Success;
         }
 
         public async Task<WebNovelAddChapterResult> AddChapterContentAsync(ApplicationUser uploader, AddChapterViewModel model)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var webNovel = await context.WebNovels
+            var webNovel = await Db.WebNovels
                 .Include(c => c.Chapters)
                     .ThenInclude(c => c.Translations)
                 .FirstOrDefaultAsync(c => c.Id == model.WebNovelId);
@@ -359,7 +347,7 @@ namespace Web.Controllers.Services
                 model.Volume = 1;
             }
 
-            var language = await context.Languages.FirstOrDefaultAsync(c => c.Id == model.LanguageId);
+            var language = await Db.Languages.FirstOrDefaultAsync(c => c.Id == model.LanguageId);
             
             if (language == null)
                 return WebNovelAddChapterResult.LanguageNotExists;
@@ -400,25 +388,25 @@ namespace Web.Controllers.Services
                     IsAdultContent = model.IsAdultContent,
                     WebNovel = webNovel
                 };
-                context.WebNovelChapters.Add(chapter);
-                await context.SaveChangesAsync();
+                Db.WebNovelChapters.Add(chapter);
+                await Db.SaveChangesAsync();
 
                 if (previousChapter != null)
                 {
                     previousChapter.NextChapter = chapter;
-                    context.Update(previousChapter);
+                    Db.Update(previousChapter);
                 }
 
                 if (nextChapter != null)
                 {
                     nextChapter.PreviousChapter = chapter;
-                    context.Update(nextChapter);
+                    Db.Update(nextChapter);
                 }
 
                 chapter.PreviousChapter = previousChapter;
                 chapter.NextChapter = nextChapter;
-                context.Update(chapter);
-                await context.SaveChangesAsync();
+                Db.Update(chapter);
+                await Db.SaveChangesAsync();
             }
 
             if (chapter.IsAdultContent != model.IsAdultContent)
@@ -434,23 +422,22 @@ namespace Web.Controllers.Services
                 CreationDate = DateTime.Now,
                 FreeToAccessDate = DateTime.ParseExact(model.FreeToAccessDate, Constants.Misc.DateFormat, CultureInfo.InvariantCulture),
                 Symbols = model.Text.GetPureTextLength(),
-                Uploader = uploader,
-                Language = language,
-                Chapter = chapter
+                UploaderId = uploader.Id,
+                LanguageId = language.Id,
+                ChapterId = chapter.Id
             };
-            context.WebNovelChapterContent.Add(chapterContent);
-            await context.SaveChangesAsync();
+            Db.WebNovelChapterContent.Add(chapterContent);
+            await Db.SaveChangesAsync();
 
-            await UpdateWebNovelSymbolCountAsync(webNovel.Id, language.Id);
-            await _notificationsService.AddNewWebNovelChapterNotificationAsync(chapterContent, context);
+            await UpdateWebNovelSymbolCountAsync(webNovel.Id, language.Id, Db);
+            await _notificationsService.AddNewWebNovelChapterNotificationAsync(chapterContent.Id, Db);
             
             return WebNovelAddChapterResult.Success;
         }
 
         public async Task<WebNovelEditWebNovelTranslationResult> EditWebNovelTranslationAsync(EditWebNovelViewModel model)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var translation = await context.WebNovelContent
+            var translation = await Db.WebNovelContent
                 .Include(x => x.WebNovel)
                 .SingleOrDefaultAsync(x => x.Id == model.TranslationId);
 
@@ -459,21 +446,20 @@ namespace Web.Controllers.Services
 
             translation.Name = model.Name;
             translation.Description = model.Description;
-            context.Update(translation);
+            Db.Update(translation);
 
             var webNovel = translation.WebNovel;
             webNovel.IsAdultContent = model.IsAdultContent;
             webNovel.UsesVolumes |= model.UsesVolumes;
-            context.Update(webNovel);
-            await context.SaveChangesAsync();
+            Db.Update(webNovel);
+            await Db.SaveChangesAsync();
 
             return WebNovelEditWebNovelTranslationResult.Success;
         }
 
         public async Task<WebNovelChapter> GetChapterAsync(string webNovelUrl, int volume, int chapterNumber)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var webNovel = await context.WebNovels
+            var webNovel = await Db.WebNovels
                 .Include(c => c.Translations)
                     .ThenInclude(c => c.Language)
                 .SingleOrDefaultAsync(c => c.UrlName == webNovelUrl.ToLower(CultureInfo.InvariantCulture));
@@ -481,7 +467,7 @@ namespace Web.Controllers.Services
             if (webNovel == null)
                 return null;
 
-            var chapter = context.WebNovelChapters
+            var chapter = Db.WebNovelChapters
                 .Include(c => c.PreviousChapter)
                     .ThenInclude(c => c.Translations)
                     .ThenInclude(c => c.Language)
@@ -506,7 +492,6 @@ namespace Web.Controllers.Services
         
         public async Task<WebNovelReadViewModel> GetChapterTranslationAsync(ApplicationUser user, string webNovelUrl, string languageCode, int volume, int chapterNumber)
         {
-            await using var context = DbContextFactory.CreateDbContext();
             var chapter = await GetChapterAsync(webNovelUrl, volume, chapterNumber);
             var chapterContent = chapter?.Translations.SingleOrDefault(c => c.Language.Code == languageCode);
             
@@ -515,7 +500,7 @@ namespace Web.Controllers.Services
             
             chapterContent.Chapter = chapter;
 
-            var languages = user.GetUserOrDefaultLanguages(context, Configuration);
+            var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
             if (user == null)
             {
                 languages = languages
@@ -538,8 +523,7 @@ namespace Web.Controllers.Services
             if (user == null)
                 return;
             
-            await using var context = DbContextFactory.CreateDbContext();
-            var webNovel = await context.WebNovels
+            var webNovel = await Db.WebNovels
                 .Include(c => c.ReaderData)
                     .ThenInclude(c => c.User)
                 .FirstOrDefaultAsync(x => x.Chapters.Contains(chapter));
@@ -547,7 +531,7 @@ namespace Web.Controllers.Services
             var readerData = webNovel.ReaderData.FirstOrDefault(x => x.User.Id == user.Id);
             if (readerData == null)
             {
-                context.Add(new WebNovelReaderData
+                Db.Add(new WebNovelReaderData
                 {
                     User = user,
                     WebNovel = webNovel,
@@ -557,15 +541,14 @@ namespace Web.Controllers.Services
             else
             {
                 readerData.LastOpenedChapter = chapter;
-                context.Update(readerData);
+                Db.Update(readerData);
             }
-            await context.SaveChangesAsync();
+            await Db.SaveChangesAsync();
         }
 
         public async Task<EditChapterTranslationViewModel> GetEditChapterTranslationViewModelAsync(ApplicationUser user, Guid id)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var content = await context.WebNovelChapterContent
+            var content = await Db.WebNovelChapterContent
                 .Include(c => c.Language)
                 .Include(c => c.Chapter)
                     .ThenInclude(c => c.WebNovel)
@@ -592,7 +575,7 @@ namespace Web.Controllers.Services
                 LanguageId = content.Language.Id,
                 WebNovel = content.Chapter.WebNovel,
                 WebNovelContent = content.Chapter.WebNovel.Translations.FirstOrDefault(c => Equals(c.Language, content.Language)),
-                Languages = user.GetUserOrDefaultLanguages(context, Configuration)
+                Languages = user.GetUserOrDefaultLanguages(Db, Configuration)
                     .Where(lang => Equals(lang, content.Language) || content.Chapter.Translations.All(t => !Equals(t.Language, lang)))
                     .ToList()
             };
@@ -601,8 +584,7 @@ namespace Web.Controllers.Services
         
         public async Task UpdateChapterContentAsync(ApplicationUser uploader, EditChapterTranslationViewModel model)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var chapterContent = await context.WebNovelChapterContent
+            var chapterContent = await Db.WebNovelChapterContent
                 .Include(c => c.Chapter)
                     .ThenInclude(c => c.WebNovel)
                 .FirstOrDefaultAsync(c => c.Id == model.WebNovelChapterContentId);
@@ -613,25 +595,24 @@ namespace Web.Controllers.Services
             if (chapterContent.Chapter.IsAdultContent != model.IsAdultContent)
             {
                 chapterContent.Chapter.IsAdultContent = model.IsAdultContent;
-                context.WebNovelChapters.Update(chapterContent.Chapter);
+                Db.WebNovelChapters.Update(chapterContent.Chapter);
             }
             
             chapterContent.Title = model.Title.RemoveHTML();
             chapterContent.Text = model.Text.SanitizeHTML();
             chapterContent.Symbols = model.Text.GetPureTextLength();
             chapterContent.FreeToAccessDate = DateTime.ParseExact(model.FreeToAccessDate, Constants.Misc.DateFormat, CultureInfo.InvariantCulture);
-            chapterContent.Language = await context.Languages.FindAsync(model.LanguageId);
+            chapterContent.Language = await Db.Languages.FindAsync(model.LanguageId);
             
-            context.WebNovelChapterContent.Update(chapterContent);
-            await context.SaveChangesAsync();
+            Db.WebNovelChapterContent.Update(chapterContent);
+            await Db.SaveChangesAsync();
 
-            await UpdateWebNovelSymbolCountAsync(chapterContent.Chapter.WebNovel.Id, model.LanguageId);
+            await UpdateWebNovelSymbolCountAsync(chapterContent.Chapter.WebNovel.Id, model.LanguageId, Db);
         }
 
         public async Task UpdateNotificationStatus(ApplicationUser user, Guid webNovelId, bool notificationsEnabled)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var webNovel = await context.WebNovels
+            var webNovel = await Db.WebNovels
                 .Include(x=> x.ReaderData)
                     .ThenInclude(x => x.User)
                 .SingleOrDefaultAsync(c => c.Id == webNovelId);
@@ -639,7 +620,7 @@ namespace Web.Controllers.Services
             var readerData = webNovel.ReaderData.FirstOrDefault(x => x.User.Id == user.Id);
             if (readerData == null)
             {
-                context.Add(new WebNovelReaderData
+                Db.Add(new WebNovelReaderData
                 {
                     User = user,
                     WebNovel = webNovel,
@@ -649,9 +630,9 @@ namespace Web.Controllers.Services
             else
             {
                 readerData.NotificationsEnabled = notificationsEnabled;
-                context.Update(readerData);
+                Db.Update(readerData);
             }
-            await context.SaveChangesAsync();
+            await Db.SaveChangesAsync();
         }
 
         private WebNovelInfo GetWebNovelInfo(WebNovel webNovel, IList<Language> languages)
@@ -687,9 +668,8 @@ namespace Web.Controllers.Services
             };
         }
         
-        private async Task UpdateWebNovelSymbolCountAsync(Guid webNovelId, Guid languageId)
+        private async Task UpdateWebNovelSymbolCountAsync(Guid webNovelId, Guid languageId, ApplicationContext context)
         {
-            await using var context = DbContextFactory.CreateDbContext();
             var webNovelContent = await context.WebNovelContent
                 .FirstOrDefaultAsync(x =>
                     x.WebNovel.Id == webNovelId &&

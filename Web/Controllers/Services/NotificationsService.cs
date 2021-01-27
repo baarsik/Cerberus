@@ -14,15 +14,20 @@ namespace Web.Controllers.Services
 {
     public class NotificationsService : BaseService
     {
-        public NotificationsService(IDbContextFactory<ApplicationContext> dbContextFactory,
+        public NotificationsService(ApplicationContext dbContext,
             UserManager<ApplicationUser> userManager,
             IConfiguration configuration)
-            : base(dbContextFactory, userManager, configuration)
+            : base(dbContext, userManager, configuration)
         {
         }
 
-        public async Task AddNewWebNovelChapterNotificationAsync(WebNovelChapterContent webNovelChapterContent, ApplicationContext context)
+        public async Task AddNewWebNovelChapterNotificationAsync(Guid webNovelChapterContentId, ApplicationContext context)
         {
+            var webNovelChapterContent = await context.WebNovelChapterContent
+                .Include(x => x.Language)
+                .Include(x => x.Chapter)
+                    .ThenInclude(x => x.WebNovel)
+                .FirstOrDefaultAsync(x => x.Id == webNovelChapterContentId);
             var applicableUsers = await context.WebNovelReaderData
                 .Where(x => x.NotificationsEnabled &&
                             x.WebNovel.Id == webNovelChapterContent.Chapter.WebNovel.Id)
@@ -66,8 +71,7 @@ namespace Web.Controllers.Services
         
         public async Task<NotificationsIndexViewModel> GetNotificationsIndexViewModelAsync(ApplicationUser user, int page)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var itemsToDisplayCount = await context.ApplicationUserNotifications.CountAsync(c => c.User == user);
+            var itemsToDisplayCount = await Db.ApplicationUserNotifications.CountAsync(c => c.User == user);
             var totalPages = (int) Math.Ceiling(itemsToDisplayCount / (double) Constants.Notifications.ItemsPerIndexPage);
             if (totalPages == 0)
             {
@@ -84,7 +88,7 @@ namespace Web.Controllers.Services
                 TotalPages = totalPages,
             };
 
-            model.Items = await context.ApplicationUserNotifications
+            model.Items = await Db.ApplicationUserNotifications
                 .Where(c => c.User == user)
                 .OrderByDescending(c => c.NotificationDate)
                 .Skip(Constants.Notifications.ItemsPerIndexPage * (model.Page - 1))
@@ -100,7 +104,7 @@ namespace Web.Controllers.Services
 
             if (model.Items.Any(c => !c.IsRead))
             {
-                await MarkAsRead(user, page, context);
+                await MarkAsRead(user, page, Db);
             }
 
             return model;
@@ -108,10 +112,9 @@ namespace Web.Controllers.Services
 
         public async Task<ManageNotificationsViewModel> GetManageNotificationsViewModelAsync(ApplicationUser user, int page)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var languages = user.GetUserOrDefaultLanguages(context, Configuration);
+            var languages = user.GetUserOrDefaultLanguages(Db, Configuration);
             
-            var itemsToDisplayCount = await context.WebNovelReaderData
+            var itemsToDisplayCount = await Db.WebNovelReaderData
                 .CountAsync(c =>
                     c.User.Id == user.Id &&
                     c.NotificationsEnabled);
@@ -131,7 +134,7 @@ namespace Web.Controllers.Services
                 TotalPages = totalPages,
             };
 
-            model.Items = await context.WebNovelReaderData
+            model.Items = await Db.WebNovelReaderData
                 .Include(x => x.WebNovel)
                 .ThenInclude(x => x.Translations)
                     .ThenInclude(x => x.Language)
@@ -156,8 +159,7 @@ namespace Web.Controllers.Services
 
         public async Task DeleteNotificationAsync(ApplicationUser user, Guid notificationId)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var notification = await context.ApplicationUserNotifications
+            var notification = await Db.ApplicationUserNotifications
                 .FirstOrDefaultAsync(x => x.User.Id == user.Id && x.Id == notificationId);
 
             if (notification == null)
@@ -165,8 +167,8 @@ namespace Web.Controllers.Services
 
             notification.IsRead = true;
             notification.IsDeleted = true;
-            context.Update(notification);
-            await context.SaveChangesAsync();
+            Db.Update(notification);
+            await Db.SaveChangesAsync();
         }
 
         private async Task MarkAsRead(ApplicationUser user, int page, ApplicationContext context)

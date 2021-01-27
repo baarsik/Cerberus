@@ -15,15 +15,14 @@ namespace Web.Controllers.Services
 {
     public class CommentsService : BaseService
     {
-        public CommentsService(IDbContextFactory<ApplicationContext> dbContextFactory, UserManager<ApplicationUser> userManager, IConfiguration configuration)
-            : base(dbContextFactory, userManager, configuration)
+        public CommentsService(ApplicationContext dbContext, UserManager<ApplicationUser> userManager, IConfiguration configuration)
+            : base(dbContext, userManager, configuration)
         {
         }
 
         public async Task<CommentsPageable> GetCommentsAsync(Guid relatedEntityId, int page)
         {
-            await using var context = DbContextFactory.CreateDbContext();
-            var totalComments = await context.Comments.CountAsync(x => x.RelatedEntityId == relatedEntityId);
+            var totalComments = await Db.Comments.CountAsync(x => x.RelatedEntityId == relatedEntityId);
             var totalPages = (int) Math.Ceiling(totalComments / (double) Constants.Comments.ItemsPerPage);
             if (totalPages == 0)
             {
@@ -36,7 +35,7 @@ namespace Web.Controllers.Services
                     ? totalPages
                     : page;
             
-            var comments = await context.Comments
+            var comments = await Db.Comments
                 .Where(x => x.RelatedEntityId == relatedEntityId)
                 .Include(x => x.Author)
                 .OrderByDescending(x => x.CreateDate)
@@ -57,17 +56,16 @@ namespace Web.Controllers.Services
             if (!user.HasWriteAccess())
                 return null;
 
-            var context = DbContextFactory.CreateDbContext();
             var comment = new Comment
             {
                 RelatedEntityId = entityId,
                 Content = content.SanitizeStrictHTML(),
                 Author = user
             };
-            context.Add(comment);
-            context.Entry(user).State = EntityState.Unchanged;
-            await context.SaveChangesAsync();
-            await context.DisposeAsync();
+            Db.Add(comment);
+            Db.Entry(user).State = EntityState.Unchanged;
+            await Db.SaveChangesAsync();
+            await Db.DisposeAsync();
 
             return comment;
         }
@@ -85,11 +83,10 @@ namespace Web.Controllers.Services
                 return;
             }
 
-            await using var context = DbContextFactory.CreateDbContext();
-            var comment = await context.Comments.FindAsync(id);
+            var comment = await Db.Comments.FindAsync(id);
             comment.IsDeleted = true;
-            context.Update(comment);
-            await context.SaveChangesAsync();
+            Db.Update(comment);
+            await Db.SaveChangesAsync();
         }
     }
 }

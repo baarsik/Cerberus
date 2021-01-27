@@ -15,25 +15,24 @@ namespace Web.Controllers.Services
 {
     public sealed class SettingsService : BaseService
     {
-        public SettingsService(IDbContextFactory<ApplicationContext> dbContextFactory,
+        public SettingsService(ApplicationContext dbContext,
             UserManager<ApplicationUser> userManager,
             IConfiguration configuration)
-            : base(dbContextFactory, userManager, configuration)
+            : base(dbContext, userManager, configuration)
         {
         }
         
         public ForumSettingsViewModel GetForumSettingsViewModel()
         {
-            using var context = DbContextFactory.CreateDbContext();
             var model = new ForumSettingsViewModel
             {
-                ForumTree = context.Forums
+                ForumTree = Db.Forums
                     .IgnoreQueryFilters()
                     .Include(c => c.Children)
                     .Include(c => c.Threads)
                     .Where(c => c.Parent == null)
                     .OrderBy(c => c.DisplayOrderId)
-                    .Select(x => ToForumInfo(x, context))
+                    .Select(x => ToForumInfo(x, Db))
                     .ToList()
             };
             return model;
@@ -41,29 +40,27 @@ namespace Web.Controllers.Services
 
         public async Task CreateForum(CreateForumViewModel model)
         {
-            await using var context = DbContextFactory.CreateDbContext();
             var forum = new Forum
             {
                 Id = Guid.NewGuid(),
-                DisplayOrderId = await context.Forums.MaxAsync(c => c.DisplayOrderId) + 1,
+                DisplayOrderId = await Db.Forums.MaxAsync(c => c.DisplayOrderId) + 1,
                 IsEnabled = false,
                 Title = model.Title.RemoveHTML()
             };
-            context.Add(forum);
+            Db.Add(forum);
             
-            await context.SaveChangesAsync();
+            await Db.SaveChangesAsync();
         }
         
         public async Task UpdateForums(IEnumerable<ForumHierarchyJson> forumHierarchy)
         {
-            await using var context = DbContextFactory.CreateDbContext();
             var displayOrderId = 0;
             foreach (var item in forumHierarchy)
             {
-                displayOrderId = await UpdateForum(item, ++displayOrderId, null, context);
+                displayOrderId = await UpdateForum(item, ++displayOrderId, null, Db);
             }
 
-            await context.SaveChangesAsync();
+            await Db.SaveChangesAsync();
         }
 
         private async Task<int> UpdateForum(ForumHierarchyJson item, int displayOrderId, Guid? parentId, ApplicationContext context)

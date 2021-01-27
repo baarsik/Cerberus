@@ -17,9 +17,9 @@ namespace Web.Controllers.Services
         private readonly SmtpClient _smtpClient;
         private readonly MailAddress _fromMailAddress;
         
-        public EmailService(IDbContextFactory<ApplicationContext> dbContextFactory, UserManager<ApplicationUser> userManager, IConfiguration configuration,
+        public EmailService(ApplicationContext dbContext, UserManager<ApplicationUser> userManager, IConfiguration configuration,
             IViewRenderService viewRenderService)
-            : base(dbContextFactory, userManager, configuration)
+            : base(dbContext, userManager, configuration)
         {
             _viewRenderService = viewRenderService;
 
