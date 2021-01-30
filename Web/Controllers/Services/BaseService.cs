@@ -17,15 +17,14 @@ namespace Web.Controllers.Services
         protected readonly ApplicationContext Db;
         protected readonly UserManager<ApplicationUser> UserManager;
         protected readonly IConfiguration Configuration;
-        
-        public BaseService(ApplicationContext dbContext,
+
+        protected BaseService(ApplicationContext dbContext,
             UserManager<ApplicationUser> userManager,
             IConfiguration configuration)
         {
             Db = dbContext;
             UserManager = userManager;
             Configuration = configuration;
-            
         }
 
         /// <summary>

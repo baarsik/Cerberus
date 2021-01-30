@@ -7,9 +7,14 @@
     public RenderFragment ChildContent { get; set; }
 }
 
-<div class="@(IsLoaded ? string.Empty : "ld-loading")">
+<div class="@Class">
     <div class="loader">
         <div class="loader-bar"></div>
     </div>
     @ChildContent
 </div>
+
+@code
+{
+    private string Class => IsLoaded ? string.Empty : "ld-loading";
+}

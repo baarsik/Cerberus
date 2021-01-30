@@ -1,0 +1,13 @@
+@code
+{
+    [Parameter]
+    public object Object { get; set; }
+    
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}
+
+@if (Object != null)
+{
+    @ChildContent
+}

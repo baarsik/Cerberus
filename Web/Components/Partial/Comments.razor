@@ -55,10 +55,10 @@
         }
         else
         {
-            <EditForm Model="NewComment" OnValidSubmit="HandleValidSubmit">
+            <EditForm Model="NewComment">
                 <DataAnnotationsValidator />
                 <textarea class="summernote summernote-comments blazor" @bind-value="NewComment.Text" @bind-value:event="oninput"></textarea>
-                <input type="submit" class="btn btn-accent" value="@L["NewComment_SubmitButton"]" />
+                <input type="button" class="btn btn-accent" value="@L["NewComment_SubmitButton"]"  @onclick="@(async () => await AddCommentAsync())" />
                 <ValidationSummary />
             </EditForm>
         }
@@ -79,7 +79,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        IsLoaded = false;
         if (EntityId == default)
         {
             throw new ArgumentNullException(nameof(EntityId));
@@ -98,8 +97,7 @@
         {
             _objRef = DotNetObjectReference.Create(this);
         }
-
-        IsLoaded = false;
+        
         await JsRuntime.InvokeVoidAsync("activateBasicSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor");
         await JsRuntime.InvokeVoidAsync("attachBlazorToSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor", _objRef, nameof(OnTextChange));
         IsLoaded = true;
@@ -111,7 +109,7 @@
         NewComment.Text = contents;
     }
     
-    private async Task HandleValidSubmit()
+    private async Task AddCommentAsync()
     {
         if (!IsAuthenticated)
         {

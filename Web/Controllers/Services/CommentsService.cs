@@ -65,7 +65,6 @@ namespace Web.Controllers.Services
             Db.Add(comment);
             Db.Entry(user).State = EntityState.Unchanged;
             await Db.SaveChangesAsync();
-            await Db.DisposeAsync();
 
             return comment;
         }
