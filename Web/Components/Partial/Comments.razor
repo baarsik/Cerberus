@@ -103,6 +103,7 @@
             await JsRuntime.InvokeVoidAsync("activateBasicSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor");
             await JsRuntime.InvokeVoidAsync("attachBlazorToSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor", _objRef, nameof(OnTextChange));
         }
+        catch (ObjectDisposedException) {} // Do nothing, page is reloading
         finally
         {
             IsLoaded = true;
