@@ -93,14 +93,20 @@
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender || _objRef is null)
+        if (firstRender)
         {
             _objRef = DotNetObjectReference.Create(this);
         }
-        
-        await JsRuntime.InvokeVoidAsync("activateBasicSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor");
-        await JsRuntime.InvokeVoidAsync("attachBlazorToSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor", _objRef, nameof(OnTextChange));
-        IsLoaded = true;
+
+        try
+        {
+            await JsRuntime.InvokeVoidAsync("activateBasicSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor");
+            await JsRuntime.InvokeVoidAsync("attachBlazorToSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor", _objRef, nameof(OnTextChange));
+        }
+        finally
+        {
+            IsLoaded = true;
+        }
     }
 
     [JSInvokable]
