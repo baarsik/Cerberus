@@ -115,7 +115,8 @@ namespace Web
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddServerSideBlazor();
+            services.AddServerSideBlazor()
+                .AddCircuitOptions(options => options.DetailedErrors = true);
             
             services.AddMvc()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
