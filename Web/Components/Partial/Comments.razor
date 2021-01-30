@@ -93,7 +93,7 @@
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (firstRender || _objRef is null)
         {
             _objRef = DotNetObjectReference.Create(this);
         }
