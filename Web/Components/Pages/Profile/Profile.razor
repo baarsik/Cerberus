@@ -1,0 +1,91 @@
+@page "/profile/{name}"
+
+@using Web.Controllers.Services
+@using System.Security.Claims
+@using System.Web
+@using DataContext.Models
+@using Web.Models.Extensions
+@using Web.Models.Helpers
+@using Web.Models.ViewModels
+
+@inject AuthService AuthService
+@inject ProfileService ProfileService
+@inject IStringLocalizer<Profile> L
+
+@code
+{
+    [Parameter]
+    public string Name { get; set; }
+}
+
+<NotNullLoading Object="@User">
+    <div class="flex-column">
+        <div class="flex-row m-b">
+            <Avatar username="@User.DisplayName" avatarname="@User.Avatar" class="m-r"/>
+            <div class="flex-column">
+                <div class="profile-name">
+                    <div>@User.DisplayName</div>
+                </div>
+                <div>
+                    @L["RegisteredOn"] @User.RegisterDate.ToLongDateString()
+                </div>
+                @if (IsOwnProfile)
+                {
+                    <div class="m-t-xs">
+                        <a class="btn btn-default btn-xs" asp-action="ChangePassword" asp-controller="Account">@L["ChangePasswordButton"]</a>
+                        <a class="btn btn-default btn-xs" asp-action="EditProfile" asp-controller="Account">@L["EditProfileButton"]</a>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="row">
+            @*<div class="col-lg-6">
+                <div class="panel panel-filled panel-c-warning">
+                    <div class="panel-heading">
+                        Forum statistics
+                    </div>
+                    <div class="panel-body">
+                        <div>Total threads: @Model.Statistics.Forum.TotalStartedThreads</div>
+                        <div>Total replies: @Model.Statistics.Forum.TotalReplies</div>
+                    </div>
+                </div>
+            </div>*@
+            <div class="col-lg-12">
+                <div class="panel panel-filled panel-c-warning">
+                    <div class="panel-heading">
+                        @L["WNStats_Title"]
+                    </div>
+                    <div class="panel-body">
+                        <div><b>@L["WNStats_TotalWNs"]:</b> @Statistics.WebNovel.TotalWebNovels</div>
+                        <div><b>@L["WNStats_TotalChapters"]:</b> @Statistics.WebNovel.TotalChapters</div>
+                        <div><b>@L["WNStats_TotalComments"]:</b> @Statistics.WebNovel.TotalComments</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</NotNullLoading>
+
+@code
+{
+    private bool IsOwnProfile { get; set; }
+    private ApplicationUser User { get; set; }
+    private ProfileStatistics Statistics { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var user = await AuthService.GetUserByDisplayNameAsync(Name);
+        if (user == null)
+        {
+            NavigationManager.NavigateTo("/404.html");
+            return;
+        }
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var currentUser = await ProfileService.GetUserAsync(authState?.User);
+
+        IsOwnProfile = currentUser != null && user.Id == currentUser.Id;
+        User = user;
+        Statistics = await ProfileService.GetUserStatisticsAsync(user);
+    }
+}

@@ -112,14 +112,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ChaptersBlock.ru.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Components\Pages\WebNovelDetails.en.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>WebNovelDetails.en.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Components\Pages\WebNovelDetails.ru.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>WebNovelDetails.ru.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Components\Partial\WebNovelRead\ChapterNavigation.en.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ChapterNavigation.en.Designer.cs</LastGenOutput>
@@ -128,11 +120,19 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ChapterNavigation.ru.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Components\Pages\WebNovelRead.en.resx">
+    <EmbeddedResource Update="Resources\Components\Pages\WebNovel\WebNovelDetails.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebNovelDetails.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Pages\WebNovel\WebNovelDetails.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebNovelDetails.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Pages\WebNovel\WebNovelRead.en.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>WebNovelRead.en.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Components\Pages\WebNovelRead.ru.resx">
+    <EmbeddedResource Update="Resources\Components\Pages\WebNovel\WebNovelRead.ru.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>WebNovelRead.ru.Designer.cs</LastGenOutput>
     </EmbeddedResource>
@@ -248,16 +248,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ChaptersBlock.ru.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Components\Pages\WebNovelDetails.en.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>WebNovelDetails.en.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\Components\Pages\WebNovelDetails.ru.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>WebNovelDetails.ru.resx</DependentUpon>
-    </Compile>
     <Compile Update="Resources\Components\Partial\WebNovelRead\ChapterNavigation.en.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -268,12 +258,22 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ChapterNavigation.ru.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Components\Pages\WebNovelRead.en.Designer.cs">
+    <Compile Update="Resources\Components\Pages\WebNovel\WebNovelDetails.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebNovelDetails.en.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Components\Pages\WebNovel\WebNovelDetails.ru.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebNovelDetails.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Components\Pages\WebNovel\WebNovelRead.en.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>WebNovelRead.en.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Components\Pages\WebNovelRead.ru.Designer.cs">
+    <Compile Update="Resources\Components\Pages\WebNovel\WebNovelRead.ru.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>WebNovelRead.ru.resx</DependentUpon>

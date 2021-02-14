@@ -140,8 +140,8 @@ namespace Web.Controllers
                 ModelState.AddModelError("", "Please verify that your password meets following criteria: it has to be 8+ length, contain digit(s), lowercase letter(s) and uppercase letter(s) and have 4+ unique chars");
                 return View(model);
             }
-            
-            return RedirectToAction(nameof(ProfileController.Profile), "Profile", new {name = user.DisplayName});
+
+            return RedirectToLocal($"/profile/{user.DisplayName}");
         }
         
         [Authorize]
@@ -167,7 +167,7 @@ namespace Web.Controllers
 
             await _authService.UpdateProfile(model);
             this.UpdateCultureCookie(_authService, model.User);
-            return RedirectToAction(nameof(ProfileController.Profile), "Profile", new {name = model.User.DisplayName});
+            return RedirectToLocal($"/profile/{model.User.DisplayName}");
         }
     }
 }

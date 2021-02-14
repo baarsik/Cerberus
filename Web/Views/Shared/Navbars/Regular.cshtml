@@ -1,8 +1,4 @@
 ﻿@{
-    var profileRouteData = new Dictionary<string, string>
-    {
-        {"name", User.GetDisplayName()}
-    };
     var notificationsNumber = await DataHelper.GetNumberOfUnreadNotificationsAsync(User);
 }
 <nav class="navbar navbar-default navbar-static-top">
@@ -49,7 +45,7 @@
                                 </li>
                             }
                             <li>
-                                <a asp-area="" asp-controller="Profile" asp-action="Profile" asp-all-route-data="profileRouteData">
+                                <a href="/profile/@User.GetDisplayName()">
                                     <i class="far fa-user-alt m-r-xs"></i>
                                     @Localizer["DropDown_Profile"]
                                 </a>
