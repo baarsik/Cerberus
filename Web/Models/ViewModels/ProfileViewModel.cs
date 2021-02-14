@@ -1,17 +1,5 @@
-﻿using System.Collections.Generic;
-using DataContext.Models;
-
-namespace Web.Models.ViewModels
+﻿namespace Web.Models.ViewModels
 {
-    public class ProfileViewModel
-    {
-        public bool IsOwnProfile { get; set; }
-        
-        public ApplicationUser User { get; set; }
-        
-        public ProfileStatistics Statistics { get; set; }
-    }
-
     public class ProfileStatistics
     {
         public ProfileForumStatistics Forum { get; set; }
