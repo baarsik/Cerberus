@@ -112,14 +112,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ChaptersBlock.ru.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Components\Partial\WebNovelRead\ChapterNavigation.en.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ChapterNavigation.en.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Components\Partial\WebNovelRead\ChapterNavigation.ru.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ChapterNavigation.ru.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Components\Pages\WebNovel\WebNovelDetails.en.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>WebNovelDetails.en.Designer.cs</LastGenOutput>
@@ -135,6 +127,22 @@
     <EmbeddedResource Update="Resources\Components\Pages\WebNovel\WebNovelRead.ru.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>WebNovelRead.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Partial\WebNovel\WebNovelDetails\ChaptersBlock.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ChaptersBlock.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Partial\WebNovel\WebNovelDetails\ChaptersBlock.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ChaptersBlock.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Partial\WebNovel\WebNovelRead\ChapterNavigation.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ChapterNavigation.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Components\Partial\WebNovel\WebNovelRead\ChapterNavigation.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ChapterNavigation.ru.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -248,16 +256,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ChaptersBlock.ru.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Components\Partial\WebNovelRead\ChapterNavigation.en.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ChapterNavigation.en.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\Components\Partial\WebNovelRead\ChapterNavigation.ru.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ChapterNavigation.ru.resx</DependentUpon>
-    </Compile>
     <Compile Update="Resources\Components\Pages\WebNovel\WebNovelDetails.en.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -278,6 +276,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>WebNovelRead.ru.resx</DependentUpon>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\Partial\WebNovelRead\ChapterNavigation.razor" />
   </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

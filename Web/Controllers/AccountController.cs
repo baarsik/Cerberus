@@ -76,7 +76,7 @@ namespace Web.Controllers
             switch (result.Status)
             {
                 case RegisterStatus.Success:
-                    return RedirectToAction(nameof(WebNovelController.Index), "WebNovel");
+                    return RedirectToLocal();
                 case RegisterStatus.DisplayNameInUse:
                     ModelState.AddModelError("", "Display Name is already in use");
                     break;
@@ -101,7 +101,7 @@ namespace Web.Controllers
         {
             await _authService.SignOutAsync();
             this.UpdateCultureCookie(_authService, null);
-            return RedirectToAction(nameof(WebNovelController.Index), "WebNovel");
+            return RedirectToLocal();
         }
 
         [Authorize]

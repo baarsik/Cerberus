@@ -16,14 +16,6 @@ namespace Web.Controllers
         {
             _webNovelService = webNovelService;
         }
-
-        [Route("{page:int=1}", Order = -1)]
-        public async Task<IActionResult> Index(int? page)
-        {
-            var user = await _webNovelService.GetUserAsync(User);
-            var model = await _webNovelService.GetWebNovelIndexViewModelAsync(user, page ?? 1);
-            return View(model);
-        }
         
         [Authorize(Roles = Constants.Permissions.WebNovelEdit)]
         [Route("[action]")]

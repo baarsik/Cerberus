@@ -1,0 +1,91 @@
+@page "/"
+@page "/{page:int}"
+
+@using Web.Controllers.Services
+@using System.Security.Claims
+@using DataContext.Models
+@using Web.Components.Partial.WebNovel.Index
+@using Web.Models.Extensions
+@using Web.Models.ViewModels
+
+@inject WebNovelService WebNovelService
+@inject IStringLocalizer<Index> L
+
+@code
+{
+    [Parameter]
+    public int Page { get; set; } = 1;
+}
+
+<NotNullLoading Object="@Model">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="view-header">
+                <div class="header-icon">
+                    <i class="fal fa-book fa-sm"></i>
+                </div>
+                <div class="pull-right text-right">
+                    @if (ClaimsPrincipal.HasWebNovelEditorAccess())
+                    {
+                        <a class="btn btn-lg btn-default" href="/addwebnovel">
+                            <i class="far fa-plus"></i>
+                            @L["NewNovelButton"]
+                        </a>
+                    }
+                </div>
+                <div class="header-title">
+                    <h3>@L["HeaderTitle"]</h3>
+                    <small>@L["HeaderDescription"]</small>
+                </div>
+            </div>
+            <hr/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <div class="panel-body">
+                    @if (Model.Items.Any())
+                    {
+                        foreach (var item in Model.Items)
+                        {
+                            <WebNovelItem Model="@item"/>
+                        }
+                        <Paginator Page="@Model.Page" TotalPages="@Model.TotalPages" OnPageChange="@ReloadPageAsync"/>
+                    }
+                    else
+                    {
+                        <div>@L["NoWebNovelsMessage"]</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</NotNullLoading>
+
+@code
+{
+    private WebNovelIndexViewModel Model { get; set; }
+    
+    private ClaimsPrincipal ClaimsPrincipal { get; set; }
+    private ApplicationUser User { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        ClaimsPrincipal = authState?.User;
+        User = await WebNovelService.GetUserAsync(ClaimsPrincipal);
+    }
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        await ReloadPageAsync(Page);
+    }
+
+    private async Task ReloadPageAsync(int page)
+    {
+        Page = page;
+        Model = await WebNovelService.GetWebNovelIndexViewModelAsync(User, Page);
+    }
+}

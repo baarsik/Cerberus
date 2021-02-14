@@ -4,14 +4,14 @@
 <nav class="navbar navbar-default navbar-static-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">
+            <a href="/" class="navbar-brand">
                 NLATE
             </a>
         </div>
         <div id="navbar" class="flex-row justify-between">
             <ul class="nav navbar-nav cerberus-nav flex-row align-center">
                 <li class="@ViewContext.FillClassIfActive("WebNovel")">
-                    <a asp-area="" asp-controller="WebNovel" asp-action="Index">@Localizer["MenuItem_WebNovels"]</a>
+                    <a href="/">@Localizer["MenuItem_WebNovels"]</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav cerberus-nav flex-row align-center">
