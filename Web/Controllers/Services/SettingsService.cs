@@ -32,7 +32,8 @@ namespace Web.Controllers.Services
                     .Include(c => c.Threads)
                     .Where(c => c.Parent == null)
                     .OrderBy(c => c.DisplayOrderId)
-                    .Select(x => ToForumInfo(x, Db))
+                    .ToList()
+                    .Select(ToForumInfo)
                     .ToList()
             };
             return model;
@@ -40,10 +41,11 @@ namespace Web.Controllers.Services
 
         public async Task CreateForum(CreateForumViewModel model)
         {
+            var forumsAreNotEmpty = await Db.Forums.AnyAsync();
             var forum = new Forum
             {
                 Id = Guid.NewGuid(),
-                DisplayOrderId = await Db.Forums.MaxAsync(c => c.DisplayOrderId) + 1,
+                DisplayOrderId =  forumsAreNotEmpty ? await Db.Forums.MaxAsync(c => c.DisplayOrderId) + 1 : 1,
                 IsEnabled = false,
                 Title = model.Title.RemoveHTML()
             };
@@ -85,21 +87,21 @@ namespace Web.Controllers.Services
             return displayOrderId;
         }
         
-        private ForumInfo ToForumInfo(Forum forum, ApplicationContext context)
+        private ForumInfo ToForumInfo(Forum forum)
         {
             return new ForumInfo
             {
                 Forum = forum,
                 IsEnabled = forum.IsEnabled,
                 ThreadCount = forum.Threads.Count,
-                Children = context.Forums
+                Children = Db.Forums
                     .IgnoreQueryFilters()
                     .Include(c => c.Children)
                     .Include(c => c.Threads)
                     .Where(c => forum.Children.Select(x => x.Id).Contains(c.Id))
                     .OrderBy(c => c.DisplayOrderId)
-                    .AsEnumerable()
-                    .Select(x => ToForumInfo(x, context))
+                    .ToList()
+                    .Select(ToForumInfo)
                     .ToList()
             };
         }
