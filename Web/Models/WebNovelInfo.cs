@@ -12,6 +12,7 @@ namespace Web.Models
         public DateTime? LastUpdateDate { get; set; }
         public int TotalChapters { get; set; }
         public int TotalVolumes { get; set; }
+        public int TotalSymbols { get; set; }
         public IList<Language> UserLanguages { get; set; }
     }
 }

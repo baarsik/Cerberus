@@ -101,10 +101,10 @@ namespace Web
                 options.DefaultRequestCulture = new RequestCulture("en", "en");
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
-                options.RequestCultureProviders = new List<IRequestCultureProvider>
+                /*options.RequestCultureProviders = new List<IRequestCultureProvider>
                 {
                     new CookieRequestCultureProvider()
-                };
+                };*/
             }); 
             
             services.Configure<RecaptchaSettings>(Configuration.GetSection("RecaptchaSettings"));

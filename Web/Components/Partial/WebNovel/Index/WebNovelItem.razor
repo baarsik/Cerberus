@@ -24,7 +24,7 @@
             <div class="badge m-r-xs">@L["Data_LastUpdate"]: @Model.LastUpdateDate.Value.ToFormattedString()</div>
         }
         <div class="badge m-r-xs">
-            <i class="far fa-pen"></i> @Model.WebNovelContent.Symbols.ToStringDisplayFormat()
+            <i class="far fa-pen"></i> @Model.TotalSymbols.ToStringDisplayFormat()
         </div>
         @if (Model.WebNovel.IsAdultContent)
         {

@@ -21,6 +21,18 @@ namespace Web.Models.Extensions
                 .OrderBy(c => languages.IndexOf(c.Language))
                 .FirstOrDefault();
         }
+
+        public static int GetNumberOfSymbols(this WebNovel webNovel, IList<Language> languages)
+        {
+            return webNovel.Chapters
+                .SelectMany(x => x.Translations)
+                .Where(x => languages.Contains(x.Language))
+                .OrderBy(x => languages.IndexOf(x.Language))
+                .GroupBy(x => x.ChapterId)
+                .Select(x => x.First())
+                .Sum(x => x.Symbols);
+
+        }
         
         public static WebNovelChapterContent GetLastChapterContent(this WebNovel webNovel, IList<Language> languages)
         {

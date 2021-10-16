@@ -664,6 +664,7 @@ namespace Web.Controllers.Services
                     .Select(c => c.Volume)
                     .OrderByDescending(c => c)
                     .FirstOrDefault(),
+                TotalSymbols = webNovel.GetNumberOfSymbols(languages),
                 UserLanguages = languages
             };
         }
