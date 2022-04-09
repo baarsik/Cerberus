@@ -3,6 +3,7 @@
 @using System.Security.Claims
 @using DataContext.Models
 @using Web.Controllers
+@using Web.Controllers.Services
 @using Web.Models.Extensions
 
 @inject IStringLocalizer<ChaptersBlock> L;
@@ -46,6 +47,9 @@
             </div>
             <div class="flex-row align-center">
                 <div style="padding-right: 1em">
+                    <i class="far fa-comment"></i> @(Model.CommentCountDictionary.ContainsKey(chapter.Id) ? Model.CommentCountDictionary[chapter.Id] : 0)
+                </div>
+                <div style="padding-right: 1em">
                     <i class="far fa-pen"></i> @translation.Symbols.ToStringDisplayFormat()
                 </div>
                 <div>
@@ -69,7 +73,7 @@
     private ChapterLinkInDetailsViewModel InternalModel { get; set; }
     
     private ClaimsPrincipal ClaimsPrincipal { get; set; }
-    
+
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();

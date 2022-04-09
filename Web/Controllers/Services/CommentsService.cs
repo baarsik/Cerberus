@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AngleSharp.Text;
@@ -10,19 +11,41 @@ using DataContext.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Web.Controllers.Services
 {
     public class CommentsService : BaseService
     {
-        public CommentsService(ApplicationContext dbContext, UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+
+        public CommentsService(ApplicationContext dbContext, UserManager<ApplicationUser> userManager, IConfiguration configuration, IServiceScopeFactory serviceScopeFactory)
             : base(dbContext, userManager, configuration)
         {
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
+        public async Task<int> GetCommentCountAsync(Guid relatedEntityId)
+        {
+            return await Db.Comments.AsNoTracking().CountAsync(x => x.RelatedEntityId == relatedEntityId);
+        }
+        
+        public async Task<IDictionary<Guid, int>> GetCommentCountAsync(IEnumerable<Guid> relatedEntityIds)
+        {
+            return (await Db.Comments
+                .AsNoTracking()    
+                .Where(x => relatedEntityIds.Contains(x.RelatedEntityId))
+                .ToListAsync())
+                .GroupBy(x => x.RelatedEntityId)
+                .ToDictionary(x => x.Key, x => x.Count());
+        }
+        
         public async Task<CommentsPageable> GetCommentsAsync(Guid relatedEntityId, int page)
         {
-            var totalComments = await Db.Comments.CountAsync(x => x.RelatedEntityId == relatedEntityId);
+            using var scope = _serviceScopeFactory.CreateScope();
+            var ownDbContext = scope.ServiceProvider.GetService<ApplicationContext>() ?? Db; 
+            
+            var totalComments = await ownDbContext.Comments.AsNoTracking().CountAsync(x => x.RelatedEntityId == relatedEntityId);
             var totalPages = (int) Math.Ceiling(totalComments / (double) Constants.Comments.ItemsPerPage);
             if (totalPages == 0)
             {
@@ -35,7 +58,8 @@ namespace Web.Controllers.Services
                     ? totalPages
                     : page;
             
-            var comments = await Db.Comments
+            var comments = await ownDbContext.Comments
+                .AsNoTracking()
                 .Where(x => x.RelatedEntityId == relatedEntityId)
                 .Include(x => x.Author)
                 .OrderByDescending(x => x.CreateDate)

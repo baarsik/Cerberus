@@ -1,3 +1,5 @@
+@inherits OwningComponentBase<CommentsService>
+
 @using System.Security.Claims
 @using DataContext.Models
 @using Web.Components.Models
@@ -7,8 +9,7 @@
 
 @implements IDisposable
 
-@inject CommentsService CommentsService;
-@inject IStringLocalizer<Comments> L;
+@inject IStringLocalizer<Comments> L
 
 @code
 {
@@ -67,6 +68,7 @@
 
 @code
 {
+    private Guid CurrentEntityId { get; set; }
     private NewComment NewComment { get; set; } = new();
     private CommentsPageable Model { get; set; } = new();
     private bool IsLoaded { get; set; }
@@ -84,11 +86,14 @@
             throw new ArgumentNullException(nameof(EntityId));
         }
         
-        Model = await CommentsService.GetCommentsAsync(EntityId, Page);
-
         ClaimsPrincipal = await GetClaimsPrincipalAsync();
-        User = await CommentsService.GetUserAsync(ClaimsPrincipal);
+        User = await Service.GetUserAsync(ClaimsPrincipal);
         IsLoaded = true;
+    }
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        await ReloadDataAsync();
     }
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -124,7 +129,7 @@
         }
 
         IsLoaded = false;
-        await CommentsService.AddCommentAsync(User, EntityId, NewComment.Text);
+        await Service.AddCommentAsync(User, EntityId, NewComment.Text);
         await ReloadPageAsync(1);
         IsLoaded = true;
     }
@@ -135,11 +140,16 @@
         return authState?.User;
     }
 
+    private async Task ReloadDataAsync()
+    {
+        Model = await Service.GetCommentsAsync(EntityId, Page);
+        NewComment.Text = string.Empty;
+    }
+    
     private async Task ReloadPageAsync(int page)
     {
         Page = page;
-        Model = await CommentsService.GetCommentsAsync(EntityId, Page);
-        NewComment.Text = string.Empty;
+        await ReloadDataAsync();
         await JsRuntime.InvokeVoidAsync("resetSummernote", $"[data-entityId='{EntityId}'] .summernote.summernote-comments.blazor");
     }
 
@@ -151,7 +161,7 @@
         }
 
         IsLoaded = false;
-        await CommentsService.DeleteCommentAsync(User, id);
+        await Service.DeleteCommentAsync(User, id);
         await ReloadPageAsync(Page);
         IsLoaded = true;
     }

@@ -17,14 +17,17 @@ namespace Web.Controllers.Services
     public sealed class WebNovelService : BaseService
     {
         private readonly NotificationsService _notificationsService;
+        private readonly CommentsService _commentsService;
 
         public WebNovelService(ApplicationContext dbContext,
             UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
-            NotificationsService notificationsService)
+            NotificationsService notificationsService,
+            CommentsService commentsService)
             : base(dbContext, userManager, configuration)
         {
             _notificationsService = notificationsService;
+            _commentsService = commentsService;
         }
 
         public async Task<WebNovelIndexViewModel> GetWebNovelIndexViewModelAsync(ApplicationUser user, int page)
@@ -168,10 +171,11 @@ namespace Web.Controllers.Services
                     SortOrder = c.SortOrder
                 })
                 .FirstOrDefault();
-            
+
             var model = new WebNovelDetailsViewModel
             {
                 WebNovelInfo = GetWebNovelInfo(webNovel, languages),
+                CommentCountDictionary = await _commentsService.GetCommentCountAsync(webNovel.Chapters.Select(x => x.Id)),
                 ReaderData = readerData ?? new WebNovelDetailsViewModel.ReaderUserData()
             };
             

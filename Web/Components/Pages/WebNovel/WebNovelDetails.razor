@@ -1,3 +1,5 @@
+@inherits OwningComponentBase<WebNovelService>
+
 @page "/details/{webNovelUrl}"
 
 @using Web.Controllers.Services
@@ -10,8 +12,7 @@
 @using Web.Models.Helpers
 @using Web.Models.ViewModels
 
-@inject WebNovelService WebNovelService
-@inject IStringLocalizer<WebNovelDetails> L;
+@inject IStringLocalizer<WebNovelDetails> L
 
 @code
 {
@@ -114,20 +115,20 @@
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         ClaimsPrincipal = authState?.User;
-        User = await WebNovelService.GetUserAsync(ClaimsPrincipal);
+        User = await Service.GetUserAsync(ClaimsPrincipal);
         await UpdateModelAsync();
     }
 
     private async Task UpdateNotificationStatusAsync(bool notificationsEnabled)
     {
-        await WebNovelService.UpdateNotificationStatus(User, WebNovel.Id, notificationsEnabled);
+        await Service.UpdateNotificationStatus(User, WebNovel.Id, notificationsEnabled);
         await UpdateModelAsync();
     }
 
     private async Task UpdateModelAsync()
     {
-        Model = await WebNovelService.GetWebNovelDetailsViewModelAsync(User, WebNovelUrl);
-        CanCreateNewTranslation = (await WebNovelService.GetLanguagesAsync(WebNovel.Translations.Select(x => x.Language))).Any();
+        Model = await Service.GetWebNovelDetailsViewModelAsync(User, WebNovelUrl);
+        CanCreateNewTranslation = (await Service.GetLanguagesAsync(WebNovel.Translations.Select(x => x.Language))).Any();
         StateHasChanged();
     }
 }

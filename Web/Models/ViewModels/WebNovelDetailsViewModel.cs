@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using DataContext.EnumDataTypes;
 using DataContext.Models;
 
@@ -6,6 +8,7 @@ namespace Web.Models.ViewModels
     public class WebNovelDetailsViewModel
     {
         public WebNovelInfo WebNovelInfo { get; set; }
+        public IDictionary<Guid, int> CommentCountDictionary { get; set; }
         public ReaderUserData ReaderData { get; set; }
 
         public class ReaderUserData

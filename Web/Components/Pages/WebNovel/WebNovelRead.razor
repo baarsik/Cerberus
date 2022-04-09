@@ -1,3 +1,5 @@
+@inherits OwningComponentBase<WebNovelService>
+
 @page "/read/{languageCode}/{webNovelUrl}/{chapterNumber:int}"
 @page "/read/{languageCode}/{webNovelUrl}/{volume:int}/{chapterNumber:int}"
 
@@ -10,7 +12,6 @@
 @using Web.Models.Helpers
 @using Web.Models.ViewModels
 
-@inject WebNovelService WebNovelService
 @inject IStringLocalizer<WebNovelRead> L
 
 @code
@@ -96,12 +97,12 @@
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         ClaimsPrincipal = authState?.User;
-        User = await WebNovelService.GetUserAsync(ClaimsPrincipal);
+        User = await Service.GetUserAsync(ClaimsPrincipal);
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        Model = await WebNovelService.GetChapterTranslationAsync(User, WebNovelUrl, LanguageCode, Volume ?? 1, ChapterNumber);
+        Model = await Service.GetChapterTranslationAsync(User, WebNovelUrl, LanguageCode, Volume ?? 1, ChapterNumber);
     }
     
     private string GetTitle()

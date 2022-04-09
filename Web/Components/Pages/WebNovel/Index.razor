@@ -1,3 +1,5 @@
+@inherits OwningComponentBase<WebNovelService>
+
 @page "/"
 @page "/{page:int}"
 
@@ -8,7 +10,6 @@
 @using Web.Models.Extensions
 @using Web.Models.ViewModels
 
-@inject WebNovelService WebNovelService
 @inject IStringLocalizer<Index> L
 
 @code
@@ -75,7 +76,7 @@
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         ClaimsPrincipal = authState?.User;
-        User = await WebNovelService.GetUserAsync(ClaimsPrincipal);
+        User = await Service.GetUserAsync(ClaimsPrincipal);
     }
     
     protected override async Task OnParametersSetAsync()
@@ -86,6 +87,6 @@
     private async Task ReloadPageAsync(int page)
     {
         Page = page;
-        Model = await WebNovelService.GetWebNovelIndexViewModelAsync(User, Page);
+        Model = await Service.GetWebNovelIndexViewModelAsync(User, Page);
     }
 }
