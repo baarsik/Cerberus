@@ -144,6 +144,38 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ChapterNavigation.ru.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages\WebNovel\WebNovelDetails.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebNovelDetails.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages\WebNovel\WebNovelDetails.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebNovelDetails.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages\WebNovel\WebNovelRead.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebNovelRead.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages\WebNovel\WebNovelRead.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebNovelRead.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages\App.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>App.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages\App.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>App.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages\Settings\Index.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Index.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages\Settings\Index.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Index.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\Views\WebNovel\EditChapterTranslation.ru.Designer.cs">
@@ -275,6 +307,16 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>WebNovelRead.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Pages\Settings\Index.ru.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Pages\Settings\Index.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.en.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

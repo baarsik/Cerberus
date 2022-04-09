@@ -4,10 +4,7 @@
     <nav class="navbar-side">
         <ul class="nav cerberus-nav">
             <li class="nav-category">Main</li>
-            <li class="@ViewContext.FillClassIfActive(nameof(SettingsController.Index), "Settings")">
-                <a asp-controller="Settings" asp-action="Index">Dashboard</a>
-            </li>
-            
+            <li><a href="/settings">Dashboard</a></li>
             <li class="nav-category">Manageable Data</li>
             @*<li class="@ViewContext.FillClassIfActive("Users", "Settings")">
                 <a asp-controller="Settings" asp-action="Users">User List</a>

@@ -19,11 +19,6 @@ namespace Web.Controllers
             _settingsService = settingsService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         public IActionResult Forums()
         {
             var model = _settingsService.GetForumSettingsViewModel();
