@@ -42,8 +42,9 @@ namespace Web.Models.Extensions
                 .ThenByDescending(c => c.Number)
                 .SelectMany(c => c.Translations)
                 .Where(c => languages.Contains(c.Language))
-                .OrderByDescending(c => languages.IndexOf(c.Language))
-                .ThenByDescending(c => c.CreationDate)
+                .OrderByDescending(c => c.Chapter.Volume)
+                .ThenByDescending(c => c.Chapter.Number)
+                .ThenBy(c => languages.IndexOf(c.Language))
                 .FirstOrDefault();
         }
         
@@ -52,7 +53,7 @@ namespace Web.Models.Extensions
             return webNovel?.Chapters
                 .SelectMany(c => c.Translations)
                 .Where(c => languages.Contains(c.Language))
-                .OrderByDescending(c => languages.IndexOf(c.Language))
+                .OrderBy(c => languages.IndexOf(c.Language))
                 .ThenByDescending(c => c.CreationDate)
                 .FirstOrDefault();
         }
